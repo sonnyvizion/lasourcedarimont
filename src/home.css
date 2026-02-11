@@ -272,6 +272,7 @@ body.is-loading {
   padding: 10px 12px;
   font-family: var(--font-body);
   font-size: 14px;
+  min-height: 46px;
   letter-spacing: normal;
 }
 
@@ -1095,8 +1096,19 @@ body.is-loading {
     left: 50%;
     right: auto;
     transform: translateX(-50%);
-    width: min(280px, calc(100vw - (var(--content-padding) * 2)));
+    width: min(360px, calc(100vw - (var(--content-padding) * 2)));
+    padding: 14px;
     min-width: 0;
+  }
+
+  .booking-date-popover-label {
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+
+  .booking-date-input {
+    font-size: 16px;
+    min-height: 52px;
   }
 
   .gallery-track .card-photo {
