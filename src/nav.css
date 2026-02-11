@@ -1,0 +1,233 @@
+.site-header {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  color: var(--color-forest);
+  background: rgba(246, 241, 230, 0.5);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.nav-hidden .site-header {
+  opacity: 0;
+  transform: translateY(-24px);
+}
+
+.menu-open .site-header {
+  background: transparent;
+  border-bottom: none;
+  color: var(--color-beige);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-mark {
+  height: 54px;
+  width: 54px;
+  background-color: var(--color-forest);
+  -webkit-mask: url("/img/LOGOTYPE_SYMETRIK.svg") no-repeat center / contain;
+  mask: url("/img/LOGOTYPE_SYMETRIK.svg") no-repeat center / contain;
+}
+
+.menu-open .logo-mark {
+  background-color: var(--color-beige);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-forest);
+  font-family: var(--font-body);
+  font-weight: 600;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: var(--color-forest);
+}
+
+.nav-icon-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid var(--color-forest);
+  position: relative;
+}
+
+.nav-icon::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border-radius: 50%;
+  border: 1px solid var(--color-forest);
+}
+
+.nav-lang {
+  letter-spacing: 0.12em;
+}
+
+.nav-toggle {
+  display: none;
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0;
+  flex-direction: column;
+  border: 0px transparent;
+}
+
+.menu-open .nav-toggle {
+  
+  border-radius: 50%;
+}
+
+.nav-toggle-bar {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--color-forest);
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.3s ease, background 0.3s ease;
+}
+
+.menu-open .nav-toggle-bar {
+  background: var(--color-beige);
+}
+
+.menu-open .nav-toggle-bar:nth-child(1) {
+  transform: translateY(6px) rotate(45deg);
+}
+
+.menu-open .nav-toggle-bar:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-open .nav-toggle-bar:nth-child(3) {
+  transform: translateY(-6px) rotate(-45deg);
+}
+
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  background: #2a5843;
+  color: var(--color-beige);
+  z-index: 9;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+  overflow: hidden;
+}
+
+.mobile-menu::after {
+  content: "";
+  position: absolute;
+  left: 180px;
+  right: 0;
+  bottom: -5px;
+  height: 180px;
+  background: url("/img/illustrations/herbes_footer_illu.png") no-repeat center bottom / contain;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.mobile-menu-inner {
+  height: 100%;
+  display: grid;
+  place-content: center;
+  gap: 20px;
+  font-family: var(--font-heading);
+  font-size: 32px;
+  text-align: center;
+}
+
+.mobile-menu-inner a .char {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
+.mobile-menu-social {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+.mobile-menu-social img {
+  width: 54px;
+  height: 54px;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+}
+
+.menu-open .mobile-menu {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.menu-open {
+  overflow: hidden;
+}
+
+@media (max-width: 980px) {
+  .nav-links {
+    display: none;
+  }
+
+  .nav-right {
+    font-size: 12px;
+    gap: 14px;
+  }
+
+  .nav-icon-link,
+  .nav-lang {
+    display: none;
+  }
+
+  .nav-toggle {
+    display: inline-flex;
+  }
+
+  .header-inner {
+    padding: 12px var(--content-padding);
+  }
+}
