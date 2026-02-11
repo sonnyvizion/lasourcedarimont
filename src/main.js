@@ -89,7 +89,6 @@ if (loaderEl) {
   }
 
   if (showLoader) {
-    introAnimationDelay = 2.4;
     bodyEl.classList.add("is-loading");
     loaderEl.classList.add("is-active");
     const startedAt = Date.now();
