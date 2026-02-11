@@ -22,7 +22,16 @@ const mobileMenu = document.querySelector(".mobile-menu");
 const mobileLinks = document.querySelectorAll(".mobile-menu-inner .menu-link");
 const LOADER_SESSION_KEY = "arimont_loader_seen";
 const BASE_URL = import.meta.env.BASE_URL || "/";
-let introAnimationDelay = 0;
+let releaseIntroGate = () => {};
+const introGate = new Promise((resolve) => {
+  releaseIntroGate = resolve;
+});
+let introGateReleased = false;
+const resolveIntroGate = () => {
+  if (introGateReleased) return;
+  introGateReleased = true;
+  releaseIntroGate();
+};
 
 const loadLottie = () =>
   new Promise((resolve) => {
@@ -94,6 +103,7 @@ if (loaderEl) {
       closed = true;
       loaderEl.classList.add("is-hidden");
       bodyEl.classList.remove("is-loading");
+      resolveIntroGate();
       try {
         sessionStorage.setItem(LOADER_SESSION_KEY, "1");
       } catch {
@@ -133,7 +143,10 @@ if (loaderEl) {
     }, maxVisibleMs);
   } else {
     loaderEl.remove();
+    resolveIntroGate();
   }
+} else {
+  resolveIntroGate();
 }
 
 if (navToggle && mobileMenu) {
@@ -248,7 +261,7 @@ if (!prefersReducedMotion) {
 
   const heroTl = gsap.timeline({
     defaults: { duration: 0.9, ease: "power3.out" },
-    delay: introAnimationDelay
+    paused: true
   });
   const titleLines = gsap.utils.toArray(".hero-title .hero-line");
 
@@ -315,6 +328,9 @@ if (!prefersReducedMotion) {
       end: "bottom top",
       scrub: true
     });
+  });
+  introGate.then(() => {
+    heroTl.play(0);
   });
 
   // Reveal text effect (line by line) for intro text
@@ -534,6 +550,7 @@ if (!prefersReducedMotion) {
 
   // Pas d'animation de fade sur les sections.
 } else if (headerEl) {
+  resolveIntroGate();
   bodyEl.classList.remove("nav-hidden");
   headerEl.style.opacity = "1";
   headerEl.style.transform = "none";
