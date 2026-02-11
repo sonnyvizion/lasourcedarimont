@@ -200,6 +200,7 @@ if (!prefersReducedMotion) {
   // Reveal text effect (line by line) for intro text
   document.querySelectorAll("h2, .label").forEach((el) => el.classList.add("reveal-text"));
   const revealTexts = document.querySelectorAll(".reveal-text");
+  const isMobileViewport = window.matchMedia("(max-width: 980px)").matches;
   const splitLines = (el) => {
     const raw = (el.innerHTML || "").trim();
     const parts = raw.split(/<br\s*\/?\s*>/i).map((p) => p.trim()).filter(Boolean);
@@ -208,7 +209,88 @@ if (!prefersReducedMotion) {
       .join("");
   };
 
+  const splitH2ByVisualLines = (el) => {
+    if (el.dataset.wordSplit !== "true") {
+      const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+      const textNodes = [];
+      let currentNode = walker.nextNode();
+      while (currentNode) {
+        if ((currentNode.nodeValue || "").trim()) {
+          textNodes.push(currentNode);
+        }
+        currentNode = walker.nextNode();
+      }
+
+      textNodes.forEach((textNode) => {
+        const text = textNode.nodeValue || "";
+        const tokens = text.split(/(\s+)/).filter(Boolean);
+        const frag = document.createDocumentFragment();
+        tokens.forEach((token) => {
+          if (/^\s+$/.test(token)) {
+            frag.appendChild(document.createTextNode(token));
+            return;
+          }
+          const span = document.createElement("span");
+          span.className = "reveal-word";
+          span.textContent = token;
+          frag.appendChild(span);
+        });
+        textNode.parentNode?.replaceChild(frag, textNode);
+      });
+
+      el.dataset.wordSplit = "true";
+    }
+
+    const words = Array.from(el.querySelectorAll(".reveal-word"));
+    const lines = [];
+    let currentLine = [];
+    let currentTop = null;
+
+    words.forEach((word) => {
+      const top = Math.round(word.offsetTop);
+      if (currentTop === null || Math.abs(top - currentTop) <= 2) {
+        currentLine.push(word);
+      } else {
+        if (currentLine.length) lines.push(currentLine);
+        currentLine = [word];
+      }
+      currentTop = top;
+    });
+
+    if (currentLine.length) {
+      lines.push(currentLine);
+    }
+
+    return lines;
+  };
+
   revealTexts.forEach((el) => {
+    if (isMobileViewport && el.tagName === "H2") {
+      const lines = splitH2ByVisualLines(el);
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: el,
+          start: "top 80%"
+        }
+      });
+
+      lines.forEach((lineWords, index) => {
+        tl.fromTo(
+          lineWords,
+          { y: 24, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.7,
+            ease: "power3.out",
+            stagger: 0.02
+          },
+          index * 0.14
+        );
+      });
+      return;
+    }
+
     splitLines(el);
     gsap.fromTo(
       el.querySelectorAll(".line-inner"),
@@ -237,11 +319,12 @@ if (!prefersReducedMotion) {
     if (isMobile) {
       gsap.set(galleryTrack, { x: 0 });
       const getMaxScroll = () => Math.max(0, galleryTrack.scrollWidth - gallerySlider.clientWidth);
+      gallerySlider.style.scrollBehavior = "auto";
       ScrollTrigger.create({
         trigger: gallerySlider,
         start: "top 80%",
-        end: "top+=100% top",
-        scrub: 0.8,
+        end: "top+=220% top",
+        scrub: 1.4,
         invalidateOnRefresh: true,
         onUpdate: (self) => {
           gallerySlider.scrollLeft = self.progress * getMaxScroll();
@@ -309,21 +392,23 @@ if (!prefersReducedMotion) {
     testimonialsNext.addEventListener("click", () => slideTestimonials(1));
   }
 
-  // Group parallax: all cards move together
-  gsap.fromTo(
-    ".feature-card",
-    { y: 35 },
-    {
-      y: -35,
-      ease: "none",
-      scrollTrigger: {
-        trigger: ".section-feature",
-        start: "top 85%",
-        end: ".section-dark bottom top",
-        scrub: 1
+  // Group parallax: all cards move together (desktop only)
+  if (!window.matchMedia("(max-width: 980px)").matches) {
+    gsap.fromTo(
+      ".feature-card",
+      { y: 35 },
+      {
+        y: -35,
+        ease: "none",
+        scrollTrigger: {
+          trigger: ".section-feature",
+          start: "top 85%",
+          end: ".section-dark bottom top",
+          scrub: 1
+        }
       }
-    }
-  );
+    );
+  }
 
 
 

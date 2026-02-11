@@ -130,6 +130,11 @@
   will-change: transform;
 }
 
+.reveal-word {
+  display: inline-block;
+  will-change: transform, opacity;
+}
+
 .hero-headline {
   position: absolute;
   top: 20vh;
@@ -252,8 +257,8 @@
   background: linear-gradient(
     to bottom,
     var(--color-beige) 0%,
-    var(--color-beige) 48%,
-    var(--color-forest) 48%,
+    var(--color-beige) 56%,
+    var(--color-forest) 56%,
     var(--color-forest) 100%
   );
 }
@@ -263,8 +268,8 @@
     background: linear-gradient(
       to bottom,
       var(--color-beige) 0%,
-      var(--color-beige) 42%,
-      var(--color-forest) 42%,
+      var(--color-beige) 59%,
+      var(--color-forest) 59%,
       var(--color-forest) 100%
     );
   }
@@ -369,17 +374,16 @@
 .feature-grid {
   margin-top: 36px;
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
-  column-gap: 16px;
-  row-gap: 16px;
-  grid-auto-rows: 1fr;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
 }
 
 .feature-card {
   background: #fff7ea;
   border-radius: 20px;
   padding: 26px;
-  min-height: 220px;
+  height: 520px;
+  min-height: 520px;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -395,12 +399,6 @@
   text-align: left;
   width: 65%;
 }
-.feature-card:first-child {
-  grid-row: span 2;
-  min-height: 100%;
-  height: 850px
-}
-
 .feature-illustration {
   position: absolute;
   right: 20px;
@@ -842,6 +840,16 @@
     text-align: center;
   }
 
+  h2 {
+    font-size: clamp(20px, 5.6vw, 28px);
+    line-height: 1.24;
+  }
+
+  .section-dark h2 {
+    font-size: clamp(20px, 5.6vw, 28px) !important;
+    line-height: 1.24;
+  }
+
   .hero-subtitle {
     font-size: 11px;
     letter-spacing: 0.10em;
@@ -870,9 +878,8 @@
   .gallery-slider {
     overflow-x: auto;
     overflow-y: hidden;
-    scroll-snap-type: x proximity;
+    scroll-snap-type: none;
     -webkit-overflow-scrolling: touch;
-    scroll-padding-inline: var(--content-padding);
     touch-action: pan-x;
     overscroll-behavior-x: contain;
   }
@@ -885,7 +892,7 @@
   }
 
   .gallery-track .card-photo {
-    scroll-snap-align: center;
+    scroll-snap-align: none;
   }
 
   .booking-inner {
@@ -919,26 +926,66 @@
   }
 
   .feature-grid {
-    grid-template-columns: 1fr;
-    column-gap: 16px;
-    row-gap: 16px;
-    grid-auto-rows: auto;
+    display: flex;
+    margin-top: 16px;
+    gap: 16px;
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    padding-left: 0;
+    padding-right: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+    scroll-padding-inline: var(--content-padding);
+    touch-action: pan-x;
+    overscroll-behavior-x: contain;
   }
 
-  .feature-card:first-child {
-    grid-row: auto;
-    height: 650px;
-    min-height: 650px;
+  .feature-grid::-webkit-scrollbar {
+    display: none;
   }
 
-  .feature-card-plaine {
-    height: 500px;
-    min-height: 500px;
+  .feature-grid::before,
+  .feature-grid::after {
+    content: "";
+    flex: 0 0 var(--content-padding);
   }
 
+  .feature-card {
+    flex: 0 0 40vw;
+    width: 40vw;
+    height: 50vh;
+    min-height: 50vh;
+    min-width: 70vw;
+    padding: 18px;
+    scroll-snap-align: start;
+  }
+
+  .feature-card h3 {
+    font-size: 22px;
+  }
+
+  .feature-card:first-child,
+  .feature-card-plaine,
+  .feature-card-spa,
   .feature-card-gites {
-    height: 450px;
-    min-height: 450px;
+    grid-row: auto;
+    height: 50vh;
+    min-height: 50vh;
+  }
+
+  .feature-card-spa .feature-illustration-img {
+    width: 100%;
+    height: auto;
+    bottom: -20px;
+  }
+
+  .feature-card-gites .feature-illustration-img {
+    width: 100%;
+    height: auto;
+    bottom: 0px;
   }
 
   .lodgings-grid {
@@ -1005,15 +1052,9 @@
   .p-card-illu {
   
     width: 100%;
+    line-height: 1.1em;
+    font-size: 14px;
   }
-  .feature-card:first-child {
-    height: 650px;
-  }
-
-  .feature-card-spa {
-    height: 500px;
-  }
-
   .after-lodgings-illu {
     top: -120px;
     right: 10%;
@@ -1032,5 +1073,6 @@
   .footer-links {
     margin-bottom: 50px;
   }
- 
+
+
 }
