@@ -77,9 +77,41 @@
         <div class="booking-panel booking-glass">
           <div class="booking-inner">
             <div class="booking-fields">
-              <div class="booking-field">Date d’arrivée</div>
-              <div class="booking-field">Date de départ</div>
-              <div class="booking-field">Adultes</div>
+              <div class="booking-field booking-date-field">
+                <button class="booking-field-button" type="button" data-date-trigger="checkin">
+                  <span data-date-label="checkin">Date d’arrivée</span>
+                </button>
+                <input class="booking-date-input" type="date" data-date-input="checkin" aria-label="Date d’arrivée" />
+              </div>
+              <div class="booking-field booking-date-field">
+                <button class="booking-field-button" type="button" data-date-trigger="checkout">
+                  <span data-date-label="checkout">Date de départ</span>
+                </button>
+                <input class="booking-date-input" type="date" data-date-input="checkout" aria-label="Date de départ" />
+              </div>
+              <div class="booking-field booking-guests-field">
+                <button class="booking-field-button" type="button" data-guests-toggle aria-expanded="false">
+                  <span data-guests-label>Nombre de personnes</span>
+                </button>
+                <div class="booking-guests-popover" data-guests-popover hidden>
+                  <div class="booking-guests-row">
+                    <span>Adultes</span>
+                    <div class="booking-guests-controls">
+                      <button type="button" data-guests-step="adults" data-step="-1" aria-label="Retirer un adulte">−</button>
+                      <span data-guests-count="adults">2</span>
+                      <button type="button" data-guests-step="adults" data-step="1" aria-label="Ajouter un adulte">+</button>
+                    </div>
+                  </div>
+                  <div class="booking-guests-row">
+                    <span>Enfants</span>
+                    <div class="booking-guests-controls">
+                      <button type="button" data-guests-step="children" data-step="-1" aria-label="Retirer un enfant">−</button>
+                      <span data-guests-count="children">0</span>
+                      <button type="button" data-guests-step="children" data-step="1" aria-label="Ajouter un enfant">+</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             <button class="btn booking-cta" type="button">Je réserve maintenant</button>
           </div>

@@ -33,6 +33,131 @@ const resolveIntroGate = () => {
   releaseIntroGate();
 };
 
+const bookingCheckinInput = document.querySelector('[data-date-input="checkin"]');
+const bookingCheckoutInput = document.querySelector('[data-date-input="checkout"]');
+const bookingCheckinLabel = document.querySelector('[data-date-label="checkin"]');
+const bookingCheckoutLabel = document.querySelector('[data-date-label="checkout"]');
+const bookingDateTriggers = document.querySelectorAll("[data-date-trigger]");
+const bookingGuestsToggle = document.querySelector("[data-guests-toggle]");
+const bookingGuestsPopover = document.querySelector("[data-guests-popover]");
+const bookingGuestsLabel = document.querySelector("[data-guests-label]");
+const bookingGuestsCounts = document.querySelectorAll("[data-guests-count]");
+const bookingGuestsSteps = document.querySelectorAll("[data-guests-step]");
+
+const formatDateFr = (raw) => {
+  if (!raw) return "";
+  const [year, month, day] = raw.split("-");
+  if (!year || !month || !day) return "";
+  return `${day}/${month}/${year}`;
+};
+
+if (bookingCheckinInput && bookingCheckoutInput && bookingCheckinLabel && bookingCheckoutLabel) {
+  const todayIso = new Date().toISOString().split("T")[0];
+  bookingCheckinInput.min = todayIso;
+  bookingCheckoutInput.min = todayIso;
+
+  const refreshDateLabels = () => {
+    bookingCheckinLabel.textContent = bookingCheckinInput.value
+      ? `Arrivée ${formatDateFr(bookingCheckinInput.value)}`
+      : "Date d’arrivée";
+    bookingCheckoutLabel.textContent = bookingCheckoutInput.value
+      ? `Départ ${formatDateFr(bookingCheckoutInput.value)}`
+      : "Date de départ";
+  };
+
+  bookingCheckinInput.addEventListener("change", () => {
+    if (bookingCheckinInput.value) {
+      bookingCheckoutInput.min = bookingCheckinInput.value;
+      if (bookingCheckoutInput.value && bookingCheckoutInput.value < bookingCheckinInput.value) {
+        bookingCheckoutInput.value = "";
+      }
+    } else {
+      bookingCheckoutInput.min = todayIso;
+    }
+    refreshDateLabels();
+  });
+
+  bookingCheckoutInput.addEventListener("change", refreshDateLabels);
+
+  bookingDateTriggers.forEach((trigger) => {
+    trigger.addEventListener("click", () => {
+      const target = trigger.getAttribute("data-date-trigger");
+      const input = document.querySelector(`[data-date-input="${target}"]`);
+      if (!input) return;
+      if (typeof input.showPicker === "function") {
+        input.showPicker();
+      } else {
+        input.focus();
+        input.click();
+      }
+    });
+  });
+
+  refreshDateLabels();
+}
+
+if (bookingGuestsToggle && bookingGuestsPopover && bookingGuestsLabel && bookingGuestsSteps.length) {
+  const state = { adults: 2, children: 0 };
+
+  const renderGuests = () => {
+    bookingGuestsCounts.forEach((el) => {
+      const key = el.getAttribute("data-guests-count");
+      if (!key) return;
+      el.textContent = String(state[key]);
+    });
+    const adultsLabel = state.adults > 1 ? "adultes" : "adulte";
+    const childrenLabel = state.children > 1 ? "enfants" : "enfant";
+    bookingGuestsLabel.textContent = `${state.adults} ${adultsLabel}, ${state.children} ${childrenLabel}`;
+  };
+
+  const openGuests = () => {
+    bookingGuestsPopover.hidden = false;
+    bookingGuestsToggle.setAttribute("aria-expanded", "true");
+  };
+
+  const closeGuests = () => {
+    bookingGuestsPopover.hidden = true;
+    bookingGuestsToggle.setAttribute("aria-expanded", "false");
+  };
+
+  bookingGuestsToggle.addEventListener("click", () => {
+    const isOpen = !bookingGuestsPopover.hidden;
+    if (isOpen) {
+      closeGuests();
+    } else {
+      openGuests();
+    }
+  });
+
+  bookingGuestsSteps.forEach((btn) => {
+    btn.addEventListener("click", (event) => {
+      event.preventDefault();
+      const key = btn.getAttribute("data-guests-step");
+      const step = Number(btn.getAttribute("data-step") || "0");
+      if (!key || !Number.isFinite(step)) return;
+      const min = key === "adults" ? 1 : 0;
+      state[key] = Math.max(min, state[key] + step);
+      renderGuests();
+    });
+  });
+
+  document.addEventListener("click", (event) => {
+    if (bookingGuestsPopover.hidden) return;
+    const target = event.target;
+    if (!(target instanceof Node)) return;
+    if (bookingGuestsPopover.contains(target) || bookingGuestsToggle.contains(target)) return;
+    closeGuests();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeGuests();
+    }
+  });
+
+  renderGuests();
+}
+
 const loadLottie = () =>
   new Promise((resolve) => {
     if (window.lottie) {
