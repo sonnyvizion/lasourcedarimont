@@ -78,16 +78,22 @@
           <div class="booking-inner">
             <div class="booking-fields">
               <div class="booking-field booking-date-field">
-                <button class="booking-field-button" type="button" data-date-trigger="checkin">
+                <button class="booking-field-button" type="button" data-date-trigger="checkin" aria-expanded="false">
                   <span data-date-label="checkin">Date d’arrivée</span>
                 </button>
-                <input class="booking-date-input" type="date" data-date-input="checkin" aria-label="Date d’arrivée" />
+                <div class="booking-date-popover" data-date-popover="checkin" hidden>
+                  <label class="booking-date-popover-label" for="booking-checkin">Date d’arrivée</label>
+                  <input id="booking-checkin" class="booking-date-input" type="date" data-date-input="checkin" aria-label="Date d’arrivée" />
+                </div>
               </div>
               <div class="booking-field booking-date-field">
-                <button class="booking-field-button" type="button" data-date-trigger="checkout">
+                <button class="booking-field-button" type="button" data-date-trigger="checkout" aria-expanded="false">
                   <span data-date-label="checkout">Date de départ</span>
                 </button>
-                <input class="booking-date-input" type="date" data-date-input="checkout" aria-label="Date de départ" />
+                <div class="booking-date-popover" data-date-popover="checkout" hidden>
+                  <label class="booking-date-popover-label" for="booking-checkout">Date de départ</label>
+                  <input id="booking-checkout" class="booking-date-input" type="date" data-date-input="checkout" aria-label="Date de départ" />
+                </div>
               </div>
               <div class="booking-field booking-guests-field">
                 <button class="booking-field-button" type="button" data-guests-toggle aria-expanded="false">

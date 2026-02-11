@@ -38,6 +38,7 @@ const bookingCheckoutInput = document.querySelector('[data-date-input="checkout"
 const bookingCheckinLabel = document.querySelector('[data-date-label="checkin"]');
 const bookingCheckoutLabel = document.querySelector('[data-date-label="checkout"]');
 const bookingDateTriggers = document.querySelectorAll("[data-date-trigger]");
+const bookingDatePopovers = document.querySelectorAll("[data-date-popover]");
 const bookingGuestsToggle = document.querySelector("[data-guests-toggle]");
 const bookingGuestsPopover = document.querySelector("[data-guests-popover]");
 const bookingGuestsLabel = document.querySelector("[data-guests-label]");
@@ -55,6 +56,15 @@ if (bookingCheckinInput && bookingCheckoutInput && bookingCheckinLabel && bookin
   const todayIso = new Date().toISOString().split("T")[0];
   bookingCheckinInput.min = todayIso;
   bookingCheckoutInput.min = todayIso;
+
+  const closeDatePopovers = () => {
+    bookingDatePopovers.forEach((popover) => {
+      popover.hidden = true;
+    });
+    bookingDateTriggers.forEach((trigger) => {
+      trigger.setAttribute("aria-expanded", "false");
+    });
+  };
 
   const refreshDateLabels = () => {
     bookingCheckinLabel.textContent = bookingCheckinInput.value
@@ -75,22 +85,65 @@ if (bookingCheckinInput && bookingCheckoutInput && bookingCheckinLabel && bookin
       bookingCheckoutInput.min = todayIso;
     }
     refreshDateLabels();
+    closeDatePopovers();
   });
 
-  bookingCheckoutInput.addEventListener("change", refreshDateLabels);
+  bookingCheckoutInput.addEventListener("change", () => {
+    refreshDateLabels();
+    closeDatePopovers();
+  });
 
   bookingDateTriggers.forEach((trigger) => {
-    trigger.addEventListener("click", () => {
+    trigger.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
       const target = trigger.getAttribute("data-date-trigger");
       const input = document.querySelector(`[data-date-input="${target}"]`);
-      if (!input) return;
-      if (typeof input.showPicker === "function") {
-        input.showPicker();
-      } else {
-        input.focus();
-        input.click();
-      }
+      const popover = document.querySelector(`[data-date-popover="${target}"]`);
+      if (!input || !popover) return;
+
+      const isOpen = !popover.hidden;
+      closeDatePopovers();
+      if (isOpen) return;
+
+      popover.hidden = false;
+      trigger.setAttribute("aria-expanded", "true");
+      requestAnimationFrame(() => {
+        const isMobilePicker = window.matchMedia("(max-width: 980px)").matches;
+        input.focus({ preventScroll: true });
+        if (isMobilePicker) {
+          input.click();
+          return;
+        }
+        if (typeof input.showPicker === "function") {
+          input.showPicker();
+        } else {
+          input.click();
+        }
+      });
     });
+  });
+
+  bookingDatePopovers.forEach((popover) => {
+    popover.addEventListener("click", (event) => {
+      event.stopPropagation();
+    });
+  });
+
+  document.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof Node)) return;
+    const clickedInDateField = Array.from(document.querySelectorAll(".booking-date-field")).some((field) =>
+      field.contains(target)
+    );
+    if (clickedInDateField) return;
+    closeDatePopovers();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      closeDatePopovers();
+    }
   });
 
   refreshDateLabels();
