@@ -15,9 +15,126 @@ if (yearEl) {
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const headerEl = document.querySelector(".site-header");
 const bodyEl = document.body;
+const loaderEl = document.querySelector(".site-loader");
+const loaderAnimationEl = document.querySelector("#site-loader-animation");
 const navToggle = document.querySelector(".nav-toggle");
 const mobileMenu = document.querySelector(".mobile-menu");
 const mobileLinks = document.querySelectorAll(".mobile-menu-inner .menu-link");
+const LOADER_SESSION_KEY = "arimont_loader_seen";
+const BASE_URL = import.meta.env.BASE_URL || "/";
+let introAnimationDelay = 0;
+
+const loadLottie = () =>
+  new Promise((resolve) => {
+    if (window.lottie) {
+      resolve(window.lottie);
+      return;
+    }
+    const existing = document.querySelector('script[data-lottie-loader="true"]');
+    if (existing) {
+      existing.addEventListener("load", () => resolve(window.lottie || null), { once: true });
+      existing.addEventListener("error", () => resolve(null), { once: true });
+      return;
+    }
+    const loadScript = (src) =>
+      new Promise((resolveScript) => {
+        const script = document.createElement("script");
+        script.src = src;
+        script.async = true;
+        script.dataset.lottieLoader = "true";
+        script.addEventListener("load", () => resolveScript(window.lottie || null), { once: true });
+        script.addEventListener("error", () => resolveScript(null), { once: true });
+        document.head.appendChild(script);
+      });
+
+    const candidates = [
+      `${BASE_URL}js/lottie.min.js`,
+      "https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js",
+      "https://cdn.jsdelivr.net/npm/lottie-web@5.12.2/build/player/lottie.min.js",
+      "https://unpkg.com/lottie-web@5.12.2/build/player/lottie.min.js"
+    ];
+
+    const tryNext = (index) => {
+      if (index >= candidates.length) {
+        resolve(null);
+        return;
+      }
+      loadScript(candidates[index]).then((lib) => {
+        if (lib) {
+          resolve(lib);
+        } else {
+          tryNext(index + 1);
+        }
+      });
+    };
+
+    tryNext(0);
+  });
+
+if (loaderEl) {
+  let showLoader = true;
+  try {
+    showLoader = sessionStorage.getItem(LOADER_SESSION_KEY) !== "1";
+  } catch {
+    showLoader = true;
+  }
+
+  if (showLoader) {
+    introAnimationDelay = 2.4;
+    bodyEl.classList.add("is-loading");
+    loaderEl.classList.add("is-active");
+    const startedAt = Date.now();
+    const minVisibleMs = 2600;
+    const holdLastFrameMs = 1500;
+    const maxVisibleMs = 7000;
+
+    let closed = false;
+    const closeLoader = () => {
+      if (closed) return;
+      closed = true;
+      loaderEl.classList.add("is-hidden");
+      bodyEl.classList.remove("is-loading");
+      try {
+        sessionStorage.setItem(LOADER_SESSION_KEY, "1");
+      } catch {
+        // noop
+      }
+      window.setTimeout(() => loaderEl.remove(), 700);
+    };
+
+    let lottieInstance = null;
+    loadLottie().then((lottie) => {
+      if (!lottie || !loaderAnimationEl || closed) return;
+      lottieInstance = lottie.loadAnimation({
+        container: loaderAnimationEl,
+        renderer: "svg",
+        loop: false,
+        autoplay: true,
+        path: `${BASE_URL}img/anim_logo_domaine_arimont.json`
+      });
+
+      lottieInstance.addEventListener("complete", () => {
+        const elapsed = Date.now() - startedAt;
+        const wait = Math.max(holdLastFrameMs, minVisibleMs - elapsed);
+        window.setTimeout(() => {
+          if (lottieInstance) {
+            lottieInstance.destroy();
+          }
+          closeLoader();
+        }, wait);
+      });
+    });
+
+    window.setTimeout(() => {
+      if (lottieInstance) {
+        lottieInstance.destroy();
+      }
+      closeLoader();
+    }, maxVisibleMs);
+  } else {
+    loaderEl.remove();
+  }
+}
 
 if (navToggle && mobileMenu) {
   const splitMenuLink = (link) => {
@@ -129,7 +246,10 @@ if (!prefersReducedMotion) {
   gsap.set(".site-header", { y: -24, opacity: 0 });
   gsap.set(".hero-headline", { opacity: 0 });
 
-  const heroTl = gsap.timeline({ defaults: { duration: 0.9, ease: "power3.out" } });
+  const heroTl = gsap.timeline({
+    defaults: { duration: 0.9, ease: "power3.out" },
+    delay: introAnimationDelay
+  });
   const titleLines = gsap.utils.toArray(".hero-title .hero-line");
 
   heroTl.addLabel("parallaxStart", 0);

@@ -13,6 +13,58 @@
   z-index: 0;
 }
 
+.site-loader {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--color-forest);
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+
+.site-loader.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.site-loader.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.site-loader-animation {
+  width: min(44vw, 220px);
+  height: min(44vw, 220px);
+}
+
+.site-loader-animation:empty::after {
+  content: "";
+  display: block;
+  width: 60px;
+  height: 60px;
+  margin: auto;
+  border: 2px solid rgba(246, 241, 230, 0.38);
+  border-top-color: var(--color-yellow);
+  border-radius: 50%;
+  animation: loader-spin 0.9s linear infinite;
+}
+
+@keyframes loader-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+body.is-loading {
+  overflow: hidden;
+}
+
 .hero-content {
   width: 100%;
   position: relative;
@@ -374,16 +426,17 @@
 .feature-grid {
   margin-top: 36px;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 16px;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+  column-gap: 16px;
+  row-gap: 16px;
+  grid-auto-rows: 1fr;
 }
 
 .feature-card {
   background: #fff7ea;
   border-radius: 20px;
   padding: 26px;
-  height: 520px;
-  min-height: 520px;
+  min-height: 220px;
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -391,6 +444,12 @@
   overflow: hidden;
   border: 3px solid var(--color-forest);
 }
+.feature-card:first-child {
+  grid-row: span 2;
+  min-height: 100%;
+  height: 850px;
+}
+
 .p-card-illu {
   font-family: var(--font-body);
   font-weight: 400;
@@ -935,7 +994,7 @@
     padding-left: 0;
     padding-right: 0;
     overflow-x: auto;
-    overflow-y: hidden;
+    overflow-y: visible;
     -webkit-overflow-scrolling: touch;
     scroll-snap-type: x proximity;
     scroll-padding-inline: var(--content-padding);
@@ -961,6 +1020,7 @@
     min-width: 70vw;
     padding: 18px;
     scroll-snap-align: start;
+    transform: none !important;
   }
 
   .feature-card h3 {
