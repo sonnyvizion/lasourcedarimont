@@ -1096,7 +1096,8 @@ body.is-loading {
     left: 50%;
     right: auto;
     transform: translateX(-50%);
-    width: min(360px, calc(100vw - (var(--content-padding) * 2)));
+    width: min(300px, calc(100vw - (var(--content-padding) * 2)));
+    max-width: 100%;
     padding: 14px;
     min-width: 0;
   }
