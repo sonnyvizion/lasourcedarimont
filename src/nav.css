@@ -19,7 +19,7 @@
 .menu-open .site-header {
   background: transparent;
   border-bottom: none;
-  color: var(--color-beige);
+  color: var(--color-yellow);
 }
 
 .header-inner {
@@ -50,7 +50,7 @@
 }
 
 .menu-open .logo-mark {
-  background-color: var(--color-beige);
+  background-color: var(--color-yellow);
 }
 
 .nav-links {
@@ -131,7 +131,7 @@
 }
 
 .menu-open .nav-toggle-bar {
-  background: var(--color-beige);
+  background: var(--color-yellow);
 }
 
 .menu-open .nav-toggle-bar:nth-child(1) {
@@ -150,12 +150,16 @@
   position: fixed;
   inset: 0;
   background: #2a5843;
-  color: var(--color-beige);
+  color: var(--color-yellow);
   z-index: 9;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.4s ease;
   overflow: hidden;
+}
+
+.menu-open .mobile-menu-inner a {
+  color: var(--color-yellow);
 }
 
 .mobile-menu::after {
@@ -164,7 +168,7 @@
   left: 180px;
   right: 0;
   bottom: -5px;
-  height: 180px;
+  height: 100px;
   background: url("/img/illustrations/herbes_footer_illu.png") no-repeat center bottom / contain;
   opacity: 0.9;
   pointer-events: none;
@@ -196,7 +200,6 @@
   width: 54px;
   height: 54px;
   object-fit: contain;
-  filter: brightness(0) invert(1);
 }
 
 .menu-open .mobile-menu {
