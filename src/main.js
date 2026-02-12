@@ -388,18 +388,20 @@ if (navToggle && mobileMenu) {
   });
 }
 
-if (!prefersReducedMotion && !isIOSDevice) {
-  const lenis = new Lenis({
-    smoothWheel: true,
-    smoothTouch: false,
-    lerp: 0.08
-  });
+if (!prefersReducedMotion) {
+  if (!isIOSDevice) {
+    const lenis = new Lenis({
+      smoothWheel: true,
+      smoothTouch: false,
+      lerp: 0.08
+    });
 
-  lenis.on("scroll", ScrollTrigger.update);
-  gsap.ticker.add((time) => {
-    lenis.raf(time * 1000);
-  });
-  gsap.ticker.lagSmoothing(0);
+    lenis.on("scroll", ScrollTrigger.update);
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000);
+    });
+    gsap.ticker.lagSmoothing(0);
+  }
 
   const splitToChars = (el) => {
     const text = el.textContent || "";
