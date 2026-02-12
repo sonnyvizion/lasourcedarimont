@@ -19,7 +19,7 @@
 .menu-open .site-header {
   background: transparent;
   border-bottom: none;
-  color: var(--color-yellow);
+  color: var(--color-beige);
 }
 
 .header-inner {
@@ -50,7 +50,7 @@
 }
 
 .menu-open .logo-mark {
-  background-color: var(--color-yellow);
+  background-color: var(--color-beige);
 }
 
 .nav-links {
@@ -131,7 +131,7 @@
 }
 
 .menu-open .nav-toggle-bar {
-  background: var(--color-yellow);
+  background: var(--color-beige);
 }
 
 .menu-open .nav-toggle-bar:nth-child(1) {
@@ -150,7 +150,7 @@
   position: fixed;
   inset: 0;
   background: #2a5843;
-  color: var(--color-yellow);
+  color: var(--color-beige);
   z-index: 9;
   opacity: 0;
   pointer-events: none;
@@ -159,7 +159,7 @@
 }
 
 .menu-open .mobile-menu-inner a {
-  color: var(--color-yellow);
+  color: var(--color-beige);
 }
 
 .mobile-menu::after {

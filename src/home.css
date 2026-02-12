@@ -914,8 +914,15 @@ body.is-loading {
 
 .footer-main {
   background: #214739;
-  color: var(--color-yellow);
+  color: var(--color-beige);
   padding: 48px 0 30px;
+}
+
+.footer-main a,
+.footer-main .footer-title,
+.footer-main .footer-links,
+.footer-main .footer-bottom {
+  color: var(--color-beige);
 }
 
 .footer-grid {
@@ -939,8 +946,8 @@ body.is-loading {
 }
 
 .footer-rabbit-cta {
-  color: var(--color-yellow);
-  border-color: rgba(253, 255, 194, 0.8);
+  color: var(--color-beige);
+  border-color: rgba(246, 241, 230, 0.8);
   background: transparent;
   margin-left: 10px;
 }
@@ -974,7 +981,7 @@ body.is-loading {
 }
 
 .footer-bottom {
-  border-top: 2px solid var(--color-yellow);
+  border-top: 2px solid rgba(246, 241, 230, 0.75);
   margin-top: 50px;
   padding-top: 25px;
   font-size: 12px;
