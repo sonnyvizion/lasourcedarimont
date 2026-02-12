@@ -521,7 +521,10 @@ if (!prefersReducedMotion) {
   const isMobileViewport = window.matchMedia("(max-width: 980px)").matches;
   const splitLines = (el) => {
     const raw = (el.innerHTML || "").trim();
-    const parts = raw.split(/<br\s*\/?\s*>/i).map((p) => p.trim()).filter(Boolean);
+    const parts = raw
+      .split(/<br\b[^>]*>/gi)
+      .map((p) => p.trim())
+      .filter(Boolean);
     el.innerHTML = parts
       .map((part) => `<span class="line"><span class="line-inner">${part}</span></span>`)
       .join("");
@@ -636,16 +639,32 @@ if (!prefersReducedMotion) {
     const isMobile = window.matchMedia("(max-width: 980px)").matches;
     if (isMobile) {
       gsap.set(galleryTrack, { x: 0 });
-      const getMaxScroll = () => Math.max(0, galleryTrack.scrollWidth - gallerySlider.clientWidth);
       gallerySlider.style.scrollBehavior = "auto";
+      const getMaxScroll = () => Math.max(0, galleryTrack.scrollWidth - gallerySlider.clientWidth);
+      let isTouchingSlider = false;
+      gallerySlider.addEventListener("touchstart", () => {
+        isTouchingSlider = true;
+      }, { passive: true });
+      const releaseTouch = () => {
+        isTouchingSlider = false;
+      };
+      gallerySlider.addEventListener("touchend", releaseTouch, { passive: true });
+      gallerySlider.addEventListener("touchcancel", releaseTouch, { passive: true });
+
       ScrollTrigger.create({
         trigger: gallerySlider,
         start: "top 80%",
         end: "top+=220% top",
-        scrub: 1.4,
+        scrub: 1.2,
         invalidateOnRefresh: true,
         onUpdate: (self) => {
-          gallerySlider.scrollLeft = self.progress * getMaxScroll();
+          if (isTouchingSlider) return;
+          gsap.to(gallerySlider, {
+            scrollLeft: self.progress * getMaxScroll(),
+            duration: 0.2,
+            ease: "power1.out",
+            overwrite: true
+          });
         }
       });
       requestAnimationFrame(() => ScrollTrigger.refresh());
@@ -726,6 +745,43 @@ if (!prefersReducedMotion) {
         }
       }
     );
+  } else {
+    const featureGrid = document.querySelector(".feature-grid");
+    if (featureGrid) {
+      const getFeatureMaxScroll = () =>
+        Math.max(0, featureGrid.scrollWidth - featureGrid.clientWidth);
+      const smoothFeatureScroll = gsap.quickTo(featureGrid, "scrollLeft", {
+        duration: 0.55,
+        ease: "power2.out"
+      });
+      let isTouchingFeatureGrid = false;
+
+      featureGrid.addEventListener(
+        "touchstart",
+        () => {
+          isTouchingFeatureGrid = true;
+        },
+        { passive: true }
+      );
+
+      const releaseFeatureTouch = () => {
+        isTouchingFeatureGrid = false;
+      };
+      featureGrid.addEventListener("touchend", releaseFeatureTouch, { passive: true });
+      featureGrid.addEventListener("touchcancel", releaseFeatureTouch, { passive: true });
+
+      ScrollTrigger.create({
+        trigger: featureGrid,
+        start: "top 65%",
+        end: "top+=280% top",
+        scrub: 1.8,
+        invalidateOnRefresh: true,
+        onUpdate: (self) => {
+          if (isTouchingFeatureGrid) return;
+          smoothFeatureScroll(self.progress * getFeatureMaxScroll());
+        }
+      });
+    }
   }
 
 

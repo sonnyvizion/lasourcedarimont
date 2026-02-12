@@ -995,6 +995,10 @@ body.is-loading {
     );
   }
 
+  .hero-headline {
+    gap:0;
+  }
+
   .nav-links {
     display: none;
   }
@@ -1148,7 +1152,7 @@ body.is-loading {
     overflow-x: auto;
     overflow-y: visible;
     -webkit-overflow-scrolling: touch;
-    scroll-snap-type: x proximity;
+    scroll-snap-type: none;
     scroll-padding-inline: var(--content-padding);
     touch-action: auto;
     overscroll-behavior-x: contain;
@@ -1171,7 +1175,7 @@ body.is-loading {
     min-height: 50vh;
     min-width: 70vw;
     padding: 18px;
-    scroll-snap-align: start;
+    scroll-snap-align: none;
     transform: none !important;
   }
 
