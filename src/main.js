@@ -680,8 +680,7 @@ if (!prefersReducedMotion) {
   });
 
   const bannerEl = document.querySelector(".banner");
-  const isDesktopViewport = window.matchMedia("(min-width: 981px)").matches;
-  if (bannerEl && isDesktopViewport) {
+  if (bannerEl) {
     gsap.fromTo(
       bannerEl,
       {

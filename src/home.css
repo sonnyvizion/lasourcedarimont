@@ -1153,10 +1153,6 @@ body.is-loading {
 
   .banner {
     min-height: 0;
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
-    border-radius: 0;
   }
 
   .banner-video-desktop {
