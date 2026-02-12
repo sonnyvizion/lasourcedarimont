@@ -13,6 +13,9 @@ if (yearEl) {
 }
 
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const isIOSDevice =
+  /iP(ad|hone|od)/.test(navigator.userAgent) ||
+  (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 const headerEl = document.querySelector(".site-header");
 const bodyEl = document.body;
 const loaderEl = document.querySelector(".site-loader");
@@ -385,7 +388,7 @@ if (navToggle && mobileMenu) {
   });
 }
 
-if (!prefersReducedMotion) {
+if (!prefersReducedMotion && !isIOSDevice) {
   const lenis = new Lenis({
     smoothWheel: true,
     smoothTouch: false,

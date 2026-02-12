@@ -1000,6 +1000,9 @@ body.is-loading {
   }
 
   .hero {
+    position: relative;
+    top: auto;
+    z-index: 1;
     height: 100vh;
     min-height: 100vh;
     padding-bottom: 0;
