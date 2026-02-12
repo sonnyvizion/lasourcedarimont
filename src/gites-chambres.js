@@ -50,10 +50,13 @@ if (navToggle && mobileMenu) {
 
 const splitRevealLines = (el) => {
   const raw = (el.innerHTML || "").trim();
-  const parts = raw
-    .split(/<br\b[^>]*>/gi)
-    .map((p) => p.trim())
-    .filter(Boolean);
+  const isMobile = window.matchMedia("(max-width: 980px)").matches;
+  const parts = isMobile && el.tagName === "H2"
+    ? [raw.replace(/<br\b[^>]*>/gi, " ").replace(/\s+/g, " ").trim()]
+    : raw
+        .split(/<br\b[^>]*>/gi)
+        .map((p) => p.trim())
+        .filter(Boolean);
   el.innerHTML = parts
     .map((part) => `<span class="line"><span class="line-inner">${part}</span></span>`)
     .join("");
