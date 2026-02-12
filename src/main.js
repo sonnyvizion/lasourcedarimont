@@ -214,6 +214,41 @@ if (bookingGuestsToggle && bookingGuestsPopover && bookingGuestsLabel && booking
   renderGuests();
 }
 
+document.querySelectorAll(".feature-illustration-video").forEach((videoEl) => {
+  const card = videoEl.closest(".feature-card");
+  if (!card) return;
+  const freezeTime = Number.parseFloat(videoEl.getAttribute("data-freeze-time") || "0.05");
+  const playStart = Number.parseFloat(videoEl.getAttribute("data-play-start") || "0");
+
+  const freezeVideo = () => {
+    videoEl.pause();
+    const nextTime = Number.isFinite(freezeTime) && freezeTime >= 0 ? freezeTime : 0.05;
+    if (videoEl.readyState >= 1) {
+      videoEl.currentTime = Math.min(nextTime, Math.max(0, videoEl.duration || nextTime));
+    }
+  };
+  const playVideo = () => {
+    if (videoEl.readyState >= 1 && Number.isFinite(playStart) && playStart >= 0) {
+      videoEl.currentTime = Math.min(playStart, Math.max(0, videoEl.duration || playStart));
+    }
+    const playback = videoEl.play();
+    if (playback && typeof playback.catch === "function") {
+      playback.catch(() => {});
+    }
+  };
+
+  videoEl.muted = true;
+  videoEl.loop = false;
+  if (videoEl.readyState >= 1) {
+    freezeVideo();
+  } else {
+    videoEl.addEventListener("loadedmetadata", freezeVideo, { once: true });
+  }
+
+  card.addEventListener("mouseenter", playVideo);
+  card.addEventListener("mouseleave", freezeVideo);
+});
+
 const loadLottie = () =>
   new Promise((resolve) => {
     if (window.lottie) {
@@ -643,6 +678,34 @@ if (!prefersReducedMotion) {
     }
     requestAnimationFrame(initRevealText);
   });
+
+  const bannerEl = document.querySelector(".banner");
+  const isDesktopViewport = window.matchMedia("(min-width: 981px)").matches;
+  if (bannerEl && isDesktopViewport) {
+    gsap.fromTo(
+      bannerEl,
+      {
+        width: "100%",
+        marginLeft: "0",
+        marginRight: "0",
+        borderRadius: "24px"
+      },
+      {
+        width: "100vw",
+        marginLeft: "calc(50% - 50vw)",
+        marginRight: "calc(50% - 50vw)",
+        borderRadius: "0px",
+        ease: "none",
+        scrollTrigger: {
+          trigger: bannerEl,
+          start: "top 85%",
+          end: () => `+=${Math.max(320, bannerEl.offsetHeight * 0.7)}`,
+          scrub: true,
+          invalidateOnRefresh: true
+        }
+      }
+    );
+  }
 
   // Gallery slider: scroll-driven + arrow controls
   const gallerySlider = document.querySelector(".gallery-slider");
