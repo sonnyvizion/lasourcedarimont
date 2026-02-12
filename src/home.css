@@ -1053,7 +1053,7 @@ body.is-loading {
     overflow-y: hidden;
     scroll-snap-type: none;
     -webkit-overflow-scrolling: touch;
-    touch-action: pan-x;
+    touch-action: auto;
     overscroll-behavior-x: contain;
   }
 
@@ -1150,7 +1150,7 @@ body.is-loading {
     -webkit-overflow-scrolling: touch;
     scroll-snap-type: x proximity;
     scroll-padding-inline: var(--content-padding);
-    touch-action: pan-x;
+    touch-action: auto;
     overscroll-behavior-x: contain;
   }
 
@@ -1215,7 +1215,7 @@ body.is-loading {
 
   .testimonials-slider {
     scroll-snap-type: x proximity;
-    touch-action: pan-x;
+    touch-action: auto;
     overscroll-behavior-x: contain;
   }
 
