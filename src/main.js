@@ -516,117 +516,132 @@ if (!prefersReducedMotion) {
   });
 
   // Reveal text effect (line by line) for intro text
-  document.querySelectorAll("h2, .label").forEach((el) => el.classList.add("reveal-text"));
-  const revealTexts = document.querySelectorAll(".reveal-text");
-  const isMobileViewport = window.matchMedia("(max-width: 980px)").matches;
-  const splitLines = (el) => {
-    const raw = (el.innerHTML || "").trim();
-    const parts = raw
-      .split(/<br\b[^>]*>/gi)
-      .map((p) => p.trim())
-      .filter(Boolean);
-    el.innerHTML = parts
-      .map((part) => `<span class="line"><span class="line-inner">${part}</span></span>`)
-      .join("");
-  };
+  const initRevealText = () => {
+    document.querySelectorAll("h2, .label").forEach((el) => el.classList.add("reveal-text"));
+    const revealTexts = document.querySelectorAll(".reveal-text");
+    const isMobileViewport = window.matchMedia("(max-width: 980px)").matches;
+    const splitLines = (el) => {
+      const raw = (el.innerHTML || "").trim();
+      const parts = raw
+        .split(/<br\b[^>]*>/gi)
+        .map((p) => p.trim())
+        .filter(Boolean);
+      el.innerHTML = parts
+        .map((part) => `<span class="line"><span class="line-inner">${part}</span></span>`)
+        .join("");
+    };
 
-  const splitH2ByVisualLines = (el) => {
-    if (el.dataset.wordSplit !== "true") {
-      const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
-      const textNodes = [];
-      let currentNode = walker.nextNode();
-      while (currentNode) {
-        if ((currentNode.nodeValue || "").trim()) {
-          textNodes.push(currentNode);
+    const splitH2ByVisualLines = (el) => {
+      if (el.dataset.wordSplit !== "true") {
+        const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+        const textNodes = [];
+        let currentNode = walker.nextNode();
+        while (currentNode) {
+          if ((currentNode.nodeValue || "").trim()) {
+            textNodes.push(currentNode);
+          }
+          currentNode = walker.nextNode();
         }
-        currentNode = walker.nextNode();
+
+        textNodes.forEach((textNode) => {
+          const text = textNode.nodeValue || "";
+          const tokens = text.split(/(\s+)/).filter(Boolean);
+          const frag = document.createDocumentFragment();
+          tokens.forEach((token) => {
+            if (/^\s+$/.test(token)) {
+              frag.appendChild(document.createTextNode(token));
+              return;
+            }
+            const span = document.createElement("span");
+            span.className = "reveal-word";
+            span.textContent = token;
+            frag.appendChild(span);
+          });
+          textNode.parentNode?.replaceChild(frag, textNode);
+        });
+
+        el.dataset.wordSplit = "true";
       }
 
-      textNodes.forEach((textNode) => {
-        const text = textNode.nodeValue || "";
-        const tokens = text.split(/(\s+)/).filter(Boolean);
-        const frag = document.createDocumentFragment();
-        tokens.forEach((token) => {
-          if (/^\s+$/.test(token)) {
-            frag.appendChild(document.createTextNode(token));
-            return;
-          }
-          const span = document.createElement("span");
-          span.className = "reveal-word";
-          span.textContent = token;
-          frag.appendChild(span);
-        });
-        textNode.parentNode?.replaceChild(frag, textNode);
+      const words = Array.from(el.querySelectorAll(".reveal-word"));
+      const lines = [];
+      let currentLine = [];
+      let currentTop = null;
+
+      words.forEach((word) => {
+        const top = Math.round(word.offsetTop);
+        if (currentTop === null || Math.abs(top - currentTop) <= 2) {
+          currentLine.push(word);
+        } else {
+          if (currentLine.length) lines.push(currentLine);
+          currentLine = [word];
+        }
+        currentTop = top;
       });
 
-      el.dataset.wordSplit = "true";
-    }
-
-    const words = Array.from(el.querySelectorAll(".reveal-word"));
-    const lines = [];
-    let currentLine = [];
-    let currentTop = null;
-
-    words.forEach((word) => {
-      const top = Math.round(word.offsetTop);
-      if (currentTop === null || Math.abs(top - currentTop) <= 2) {
-        currentLine.push(word);
-      } else {
-        if (currentLine.length) lines.push(currentLine);
-        currentLine = [word];
+      if (currentLine.length) {
+        lines.push(currentLine);
       }
-      currentTop = top;
+
+      return lines;
+    };
+
+    revealTexts.forEach((el) => {
+      if (isMobileViewport && el.tagName === "H2") {
+        const lines = splitH2ByVisualLines(el);
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: el,
+            start: "top 80%"
+          }
+        });
+
+        lines.forEach((lineWords, index) => {
+          tl.fromTo(
+            lineWords,
+            { y: 24, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 0.7,
+              ease: "power3.out",
+              stagger: 0.02
+            },
+            index * 0.14
+          );
+        });
+        return;
+      }
+
+      splitLines(el);
+      gsap.fromTo(
+        el.querySelectorAll(".line-inner"),
+        { yPercent: 100 },
+        {
+          yPercent: 0,
+          duration: 1.1,
+          ease: "power3.out",
+          stagger: 0.12,
+          scrollTrigger: {
+            trigger: el,
+            start: "top 80%"
+          }
+        }
+      );
     });
 
-    if (currentLine.length) {
-      lines.push(currentLine);
-    }
-
-    return lines;
+    requestAnimationFrame(() => ScrollTrigger.refresh());
   };
 
-  revealTexts.forEach((el) => {
-    if (isMobileViewport && el.tagName === "H2") {
-      const lines = splitH2ByVisualLines(el);
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: el,
-          start: "top 80%"
-        }
-      });
-
-      lines.forEach((lineWords, index) => {
-        tl.fromTo(
-          lineWords,
-          { y: 24, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.7,
-            ease: "power3.out",
-            stagger: 0.02
-          },
-          index * 0.14
-        );
+  introGate.then(() => {
+    const fontsReady = document.fonts?.ready;
+    if (fontsReady && typeof fontsReady.then === "function") {
+      fontsReady.then(() => {
+        requestAnimationFrame(initRevealText);
       });
       return;
     }
-
-    splitLines(el);
-    gsap.fromTo(
-      el.querySelectorAll(".line-inner"),
-      { yPercent: 100 },
-      {
-        yPercent: 0,
-        duration: 1.1,
-        ease: "power3.out",
-        stagger: 0.12,
-        scrollTrigger: {
-          trigger: el,
-          start: "top 80%"
-        }
-      }
-    );
+    requestAnimationFrame(initRevealText);
   });
 
   // Gallery slider: scroll-driven + arrow controls
