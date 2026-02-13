@@ -2,8 +2,9 @@
 .hero {
   position: sticky;
   top: 0;
-  height: 100vh;
-  min-height: 100vh;
+  height: 100vw;
+  max-height: 100vh;
+  min-height: 0;
   background: #223226;
   color: var(--color-white);
   display: flex;
@@ -72,12 +73,29 @@ body.is-loading {
   height: 100%;
   display: flex;
   flex-direction: column;
+  padding-inline: 6vw;
+  max-width: none;
 }
 
 .hero-media {
   position: absolute;
   inset: 0;
   z-index: 1;
+}
+
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  opacity: 1;
+  transition: opacity 0.8s ease;
+}
+
+.hero-video.is-fading {
+  opacity: 0.85;
 }
 
 .hero-image {
@@ -91,6 +109,7 @@ body.is-loading {
   will-change: transform;
   /*filter: brightness(0.85);*/
   z-index: 0;
+  display: none;
 }
 
 .hero-image img {
@@ -125,17 +144,20 @@ body.is-loading {
   content: "";
   position: absolute;
   inset: 0;
-  /*background: linear-gradient(180deg, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.1));*/
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.22) 35%, rgba(0, 0, 0, 0) 70%);
   z-index: 1;
 }
 
 
 .hero-title {
-  text-align: center;
-  color: var(--color-yellow);
+  text-align: left;
+  color: var(--color-white);
   text-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
-  line-height: 0.95;
-  font-size: 6em;
+  line-height: 0.88;
+  letter-spacing: -1px;
+  font-size: clamp(32px, 5.2vw, 4.5vw);
+  font-family: var(--font-body);
+  font-weight: 500;
 }
 
 .hero-line {
@@ -143,22 +165,16 @@ body.is-loading {
   overflow: hidden;
 }
 
+
 .hero-line-small {
   font-size: 0.65em;
 }
 
-.hero-subtitle {
-  text-align: center;
-  font-size: 16px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  margin-top: 10px;
-  color: var(--color-yellow);
-  font-family: var(--font-body);
-  font-weight: 500;
-  line-height: 1.2;
-  display: inline-block;
-  white-space: nowrap;
+.hero-cta {
+  align-self: start;
+  font-size: 14px;
+  padding: 16px 26px;
+  width: max-content;
 }
 
 .hero-split .char {
@@ -189,11 +205,12 @@ body.is-loading {
 
 .hero-headline {
   position: absolute;
-  top: 20vh;
-  left: 0;
-  right: 0;
+  top: auto;
+  bottom: 15%;
+  left: 6vw;
+  right: auto;
   display: grid;
-  gap: 10px;
+  gap: 50px;
 }
 
 .booking-panel {
@@ -357,7 +374,11 @@ body.is-loading {
 }
 
 .scroll-cue {
-  margin: 18px auto 2vh;
+  position: absolute;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  margin: 0;
   display: inline-flex;
   flex-direction: column;
   align-items: center;
@@ -414,26 +435,8 @@ body.is-loading {
 }
 
 .section-feature {
-  /* Make the green block start around the feature-grid level */
-  background: linear-gradient(
-    to bottom,
-    var(--color-beige) 0%,
-    var(--color-beige) 56%,
-    var(--color-forest) 56%,
-    var(--color-forest) 100%
-  );
-}
-
-@media (max-width: 980px) {
-  .section-feature {
-    background: linear-gradient(
-      to bottom,
-      var(--color-beige) 0%,
-      var(--color-beige) 59%,
-      var(--color-forest) 59%,
-      var(--color-forest) 100%
-    );
-  }
+  background: transparent;
+  
 }
 
 .center {
@@ -636,21 +639,58 @@ body.is-loading {
   pointer-events: none;
 }
 
+.section-lodgings-feature {
+  position: relative;
+  background: var(--color-forest);
+  --bg-start: clamp(430px, 40vh, 560px);
+  --bg-end: clamp(680px, 54vh, 880px);
+}
+
+.section-lodgings-feature::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: var(--bg-start);
+  background: var(--color-beige);
+  z-index: 0;
+}
+
+.section-lodgings-feature::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--bg-end);
+  background: var(--color-beige);
+  z-index: 0;
+}
+
+.section-lodgings-feature .section {
+  position: relative;
+  z-index: 1;
+  background: transparent;
+}
+
+@media (max-width: 980px) {
+  .section-lodgings-feature {
+    --bg-end: clamp(460px, 40vh, 660px);
+  }
+}
+
 .section-dark {
-  background: linear-gradient(
-    to bottom,
-    var(--color-forest) 0%,
-    var(--color-forest) 82%,
-    var(--color-beige) 82%,
-    var(--color-beige) 100%
-  );
+  background: none;
   color: var(--color-yellow);
   padding-top: 80px;
 }
 
 .section-dark h2,
-.section-dark p,
 .section-dark .label {
+  color: var(--color-forest);
+}
+.section-dark p {
   color: var(--color-yellow);
 }
 .section-dark h2 {
@@ -660,6 +700,11 @@ body.is-loading {
   letter-spacing: 0.01em;
   line-height: 1.2;
 }
+
+.section-feature .label,
+.section-feature h2 {
+  color: var(--color-yellow);
+}
 .lodgings-grid {
   margin-top: 150px;
   display: grid;
@@ -668,7 +713,7 @@ body.is-loading {
 }
 
 .section-dark .lodgings-grid {
-  margin-top: 150px !important;
+  margin-top: 80px !important;
 }
 
 .lodging-card {
@@ -1013,17 +1058,16 @@ body.is-loading {
 
 @media (max-width: 980px) {
   .section-dark {
-    background: linear-gradient(
-      to bottom,
-      var(--color-forest) 0%,
-      var(--color-forest) 88%,
-      var(--color-beige) 88%,
-      var(--color-beige) 100%
-    );
+    background: none;
   }
 
   .hero-headline {
-    gap:0;
+    gap: 40px;
+    top: auto;
+    bottom: 100px;
+    left: 6vw;
+    right: 6vw;
+    transform: none;
   }
 
   .nav-links {
@@ -1040,8 +1084,9 @@ body.is-loading {
   }
 
   .hero-title {
-    font-size: 2.6em;
-    text-align: center;
+    font-size: clamp(39px, 8vw, 48px);
+    text-align: left;
+    width: 100%;
   }
 
   h2 {
@@ -1054,10 +1099,12 @@ body.is-loading {
     line-height: 1.24;
   }
 
-  .hero-subtitle {
-    font-size: 11px;
-    letter-spacing: 0.10em;
-    text-align: center;
+  .hero-cta {
+    align-self: center;
+    margin-top: 14px;
+    margin-left: auto;
+    margin-right: auto;
+    display: inline-flex;
   }
 
   .intro-illu {
@@ -1070,9 +1117,16 @@ body.is-loading {
     transform: scale(1.5);
   }
 
+  .hero-video {
+    display: none;
+  }
+
+  .hero-image {
+    display: block;
+  }
+
   .hero-tree {
-    width: min(40vw, 220px);
-    bottom: -10%;
+    display: none;
   }
 
   .gallery-arrows {
@@ -1169,7 +1223,7 @@ body.is-loading {
 
   .feature-grid {
     display: flex;
-    margin-top: 16px;
+    margin-top: -24px;
     gap: 16px;
     width: 100vw;
     margin-left: calc(50% - 50vw);

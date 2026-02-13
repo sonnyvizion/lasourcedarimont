@@ -4,11 +4,16 @@
   top: 0;
   left: 0;
   z-index: 10;
+  color: var(--color-white);
+  background: transparent;
+  border-bottom: none;
+  transition: background 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+}
+
+.site-header.is-solid {
+  background: rgba(246, 241, 230, 0.95);
   color: var(--color-forest);
-  background: rgba(246, 241, 230, 0.5);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  border-bottom: 1px solid rgba(24, 53, 40, 0.15);
 }
 
 .nav-hidden .site-header {
@@ -19,7 +24,7 @@
 .menu-open .site-header {
   background: transparent;
   border-bottom: none;
-  color: var(--color-beige);
+  color: var(--color-white);
 }
 
 .header-inner {
@@ -27,6 +32,11 @@
   align-items: center;
   justify-content: space-between;
   padding: 8px 0;
+}
+
+.site-header .content-wrap {
+  max-width: none;
+  padding-inline: 6vw;
 }
 
 .nav-left {
@@ -44,13 +54,18 @@
 .logo-mark {
   height: 54px;
   width: 54px;
-  background-color: var(--color-forest);
+  background-color: var(--color-white);
   -webkit-mask: url("/img/LOGOTYPE_SYMETRIK.svg") no-repeat center / contain;
   mask: url("/img/LOGOTYPE_SYMETRIK.svg") no-repeat center / contain;
+  transition: background-color 0.4s ease;
+}
+
+.site-header.is-solid .logo-mark {
+  background-color: var(--color-forest);
 }
 
 .menu-open .logo-mark {
-  background-color: var(--color-beige);
+  background-color: var(--color-white);
 }
 
 .nav-links {
@@ -60,9 +75,39 @@
   font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--color-forest);
+  color: var(--color-white);
   font-family: var(--font-body);
   font-weight: 600;
+  transition: color 0.4s ease;
+}
+
+.nav-links a {
+  position: relative;
+  display: inline-flex;
+  padding-bottom: 6px;
+}
+
+.nav-links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nav-links a:hover::after,
+.nav-links a:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.site-header.is-solid .nav-links {
+  color: var(--color-forest);
 }
 
 .nav-right {
@@ -74,6 +119,11 @@
   letter-spacing: 0.08em;
   font-family: var(--font-body);
   font-weight: 600;
+  color: var(--color-white);
+  transition: color 0.4s ease;
+}
+
+.site-header.is-solid .nav-right {
   color: var(--color-forest);
 }
 
@@ -87,8 +137,9 @@
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  border: 1px solid var(--color-forest);
+  border: 1px solid var(--color-white);
   position: relative;
+  transition: border-color 0.4s ease;
 }
 
 .nav-icon::after {
@@ -96,7 +147,13 @@
   position: absolute;
   inset: 5px;
   border-radius: 50%;
-  border: 1px solid var(--color-forest);
+  border: 1px solid var(--color-white);
+  transition: border-color 0.4s ease;
+}
+
+.site-header.is-solid .nav-icon,
+.site-header.is-solid .nav-icon::after {
+  border-color: var(--color-forest);
 }
 
 .nav-lang {
@@ -125,13 +182,21 @@
   display: block;
   width: 20px;
   height: 2px;
-  background: var(--color-forest);
+  background: var(--color-white);
   border-radius: 2px;
   transition: transform 0.3s ease, opacity 0.3s ease, background 0.3s ease;
 }
 
+.site-header.is-solid .nav-toggle-bar {
+  transition: transform 0.3s ease, opacity 0.3s ease, background 0.4s ease;
+}
+
+.site-header.is-solid .nav-toggle-bar {
+  background: var(--color-forest);
+}
+
 .menu-open .nav-toggle-bar {
-  background: var(--color-beige);
+  background: var(--color-white);
 }
 
 .menu-open .nav-toggle-bar:nth-child(1) {

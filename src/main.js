@@ -47,6 +47,8 @@ const bookingGuestsPopover = document.querySelector("[data-guests-popover]");
 const bookingGuestsLabel = document.querySelector("[data-guests-label]");
 const bookingGuestsCounts = document.querySelectorAll("[data-guests-count]");
 const bookingGuestsSteps = document.querySelectorAll("[data-guests-step]");
+const heroEl = document.querySelector(".hero");
+const heroVideo = document.querySelector(".hero-video");
 
 const formatDateFr = (raw) => {
   if (!raw) return "";
@@ -483,19 +485,21 @@ if (!prefersReducedMotion) {
   const titleLines = gsap.utils.toArray(".hero-title .hero-line");
 
   heroTl.addLabel("parallaxStart", 0);
-  heroTl
-    // Parallax: zoom + sapins
-    .to(".hero-image", { scale: 1.12, duration: 5, ease: "power2.out" }, "parallaxStart")
-    .to(
-      ".hero-tree-left",
-      { x: -240, opacity: 1, duration: 5, ease: "power2.out" },
-      "parallaxStart"
-    )
-    .to(
-      ".hero-tree-right",
-      { x: 240, opacity: 1, duration: 5, ease: "power2.out" },
-      "parallaxStart"
-    );
+  if (!heroVideo) {
+    heroTl
+      // Parallax: zoom + sapins
+      .to(".hero-image", { scale: 1.12, duration: 5, ease: "power2.out" }, "parallaxStart")
+      .to(
+        ".hero-tree-left",
+        { x: -240, opacity: 1, duration: 5, ease: "power2.out" },
+        "parallaxStart"
+      )
+      .to(
+        ".hero-tree-right",
+        { x: 240, opacity: 1, duration: 5, ease: "power2.out" },
+        "parallaxStart"
+      );
+  }
 
   heroTl.to(".hero-headline", { opacity: 1, duration: 0 }, 1);
   titleLines.forEach((line, index) => {
@@ -533,11 +537,13 @@ if (!prefersReducedMotion) {
 
   heroTl.eventCallback("onComplete", () => {
     const parallaxTl = gsap.timeline();
-    parallaxTl
-      .fromTo(".hero-image", { scale: 1.12 }, { scale: 1.02, ease: "none" }, 0)
-      .fromTo(".hero-tree-left", { x: -240 }, { x: 0, ease: "none" }, 0)
-      .fromTo(".hero-tree-right", { x: 240 }, { x: 0, ease: "none" }, 0);
-
+    if (!heroVideo) {
+      parallaxTl
+        .fromTo(".hero-image", { scale: 1.12 }, { scale: 1.02, ease: "none" }, 0)
+        .fromTo(".hero-tree-left", { x: -240 }, { x: 0, ease: "none" }, 0)
+        .fromTo(".hero-tree-right", { x: 240 }, { x: 0, ease: "none" }, 0);
+    }
+    parallaxTl.fromTo(".hero-headline", { y: 0 }, { y: -60, ease: "none" }, 0);
     ScrollTrigger.create({
       animation: parallaxTl,
       trigger: ".hero",
@@ -547,8 +553,60 @@ if (!prefersReducedMotion) {
     });
   });
   introGate.then(() => {
+    const isMobileViewport = window.matchMedia("(max-width: 980px)").matches;
+    if (heroVideo && !isMobileViewport) {
+      const playTimeline = () => {
+        if (heroTl.isActive() || heroTl.progress() > 0) return;
+        heroTl.play(0);
+      };
+      heroVideo.addEventListener("ended", playTimeline, { once: true });
+      heroVideo.addEventListener("error", playTimeline, { once: true });
+      const startHeadline = () => {
+        if (!heroVideo.duration || Number.isNaN(heroVideo.duration)) return;
+        const remaining = heroVideo.duration - heroVideo.currentTime;
+        if (remaining <= 2.7) {
+          playTimeline();
+          heroVideo.removeEventListener("timeupdate", startHeadline);
+        }
+      };
+      const fadeAt = () => {
+        if (!heroVideo.duration || Number.isNaN(heroVideo.duration)) return;
+        if (heroVideo.currentTime >= heroVideo.duration - 0.6) {
+          heroVideo.classList.add("is-fading");
+        }
+      };
+      heroVideo.addEventListener("timeupdate", fadeAt);
+      heroVideo.addEventListener("timeupdate", startHeadline);
+      const tryPlay = () => {
+        heroVideo.play().catch(() => {});
+      };
+      if (heroVideo.readyState >= 2) {
+        tryPlay();
+      } else {
+        heroVideo.addEventListener("loadeddata", tryPlay, { once: true });
+      }
+      return;
+    }
     heroTl.play(0);
   });
+
+  if (headerEl && heroEl) {
+    let heroHeight = heroEl.getBoundingClientRect().height || 0;
+    const updateHeroHeight = () => {
+      heroHeight = heroEl.getBoundingClientRect().height || 0;
+      updateHeaderTheme();
+    };
+    const updateHeaderTheme = () => {
+      if (!heroHeight) return;
+      const trigger = heroHeight * 0.5;
+      const scrollY = window.scrollY || window.pageYOffset || 0;
+      headerEl.classList.toggle("is-solid", scrollY >= trigger);
+    };
+
+    updateHeroHeight();
+    window.addEventListener("scroll", updateHeaderTheme, { passive: true });
+    window.addEventListener("resize", updateHeroHeight);
+  }
 
   // Reveal text effect (line by line) for intro text
   const initRevealText = () => {
@@ -638,7 +696,7 @@ if (!prefersReducedMotion) {
             {
               y: 0,
               opacity: 1,
-              duration: 0.7,
+              duration: 1.4,
               ease: "power3.out",
               stagger: 0.02
             },
@@ -651,10 +709,11 @@ if (!prefersReducedMotion) {
       splitLines(el);
       gsap.fromTo(
         el.querySelectorAll(".line-inner"),
-        { yPercent: 100 },
+        { yPercent: 100, opacity: 0 },
         {
           yPercent: 0,
-          duration: 1.1,
+          opacity: 1,
+          duration: 1.7,
           ease: "power3.out",
           stagger: 0.12,
           scrollTrigger: {
