@@ -556,6 +556,7 @@ if (!prefersReducedMotion) {
         .fromTo(".hero-tree-right", { x: 240 }, { x: 0, ease: "none" }, 0);
     }
     parallaxTl.fromTo(".hero-headline", { y: 0 }, { y: -60, ease: "none" }, 0);
+    parallaxTl.fromTo(".hero-note", { y: 0 }, { y: -60, ease: "none" }, 0);
     ScrollTrigger.create({
       animation: parallaxTl,
       trigger: ".hero",
