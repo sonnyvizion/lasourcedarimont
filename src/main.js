@@ -310,8 +310,8 @@ if (loaderEl) {
     bodyEl.classList.add("is-loading");
     loaderEl.classList.add("is-active");
     const startedAt = Date.now();
-    const minVisibleMs = 2600;
-    const holdLastFrameMs = 1500;
+    const minVisibleMs = 0;
+    const holdLastFrameMs = 0;
     const maxVisibleMs = 7000;
 
     let closed = false;
@@ -341,14 +341,10 @@ if (loaderEl) {
       });
 
       lottieInstance.addEventListener("complete", () => {
-        const elapsed = Date.now() - startedAt;
-        const wait = Math.max(holdLastFrameMs, minVisibleMs - elapsed);
-        window.setTimeout(() => {
-          if (lottieInstance) {
-            lottieInstance.destroy();
-          }
-          closeLoader();
-        }, wait);
+        if (lottieInstance) {
+          lottieInstance.destroy();
+        }
+        closeLoader();
       });
     });
 
