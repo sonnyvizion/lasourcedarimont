@@ -3,7 +3,7 @@
   width: 100%;
   top: 0;
   left: 0;
-  z-index: 10;
+  z-index: 12;
   color: var(--color-white);
   background: transparent;
   border-bottom: none;
@@ -171,6 +171,8 @@
   padding: 0;
   flex-direction: column;
   border: 0px transparent;
+  position: relative;
+  z-index: 13;
 }
 
 .menu-open .nav-toggle {
@@ -197,6 +199,7 @@
 
 .menu-open .nav-toggle-bar {
   background: var(--color-white);
+  opacity: 1;
 }
 
 .menu-open .nav-toggle-bar:nth-child(1) {
@@ -216,7 +219,7 @@
   inset: 0;
   background: #2a5843;
   color: var(--color-beige);
-  z-index: 9;
+  z-index: 11;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.4s ease;
@@ -244,9 +247,11 @@
   display: grid;
   place-content: center;
   gap: 20px;
-  font-family: var(--font-heading);
+  font-family: var(--font-body);
   font-size: 32px;
-  text-align: center;
+  text-align: right;
+  font-weight: 500;
+  justify-items: end;
 }
 
 .mobile-menu-inner a .char {
