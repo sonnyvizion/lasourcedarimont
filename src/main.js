@@ -467,12 +467,25 @@ if (!prefersReducedMotion) {
     splitToChars(subtitleEl);
   }
 
+  const noteEl = document.querySelector(".hero-note");
+  if (noteEl) {
+    const text = noteEl.textContent || "";
+    noteEl.setAttribute("aria-label", text.trim());
+    noteEl.setAttribute("role", "text");
+    const parts = noteEl.innerHTML.split(/<br\b[^>]*>/i);
+    noteEl.innerHTML = parts
+      .map((part) => `<span class="hero-note-line">${part}</span>`)
+      .join("<br>");
+    noteEl.querySelectorAll(".hero-note-line").forEach((line) => splitToChars(line));
+  }
+
   // Les valeurs "from" sont appliquées directement dans les animations
   gsap.set(".booking-panel", { y: 32, opacity: 0 });
   gsap.set(".hero-tree-left", { x: 0, opacity: 1, scale: 1 });
   gsap.set(".hero-tree-right", { x: 0, opacity: 1, scale: 1 });
   gsap.set(".site-header", { y: -24, opacity: 0 });
   gsap.set(".hero-headline", { opacity: 0 });
+  gsap.set(".hero-note", { opacity: 0 });
 
   const heroTl = gsap.timeline({
     defaults: { duration: 0.9, ease: "power3.out" },
@@ -515,18 +528,21 @@ if (!prefersReducedMotion) {
     },
     1
   );
-  heroTl.fromTo(
-    ".hero-subtitle .char",
-    { y: 24, opacity: 0 },
-    {
-      y: 0,
-      opacity: 1,
-      duration: 1,
-      ease: "power3.out",
-      stagger: { each: 0.015, from: "start" }
-    },
-    ">-0.2"
-  );
+  if (noteEl) {
+    heroTl.to(".hero-note", { opacity: 1, duration: 0 }, 1);
+    heroTl.fromTo(
+      ".hero-note .char",
+      { y: 24, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 1,
+        ease: "power3.out",
+        stagger: { each: 0.015, from: "start" }
+      },
+      ">-0.2"
+    );
+  }
   heroTl.add(() => bodyEl.classList.remove("nav-hidden"), 2);
   heroTl.to(".site-header", { y: 0, opacity: 1, duration: 1.1, ease: "power3.out" }, 2);
   heroTl.to(".booking-panel", { y: 0, opacity: 1, duration: 1.1, ease: "power3.out" }, 2);
@@ -582,6 +598,14 @@ if (!prefersReducedMotion) {
         heroVideo.addEventListener("loadeddata", tryPlay, { once: true });
       }
       return;
+    }
+    if (isMobileViewport) {
+      const heroImg = document.querySelector(".hero-image img");
+      if (heroImg) {
+        requestAnimationFrame(() => {
+          heroImg.classList.add("is-zooming");
+        });
+      }
     }
     heroTl.play(0);
   });
