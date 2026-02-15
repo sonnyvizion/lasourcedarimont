@@ -52,8 +52,8 @@
 }
 
 .logo-mark {
-  height: 54px;
-  width: 54px;
+  height: 70px;
+  width: 70px;
   background-color: var(--color-white);
   -webkit-mask: url("/img/LOGOTYPE_SYMETRIK.svg") no-repeat center / contain;
   mask: url("/img/LOGOTYPE_SYMETRIK.svg") no-repeat center / contain;
@@ -198,7 +198,7 @@
 }
 
 .menu-open .nav-toggle-bar {
-  background: var(--color-white);
+  background: var(--color-beige);
   opacity: 1;
 }
 
@@ -245,7 +245,9 @@
 .mobile-menu-inner {
   height: 100%;
   display: grid;
-  place-content: center;
+  width: 100%;
+  padding: 0 calc(6vw + var(--content-padding));
+  place-content: center end;
   gap: 20px;
   font-family: var(--font-body);
   font-size: 32px;
@@ -261,7 +263,7 @@
 
 .mobile-menu-social {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   gap: 16px;
   margin-top: 8px;
 }
@@ -302,5 +304,10 @@
 
   .header-inner {
     padding: 12px var(--content-padding);
+  }
+
+  .logo-mark {
+    height: 60px;
+    width: 60px;
   }
 }

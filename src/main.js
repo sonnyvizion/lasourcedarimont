@@ -219,6 +219,7 @@ if (bookingGuestsToggle && bookingGuestsPopover && bookingGuestsLabel && booking
 document.querySelectorAll(".feature-illustration-video").forEach((videoEl) => {
   const card = videoEl.closest(".feature-card");
   if (!card) return;
+  const isMobile = window.matchMedia("(max-width: 980px)").matches;
   const freezeTime = Number.parseFloat(videoEl.getAttribute("data-freeze-time") || "0.05");
   const playStart = Number.parseFloat(videoEl.getAttribute("data-play-start") || "0");
 
@@ -240,6 +241,26 @@ document.querySelectorAll(".feature-illustration-video").forEach((videoEl) => {
   };
 
   videoEl.muted = true;
+  videoEl.playsInline = true;
+
+  if (isMobile) {
+    videoEl.loop = true;
+    videoEl.autoplay = true;
+    const startLoop = () => {
+      const playback = videoEl.play();
+      if (playback && typeof playback.catch === "function") {
+        playback.catch(() => {});
+      }
+    };
+    if (videoEl.readyState >= 1) {
+      startLoop();
+    } else {
+      videoEl.addEventListener("loadedmetadata", startLoop, { once: true });
+    }
+    document.addEventListener("touchstart", startLoop, { once: true, passive: true });
+    return;
+  }
+
   videoEl.loop = false;
   if (videoEl.readyState >= 1) {
     freezeVideo();
@@ -798,6 +819,7 @@ if (!prefersReducedMotion) {
       gsap.set(galleryTrack, { x: 0 });
       gallerySlider.style.scrollBehavior = "auto";
       const getMaxScroll = () => Math.max(0, galleryTrack.scrollWidth - gallerySlider.clientWidth);
+      const getStep = () => gallerySlider.clientWidth * 0.75;
       let isTouchingSlider = false;
       gallerySlider.addEventListener("touchstart", () => {
         isTouchingSlider = true;
@@ -824,6 +846,29 @@ if (!prefersReducedMotion) {
           });
         }
       });
+
+      const slideByMobile = (direction) => {
+        const max = getMaxScroll();
+        const step = getStep();
+        const current = gallerySlider.scrollLeft || 0;
+        let next = current + step * direction;
+        if (direction > 0 && next > max - 1) {
+          next = 0;
+        } else if (direction < 0 && next < 1) {
+          next = max;
+        } else {
+          next = Math.min(max, Math.max(0, next));
+        }
+        gallerySlider.scrollTo({ left: next, behavior: "smooth" });
+      };
+
+      if (galleryPrev) {
+        galleryPrev.addEventListener("click", () => slideByMobile(-1));
+      }
+      if (galleryNext) {
+        galleryNext.addEventListener("click", () => slideByMobile(1));
+      }
+
       requestAnimationFrame(() => ScrollTrigger.refresh());
     } else {
       const getMaxX = () => Math.max(0, galleryTrack.scrollWidth - gallerySlider.clientWidth);

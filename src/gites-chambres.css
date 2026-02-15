@@ -3,6 +3,30 @@
   margin-top: 0;
 }
 
+.gites-chambres-page:not(.menu-open) .site-header {
+  color: var(--color-forest);
+  background: var(--color-beige);
+  border-bottom: 2px solid var(--color-forest);
+}
+
+.gites-chambres-page:not(.menu-open) .logo-mark {
+  background-color: var(--color-forest);
+}
+
+.gites-chambres-page:not(.menu-open) .nav-links,
+.gites-chambres-page:not(.menu-open) .nav-right {
+  color: var(--color-forest);
+}
+
+.gites-chambres-page:not(.menu-open) .nav-icon,
+.gites-chambres-page:not(.menu-open) .nav-icon::after {
+  border-color: var(--color-forest);
+}
+
+.gites-chambres-page:not(.menu-open) .nav-toggle-bar {
+  background: var(--color-forest);
+}
+
 .stays-intro {
   position: sticky;
   top: 0;
@@ -273,6 +297,45 @@
   transform: translateY(0);
 }
 
+.stays-notes {
+  position: relative;
+  z-index: 9;
+  background: var(--color-beige);
+  padding-top: 36px;
+  padding-bottom: 70px;
+}
+
+.stays-notes-card {
+  border: 2px solid var(--color-forest);
+  border-radius: 22px;
+  padding: clamp(18px, 3vw, 34px);
+  background: rgba(246, 241, 230, 0.75);
+  width: 100%;
+}
+
+.stays-notes-title {
+  margin-top: 8px;
+  margin-bottom: 16px;
+  font-family: var(--font-heading);
+  font-size: clamp(28px, 3.2vw, 44px);
+  line-height: 1.05;
+}
+
+.stays-notes-card p {
+  margin: 0 0 12px;
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+.stays-notes-card p:last-child {
+  margin-bottom: 0;
+}
+
+.stays-notes-tip {
+  font-style: italic;
+}
+
 @media (max-width: 980px) {
   .stays-page {
     padding-top: 0;
@@ -333,6 +396,15 @@
   }
 
   .testimonials-arrows {
-    display: none;
+    display: inline-flex;
+  }
+
+  .stays-notes {
+    padding-top: 24px;
+    padding-bottom: 44px;
+  }
+
+  .stays-notes-card p {
+    font-size: 14px;
   }
 }

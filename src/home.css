@@ -1160,7 +1160,7 @@ body.is-loading {
   }
 
   .gallery-arrows {
-    display: none;
+    display: inline-flex;
   }
 
   .gallery-slider {
@@ -1326,7 +1326,7 @@ body.is-loading {
   }
 
   .testimonials-arrows {
-    display: none;
+    display: inline-flex;
   }
 
   .testimonials-slider {
