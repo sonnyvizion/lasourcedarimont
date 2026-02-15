@@ -1,6 +1,7 @@
 import "./style.css";
 import "./nav.css";
 import "./home.css";
+import "./nav-lang-globe.js";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
@@ -217,23 +218,7 @@ if (bookingGuestsToggle && bookingGuestsPopover && bookingGuestsLabel && booking
 }
 
 document.querySelectorAll(".feature-illustration-video").forEach((videoEl) => {
-  const card = videoEl.closest(".feature-card");
-  if (!card) return;
-  const isMobile = window.matchMedia("(max-width: 980px)").matches;
-  const freezeTime = Number.parseFloat(videoEl.getAttribute("data-freeze-time") || "0.05");
-  const playStart = Number.parseFloat(videoEl.getAttribute("data-play-start") || "0");
-
-  const freezeVideo = () => {
-    videoEl.pause();
-    const nextTime = Number.isFinite(freezeTime) && freezeTime >= 0 ? freezeTime : 0.05;
-    if (videoEl.readyState >= 1) {
-      videoEl.currentTime = Math.min(nextTime, Math.max(0, videoEl.duration || nextTime));
-    }
-  };
-  const playVideo = () => {
-    if (videoEl.readyState >= 1 && Number.isFinite(playStart) && playStart >= 0) {
-      videoEl.currentTime = Math.min(playStart, Math.max(0, videoEl.duration || playStart));
-    }
+  const startLoop = () => {
     const playback = videoEl.play();
     if (playback && typeof playback.catch === "function") {
       playback.catch(() => {});
@@ -242,34 +227,15 @@ document.querySelectorAll(".feature-illustration-video").forEach((videoEl) => {
 
   videoEl.muted = true;
   videoEl.playsInline = true;
-
-  if (isMobile) {
-    videoEl.loop = true;
-    videoEl.autoplay = true;
-    const startLoop = () => {
-      const playback = videoEl.play();
-      if (playback && typeof playback.catch === "function") {
-        playback.catch(() => {});
-      }
-    };
-    if (videoEl.readyState >= 1) {
-      startLoop();
-    } else {
-      videoEl.addEventListener("loadedmetadata", startLoop, { once: true });
-    }
-    document.addEventListener("touchstart", startLoop, { once: true, passive: true });
-    return;
-  }
-
-  videoEl.loop = false;
+  videoEl.loop = true;
+  videoEl.autoplay = true;
   if (videoEl.readyState >= 1) {
-    freezeVideo();
+    startLoop();
   } else {
-    videoEl.addEventListener("loadedmetadata", freezeVideo, { once: true });
+    videoEl.addEventListener("loadedmetadata", startLoop, { once: true });
   }
-
-  card.addEventListener("mouseenter", playVideo);
-  card.addEventListener("mouseleave", freezeVideo);
+  document.addEventListener("touchstart", startLoop, { once: true, passive: true });
+  document.addEventListener("pointerdown", startLoop, { once: true, passive: true });
 });
 
 const loadLottie = () =>

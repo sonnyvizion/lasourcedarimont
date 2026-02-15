@@ -2,6 +2,7 @@ import "./style.css";
 import "./nav.css";
 import "./home.css";
 import "./gites-chambres.css";
+import "./nav-lang-globe.js";
 
 const yearEl = document.querySelector("[data-year]");
 if (yearEl) yearEl.textContent = new Date().getFullYear();
