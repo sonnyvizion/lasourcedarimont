@@ -746,33 +746,6 @@ if (!prefersReducedMotion) {
     requestAnimationFrame(initRevealText);
   });
 
-  const bannerEl = document.querySelector(".banner");
-  if (bannerEl) {
-    gsap.fromTo(
-      bannerEl,
-      {
-        width: "100%",
-        marginLeft: "0",
-        marginRight: "0",
-        borderRadius: "24px"
-      },
-      {
-        width: "100vw",
-        marginLeft: "calc(50% - 50vw)",
-        marginRight: "calc(50% - 50vw)",
-        borderRadius: "0px",
-        ease: "none",
-        scrollTrigger: {
-          trigger: bannerEl,
-          start: "top 85%",
-          end: () => `+=${Math.max(320, bannerEl.offsetHeight * 0.7)}`,
-          scrub: true,
-          invalidateOnRefresh: true
-        }
-      }
-    );
-  }
-
   // Gallery slider: scroll-driven + arrow controls
   const gallerySlider = document.querySelector(".gallery-slider");
   const galleryTrack = document.querySelector(".gallery-track");
