@@ -147,4 +147,13 @@ if (testimonialsSlider && testimonialsTrack && testimonialsPrev && testimonialsN
   });
 }
 
-setPanel("gites");
+const getPanelFromHash = () => {
+  const hash = (window.location.hash || "").replace("#", "").toLowerCase();
+  return hash === "chambres" ? "chambres" : "gites";
+};
+
+setPanel(getPanelFromHash());
+
+window.addEventListener("hashchange", () => {
+  setPanel(getPanelFromHash());
+});
