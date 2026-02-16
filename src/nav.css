@@ -266,6 +266,10 @@
   opacity: 1;
 }
 
+.home-page.menu-open .nav-toggle-bar {
+  background: var(--color-white);
+}
+
 .menu-open .nav-toggle-bar:nth-child(1) {
   transform: translateY(6px) rotate(45deg);
 }

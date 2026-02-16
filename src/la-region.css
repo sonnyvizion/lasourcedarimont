@@ -321,6 +321,10 @@
     justify-items: center;
   }
 
+  .region-spot-title {
+    text-align: center;
+  }
+
   .region-video-desktop {
     display: none;
   }
