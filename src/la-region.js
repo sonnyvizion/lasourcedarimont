@@ -6,7 +6,7 @@ import "./nav-lang-globe.js";
 
 const BASE_URL = import.meta.env.BASE_URL || "/";
 const assetUrl = (path) => `${BASE_URL}${path.replace(/^\/+/, "")}`;
-const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || "";
+const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || window.MAPBOX_TOKEN || "";
 
 const yearEl = document.querySelector("[data-year]");
 if (yearEl) yearEl.textContent = new Date().getFullYear();
