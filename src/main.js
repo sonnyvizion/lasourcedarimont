@@ -52,6 +52,9 @@ const heroEl = document.querySelector(".hero");
 const heroMedia = document.querySelector(".hero-media");
 const heroVideoDesktop = document.querySelector(".hero-video-desktop");
 const heroVideoMobile = document.querySelector(".hero-video-mobile");
+const heroBookingForm = document.querySelector("[data-hero-booking-form]");
+const heroBookingCta = document.querySelector(".hero-cta[data-booking-base]");
+const heroBookingInline = document.querySelector(".hero-booking-inline");
 
 const formatDateFr = (raw) => {
   if (!raw) return "";
@@ -217,6 +220,169 @@ if (bookingGuestsToggle && bookingGuestsPopover && bookingGuestsLabel && booking
   });
 
   renderGuests();
+}
+
+if (heroBookingForm && heroBookingCta) {
+  const checkinInput = heroBookingForm.querySelector('[data-booking-input="checkin"]');
+  const checkoutInput = heroBookingForm.querySelector('[data-booking-input="checkout"]');
+  const adultsInput = heroBookingForm.querySelector('[data-booking-input="adults"]');
+  const childrenInput = heroBookingForm.querySelector('[data-booking-input="children"]');
+  const roomsInput = heroBookingForm.querySelector('[data-booking-input="rooms"]');
+  const closeButton = heroBookingForm.querySelector(".hero-booking-close");
+  const heroHeadline = document.querySelector(".hero-headline");
+  const heroTitle = document.querySelector(".hero-title");
+  const heroNote = document.querySelector(".hero-note");
+  const mobileMedia = window.matchMedia("(max-width: 980px)");
+  let bookingOpen = false;
+  let bookingAnimating = false;
+
+  const baseHref = heroBookingCta.getAttribute("data-booking-base") || heroBookingCta.getAttribute("href") || "";
+  const setDefaultDates = () => {
+    if (!checkinInput || !checkoutInput) return;
+    const today = new Date();
+    const checkin = new Date(today);
+    checkin.setDate(today.getDate() + 2);
+    const checkout = new Date(checkin);
+    checkout.setDate(checkin.getDate() + 1);
+    const toIso = (d) => d.toISOString().slice(0, 10);
+
+    checkinInput.min = toIso(today);
+    checkoutInput.min = toIso(today);
+    if (!checkinInput.value) checkinInput.value = toIso(checkin);
+    if (!checkoutInput.value) checkoutInput.value = toIso(checkout);
+  };
+
+  const refreshBookingHref = () => {
+    if (!baseHref) return;
+    const url = new URL(baseHref);
+    const checkin = checkinInput?.value || "";
+    const checkout = checkoutInput?.value || "";
+    const adults = adultsInput?.value || "2";
+    const children = childrenInput?.value || "0";
+    const rooms = roomsInput?.value || "1";
+
+    ["age", "req_age", "room1", "room2", "room3", "room4", "room5"].forEach((key) =>
+      url.searchParams.delete(key)
+    );
+    url.searchParams.set("checkin", checkin);
+    url.searchParams.set("checkout", checkout);
+    url.searchParams.set("group_adults", adults);
+    url.searchParams.set("req_adults", adults);
+    url.searchParams.set("group_children", children);
+    url.searchParams.set("req_children", children);
+    url.searchParams.set("no_rooms", rooms);
+
+    heroBookingCta.href = url.toString();
+  };
+
+  if (checkinInput && checkoutInput) {
+    checkinInput.addEventListener("change", () => {
+      if (checkinInput.value) {
+        checkoutInput.min = checkinInput.value;
+        if (checkoutInput.value && checkoutInput.value <= checkinInput.value) {
+          const nextDay = new Date(checkinInput.value);
+          nextDay.setDate(nextDay.getDate() + 1);
+          checkoutInput.value = nextDay.toISOString().slice(0, 10);
+        }
+      }
+      refreshBookingHref();
+    });
+  }
+
+  setDefaultDates();
+  refreshBookingHref();
+  heroBookingForm.querySelectorAll("input, select").forEach((field) => {
+    field.addEventListener("change", refreshBookingHref);
+    field.addEventListener("input", refreshBookingHref);
+  });
+
+  const setClosedMobileState = (immediate = false) => {
+    if (!mobileMedia.matches) return;
+    bookingOpen = false;
+    bookingAnimating = false;
+    const vars = { height: 0, opacity: 0, y: 0, pointerEvents: "none" };
+    if (immediate) gsap.set(heroBookingForm, vars);
+    else gsap.to(heroBookingForm, { ...vars, duration: 0.35, ease: "power3.inOut" });
+    if (closeButton) {
+      if (immediate) gsap.set(closeButton, { opacity: 0, pointerEvents: "none" });
+      else gsap.to(closeButton, { opacity: 0, duration: 0.2, ease: "power2.out", onComplete: () => {
+        closeButton.style.pointerEvents = "none";
+      } });
+    }
+    if (heroNote) gsap.to(heroNote, { opacity: 1, y: 0, duration: immediate ? 0 : 0.35, ease: "power3.out" });
+    if (heroTitle) gsap.to(heroTitle, { y: 0, duration: immediate ? 0 : 0.45, ease: "power4.inOut" });
+  };
+
+  const openMobileBooking = () => {
+    if (!mobileMedia.matches || bookingOpen || bookingAnimating) return;
+    bookingAnimating = true;
+    heroBookingForm.style.pointerEvents = "auto";
+
+    const tl = gsap.timeline({
+      defaults: { ease: "power3.inOut" },
+      onComplete: () => {
+        bookingOpen = true;
+        bookingAnimating = false;
+        if (closeButton) closeButton.style.pointerEvents = "auto";
+      }
+    });
+
+    if (heroNote) tl.to(heroNote, { opacity: 0, y: -8, duration: 0.35 }, 0);
+    if (heroTitle) tl.to(heroTitle, { y: -385, duration: 0.45, ease: "power4.inOut" }, 0);
+    tl.to(heroBookingForm, { height: "auto", opacity: 1, y: 0, duration: 0.48, ease: "power3.out" }, 0.04);
+    if (closeButton) tl.to(closeButton, { opacity: 1, duration: 0.24, ease: "power2.out" }, 0.16);
+  };
+
+  const closeMobileBooking = () => {
+    if (!mobileMedia.matches || !bookingOpen || bookingAnimating) return;
+    bookingAnimating = true;
+    if (closeButton) closeButton.style.pointerEvents = "none";
+
+    const tl = gsap.timeline({
+      defaults: { ease: "power3.inOut" },
+      onComplete: () => {
+        bookingOpen = false;
+        bookingAnimating = false;
+        heroBookingForm.style.pointerEvents = "none";
+      }
+    });
+
+    if (closeButton) tl.to(closeButton, { opacity: 0, duration: 0.2, ease: "power2.out" }, 0);
+    tl.to(heroBookingForm, { height: 0, opacity: 0, y: 8, duration: 0.42, ease: "power3.inOut" }, 0);
+    if (heroNote) tl.to(heroNote, { opacity: 1, y: 0, duration: 0.38, ease: "power3.out" }, 0.08);
+    if (heroTitle) tl.to(heroTitle, { y: 0, duration: 0.45, ease: "power4.inOut" }, 0);
+  };
+
+  heroBookingCta.addEventListener("click", (event) => {
+    if (!mobileMedia.matches) return;
+    if (!bookingOpen) {
+      event.preventDefault();
+      openMobileBooking();
+    }
+  });
+
+  closeButton?.addEventListener("click", (event) => {
+    event.preventDefault();
+    closeMobileBooking();
+  });
+
+  mobileMedia.addEventListener("change", () => {
+    if (mobileMedia.matches) {
+      setClosedMobileState(true);
+    } else {
+      bookingOpen = false;
+      bookingAnimating = false;
+      gsap.set(heroBookingForm, { height: "auto", opacity: 1, y: 0, pointerEvents: "auto" });
+      if (closeButton) gsap.set(closeButton, { opacity: 0, pointerEvents: "none" });
+      if (heroNote) gsap.set(heroNote, { opacity: 1, y: 0 });
+      if (heroTitle) gsap.set(heroTitle, { y: 0 });
+      if (heroHeadline) gsap.set(heroHeadline, { bottom: "15%" });
+    }
+  });
+
+  if (mobileMedia.matches) {
+    setClosedMobileState(true);
+  }
 }
 
 document.querySelectorAll(".feature-illustration-video").forEach((videoEl) => {
@@ -475,6 +641,9 @@ if (!prefersReducedMotion) {
   gsap.set(".site-header", { y: -24, opacity: 0 });
   gsap.set(".hero-headline", { opacity: 0 });
   gsap.set(".hero-note", { opacity: 0 });
+  if (heroBookingInline && !window.matchMedia("(max-width: 980px)").matches) {
+    gsap.set(heroBookingInline, { y: 20, opacity: 0 });
+  }
 
   const heroTl = gsap.timeline({
     defaults: { duration: 0.9, ease: "power3.out" },
@@ -517,6 +686,9 @@ if (!prefersReducedMotion) {
     },
     1
   );
+  if (heroBookingInline && !window.matchMedia("(max-width: 980px)").matches) {
+    heroTl.to(heroBookingInline, { y: 0, opacity: 1, duration: 1, ease: "power3.out" }, 1.05);
+  }
   if (noteEl) {
     heroTl.to(".hero-note", { opacity: 1, duration: 0 }, 1);
     heroTl.fromTo(

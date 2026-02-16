@@ -185,6 +185,54 @@ body.is-loading {
   width: max-content;
 }
 
+.hero-booking-inline {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.hero-booking-field {
+  display: grid;
+  gap: 6px;
+}
+
+.hero-booking-close {
+  display: none;
+}
+
+.hero-booking-field span {
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.hero-booking-field input,
+.hero-booking-field select {
+  height: 40px;
+  border-radius: 999px;
+  border: none;
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--color-white);
+  padding: 0 14px;
+  font-family: var(--font-body);
+  font-size: 13px;
+}
+
+.hero-booking-field input {
+  min-width: 155px;
+}
+
+.hero-booking-field select {
+  min-width: 88px;
+}
+
+.hero-booking-field input::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
+
 .hero-split .char {
   display: inline-block;
   will-change: transform, opacity;
@@ -218,7 +266,7 @@ body.is-loading {
   left: 6vw;
   right: auto;
   display: grid;
-  gap: 50px;
+  gap: 16px;
 }
 
 .hero-note {
@@ -1096,7 +1144,7 @@ body.is-loading {
   }
 
   .hero-headline {
-    gap: 40px;
+    gap: 14px;
     top: auto;
     bottom: 100px;
     left: 6vw;
@@ -1106,12 +1154,13 @@ body.is-loading {
 
   .hero-note {
     top: calc(80px + 50px);
-    left: 50%;
-    right: auto;
+    left: 6vw;
+    right: 6vw;
     bottom: auto;
-    transform: translateX(-50%);
+    transform: none;
     text-align: center;
-    width: min(80vw, 360px);
+    width: auto;
+    max-width: none;
     font-size: 16px;
   }
 
@@ -1150,6 +1199,61 @@ body.is-loading {
     margin-left: auto;
     margin-right: auto;
     display: inline-flex;
+    position: relative;
+    z-index: 3;
+  }
+
+  .hero-booking-inline {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    width: 100%;
+    max-width: 460px;
+    margin-inline: auto;
+    overflow: hidden;
+    height: 0;
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 62px;
+    z-index: 2;
+  }
+
+  .hero-booking-field {
+    width: 100%;
+  }
+
+  .hero-booking-field input,
+  .hero-booking-field select {
+    width: 100%;
+    min-width: 0;
+    height: 38px;
+    font-size: 12px;
+    padding: 0 12px;
+  }
+
+  .hero-booking-field span {
+    font-size: 10px;
+  }
+
+  .hero-booking-close {
+    display: inline-flex;
+    grid-column: 1 / -1;
+    justify-self: end;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    height: auto;
+    border: none;
+    background: transparent;
+    color: var(--color-white);
+    font-size: 24px;
+    line-height: 1;
+    padding: 0;
+    opacity: 0;
+    pointer-events: none;
   }
 
   .intro-illu {
