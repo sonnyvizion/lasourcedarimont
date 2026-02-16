@@ -87,11 +87,13 @@
 }
 
 .region-spot-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   border: 2px solid var(--color-forest);
   border-radius: 16px;
   background: rgba(246, 241, 230, 0.8);
   padding: 16px;
-  gap: 0;
 }
 
 .region-spot-title {
@@ -128,11 +130,53 @@
   margin-top: 10px;
 }
 
+.region-spot-address {
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.4;
+  color: rgba(24, 53, 40, 0.82);
+  margin-top: 10px;
+}
+
+.region-spot-nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: auto;
+  width: 100%;
+  justify-content: flex-end;
+  padding-top: 8px;
+}
+
+.region-spot-icon-link {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--color-forest);
+  color: var(--color-forest);
+  background: rgba(246, 241, 230, 0.9);
+  transition: transform 0.18s ease, background 0.18s ease;
+}
+
+.region-spot-icon-link:hover {
+  transform: translateY(-1px);
+}
+
+.region-spot-icon-link img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
 .region-spot-link {
   display: inline-flex;
   width: max-content;
   align-items: center;
   justify-content: center;
+  align-self: center;
   border-radius: 999px;
   border: 2px solid var(--color-forest);
   color: var(--color-forest);
@@ -142,7 +186,14 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 8px 12px;
-  margin-top: 40px;
+  margin-top: 25px;
+  transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+
+.region-spot-link:hover {
+  background: var(--color-forest);
+  color: var(--color-beige);
+  transform: translateY(-1px);
 }
 
 .reveal-text .line {

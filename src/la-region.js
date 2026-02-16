@@ -88,6 +88,7 @@ const spots = [
     badge: assetUrl("/img/SPA_pin.png"),
     location: "Francorchamps",
     desc: "Circuit mythique, paddocks, événements auto et sensations fortes au cœur des Ardennes.",
+    address: "Route du Circuit 55, 4970 Stavelot, Belgique",
     site: "https://www.spa-francorchamps.be"
   },
   {
@@ -97,6 +98,7 @@ const spots = [
     img: assetUrl("/img/slider/domaine.jpg"),
     location: "Spa",
     desc: "Un parcours culturel autour de l’histoire thermale et du patrimoine de Spa.",
+    address: "Avenue Reine Astrid 77B, 4900 Spa, Belgique",
     site: ""
   },
   {
@@ -106,6 +108,7 @@ const spots = [
     img: assetUrl("/img/slider/ponts.jpg"),
     location: "Ovifat",
     desc: "Château emblématique des Hautes-Fagnes, visites et panoramas naturels.",
+    address: "Chemin du Cheneux 50, 4950 Waimes, Belgique",
     site: ""
   },
   {
@@ -115,6 +118,7 @@ const spots = [
     img: assetUrl("/img/slider/fox.jpg"),
     location: "Stavelot",
     desc: "Complexe historique avec musées, expositions et architecture remarquable.",
+    address: "Cour de l'Abbaye 1, 4970 Stavelot, Belgique",
     site: "https://www.abbayedestavelot.be"
   },
   {
@@ -124,6 +128,7 @@ const spots = [
     img: assetUrl("/img/slider/domaine.jpg"),
     location: "Stavelot",
     desc: "Centre vivant avec commerces, terrasses et ambiance ardennaise conviviale.",
+    address: "Place Saint-Remacle, 4970 Stavelot, Belgique",
     site: ""
   },
   {
@@ -133,6 +138,7 @@ const spots = [
     img: assetUrl("/img/slider/chevres.jpg"),
     location: "Bütgenbach",
     desc: "Balades, sports nautiques et détente en bord de lac dans un cadre ouvert.",
+    address: "Seestraße, 4750 Bütgenbach, Belgique",
     site: ""
   },
   {
@@ -142,6 +148,7 @@ const spots = [
     img: assetUrl("/img/slider/cheval_15_11zon.jpg"),
     location: "Spa",
     desc: "Bains, saunas et soins bien-être dans un établissement thermal de référence.",
+    address: "Colline d'Annette et Lubin, 4900 Spa, Belgique",
     site: "https://www.thermesdespa.com"
   },
   {
@@ -151,6 +158,7 @@ const spots = [
     img: assetUrl("/img/slider/ponts.jpg"),
     location: "Remouchamps",
     desc: "Visite souterraine spectaculaire, avec parcours guidé et rivière intérieure.",
+    address: "Rue de Louveigne 3, 4920 Aywaille, Belgique",
     site: ""
   },
   {
@@ -160,6 +168,7 @@ const spots = [
     img: assetUrl("/img/slider/fox.jpg"),
     location: "Aywaille",
     desc: "Parc animalier idéal en famille, entre safari, promenade et activités.",
+    address: "Fange de Deigné 3, 4920 Aywaille, Belgique",
     site: "https://www.mondesauvage.be"
   },
   {
@@ -169,6 +178,7 @@ const spots = [
     img: assetUrl("/img/slider/chevres.jpg"),
     location: "Hautes-Fagnes",
     desc: "Réserve naturelle unique pour randonnées, paysages de landes et points de vue.",
+    address: "Route de Botrange 131, 4950 Waimes, Belgique",
     site: ""
   }
 ];
@@ -222,6 +232,8 @@ const renderSpotsList = () => {
     .map((spot) => {
       const km = Math.round(distanceKmBetween(gite.coords, spot.coords));
       const drive = formatDrive(driveMinutesFromGite(spot.coords));
+      const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${spot.coords[1]},${spot.coords[0]}`;
+      const wazeUrl = `https://waze.com/ul?ll=${spot.coords[1]},${spot.coords[0]}&navigate=yes`;
       const siteLink = spot.site
         ? `<a class="region-spot-link" href="${spot.site}" target="_blank" rel="noopener noreferrer">Site officiel</a>`
         : "";
@@ -231,7 +243,16 @@ const renderSpotsList = () => {
           <div class="region-spot-meta">${km} km · ${drive}</div>
           <div class="region-spot-location">${spot.location}</div>
           <p class="region-spot-desc">${spot.desc}</p>
+          <div class="region-spot-address">${spot.address || `${spot.location}, Belgique`}</div>
           ${siteLink}
+          <div class="region-spot-nav">
+            <a class="region-spot-icon-link" href="${mapsUrl}" target="_blank" rel="noopener noreferrer" aria-label="Ouvrir ${spot.name} dans Google Maps">
+              <img src="${assetUrl("/img/maps_icon.png")}" alt="" aria-hidden="true" />
+            </a>
+            <a class="region-spot-icon-link" href="${wazeUrl}" target="_blank" rel="noopener noreferrer" aria-label="Ouvrir ${spot.name} dans Waze">
+              <img src="${assetUrl("/img/waze_icon.png")}" alt="" aria-hidden="true" />
+            </a>
+          </div>
         </article>
       `;
     })

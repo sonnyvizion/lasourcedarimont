@@ -905,6 +905,19 @@ body.is-loading {
   display: grid;
   grid-template-rows: auto auto 1fr;
   align-items: start;
+  position: relative;
+}
+
+.testimonial-card::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  width: 175px;
+  height: 50px;
+  background: url("/img/googlereview_logo.png") no-repeat center / contain;
+  pointer-events: none;
 }
 
 .testimonial-meta {
@@ -1363,6 +1376,11 @@ body.is-loading {
     scroll-snap-align: center;
   }
 
+  .testimonial-card::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
   .footer-grid {
     grid-template-columns: 1fr;
     gap: 28px;
@@ -1419,6 +1437,10 @@ body.is-loading {
 
   .footer-links {
     margin-bottom: 50px;
+  }
+
+  .intro-text {
+    margin: 18px auto 100px;
   }
 
 
