@@ -7,7 +7,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, "index.html"),
-        gitesChambres: resolve(__dirname, "gites-chambres.html")
+        gitesChambres: resolve(__dirname, "gites-chambres.html"),
+        laRegion: resolve(__dirname, "la-region.html")
       }
     }
   },

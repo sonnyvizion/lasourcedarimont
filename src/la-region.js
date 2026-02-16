@@ -1,0 +1,304 @@
+import "./style.css";
+import "./nav.css";
+import "./home.css";
+import "./la-region.css";
+import "./nav-lang-globe.js";
+
+const BASE_URL = import.meta.env.BASE_URL || "/";
+const assetUrl = (path) => `${BASE_URL}${path.replace(/^\/+/, "")}`;
+const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || "";
+
+const yearEl = document.querySelector("[data-year]");
+if (yearEl) yearEl.textContent = new Date().getFullYear();
+
+const bodyEl = document.body;
+const navToggle = document.querySelector(".nav-toggle");
+const mobileMenu = document.querySelector(".mobile-menu");
+const mobileLinks = document.querySelectorAll(".mobile-menu-inner .menu-link");
+
+if (navToggle && mobileMenu) {
+  mobileLinks.forEach((link) => {
+    if (link.dataset.split === "true") return;
+    const text = link.textContent || "";
+    link.setAttribute("aria-label", text.trim());
+    link.setAttribute("role", "text");
+    link.innerHTML = text
+      .split("")
+      .map((char, index) => {
+        const safe = char === " " ? "&nbsp;" : char;
+        return `<span class="char" style="--char-i:${index}" aria-hidden="true">${safe}</span>`;
+      })
+      .join("");
+    link.dataset.split = "true";
+  });
+
+  const closeMenu = () => {
+    bodyEl.classList.remove("menu-open");
+    navToggle.setAttribute("aria-expanded", "false");
+    mobileMenu.setAttribute("aria-hidden", "true");
+  };
+
+  const toggleMenu = () => {
+    const isOpen = bodyEl.classList.toggle("menu-open");
+    navToggle.setAttribute("aria-expanded", String(isOpen));
+    mobileMenu.setAttribute("aria-hidden", String(!isOpen));
+  };
+
+  navToggle.addEventListener("click", toggleMenu);
+  mobileMenu.addEventListener("click", (event) => {
+    if (event.target instanceof Element && event.target.closest("a")) closeMenu();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeMenu();
+  });
+}
+
+const splitRevealLines = (el) => {
+  const raw = (el.innerHTML || "").trim();
+  const parts = raw
+    .split(/<br\b[^>]*>/gi)
+    .map((p) => p.trim())
+    .filter(Boolean);
+  el.innerHTML = parts
+    .map((part) => `<span class="line"><span class="line-inner">${part}</span></span>`)
+    .join("");
+};
+
+const revealEls = document.querySelectorAll(".reveal-text");
+if (revealEls.length) {
+  revealEls.forEach(splitRevealLines);
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) entry.target.classList.add("is-visible");
+      });
+    },
+    { threshold: 0.25 }
+  );
+  revealEls.forEach((el) => observer.observe(el));
+}
+
+const mapRoot = document.querySelector("#region-map");
+if (mapRoot && window.mapboxgl) {
+  const mapbox = window.mapboxgl;
+  if (!MAPBOX_TOKEN) {
+    mapRoot.innerHTML = `<p style="padding:16px;font-family:var(--font-body);">Carte indisponible: token Mapbox manquant.</p>`;
+  } else {
+    mapbox.accessToken = MAPBOX_TOKEN;
+
+  const gite = { name: "Le gîte", coords: [6.06545, 50.42131] };
+  const spots = [
+    {
+      name: "Circuit de Spa-Francorchamps",
+      coords: [5.9695, 50.4357],
+      cat: "Sport",
+      img: assetUrl("/img/SPA_popin.webp"),
+      badge: assetUrl("/img/SPA_pin.png")
+    },
+    { name: "Musée de la Ville d’eaux (Spa)", coords: [5.85753, 50.49173], cat: "Culture", img: assetUrl("/img/slider/domaine.jpg") },
+    { name: "Château de Reinhardstein", coords: [6.1024676, 50.4527748], cat: "Patrimoine", img: assetUrl("/img/slider/ponts.jpg") },
+    { name: "Abbaye de Stavelot", coords: [5.9315672, 50.3934194], cat: "Patrimoine", img: assetUrl("/img/slider/fox.jpg") },
+    { name: "Stavelot (centre)", coords: [5.9304413, 50.3940981], cat: "Ville", img: assetUrl("/img/slider/domaine.jpg") },
+    { name: "Lac de Bütgenbach", coords: [6.228, 50.427], cat: "Nature", img: assetUrl("/img/slider/chevres.jpg") },
+    { name: "Thermes de Spa", coords: [5.8640616, 50.4942814], cat: "Wellness", img: assetUrl("/img/slider/cheval_15_11zon.jpg") },
+    { name: "Grottes de Remouchamps", coords: [5.712157, 50.4801118], cat: "Nature", img: assetUrl("/img/slider/ponts.jpg") },
+    { name: "Monde Sauvage (Aywaille)", coords: [5.741914, 50.502887], cat: "Famille", img: assetUrl("/img/slider/fox.jpg") },
+    { name: "Parc Naturel des Hautes-Fagnes", coords: [6.0753965, 50.5111275], cat: "Nature", img: assetUrl("/img/slider/chevres.jpg") }
+  ];
+
+  const toRad = (deg) => (deg * Math.PI) / 180;
+  const distanceKmBetween = (a, b) => {
+    const R = 6371;
+    const dLat = toRad(b[1] - a[1]);
+    const dLng = toRad(b[0] - a[0]);
+    const lat1 = toRad(a[1]);
+    const lat2 = toRad(b[1]);
+    const h =
+      Math.sin(dLat / 2) ** 2 +
+      Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2;
+    return 2 * R * Math.asin(Math.sqrt(h));
+  };
+
+  const driveMinutesFromGite = (coords) => {
+    // Approximation route Ardennes: distance * facteur route / vitesse moyenne
+    const km = distanceKmBetween(gite.coords, coords);
+    const routedKm = km * 1.35;
+    return Math.max(8, Math.round((routedKm / 62) * 60));
+  };
+
+  const formatDrive = (minutes) => {
+    if (minutes < 60) return `${minutes} min en voiture`;
+    const h = Math.floor(minutes / 60);
+    const m = minutes % 60;
+    return `${h} h ${m.toString().padStart(2, "0")} en voiture`;
+  };
+
+  const popupHtml = (spot) => {
+    const km = Math.round(distanceKmBetween(gite.coords, spot.coords));
+    const drive = formatDrive(driveMinutesFromGite(spot.coords));
+    return `
+      <div class="map-popup">
+        <img class="map-popup-thumb" src="${spot.img}" alt="${spot.name}" />
+        <div class="map-popup-body">
+          <div class="map-popup-title">${spot.name}</div>
+          <div class="map-popup-meta">${km} km · ${drive}</div>
+          <div class="map-popup-cat">${spot.cat}</div>
+        </div>
+      </div>
+    `;
+  };
+
+  const makePinEl = (isGite = false, badge = "") => {
+    const wrap = document.createElement("div");
+    wrap.className = "map-pin-wrap";
+
+    const el = document.createElement("div");
+    el.style.width = isGite ? "16px" : "14px";
+    el.style.height = isGite ? "16px" : "14px";
+    el.style.borderRadius = "999px";
+    el.style.background = isGite ? "#2A5843" : "#F6B05F";
+    el.style.border = "2px solid #fff";
+    el.style.boxShadow = "0 6px 18px rgba(0,0,0,.18)";
+    wrap.appendChild(el);
+
+    if (badge) {
+      const badgeEl = document.createElement("img");
+      badgeEl.className = "map-pin-badge";
+      badgeEl.src = badge;
+      badgeEl.alt = "";
+      badgeEl.setAttribute("aria-hidden", "true");
+      wrap.appendChild(badgeEl);
+    }
+
+    return wrap;
+  };
+
+  const updateBadgeScale = (map) => {
+    const zoom = map.getZoom();
+    const scale = Math.max(0.8, Math.min(1.6, 0.95 + (zoom - 10.8) * 0.14));
+    document.querySelectorAll(".map-pin-badge").forEach((badgeEl) => {
+      badgeEl.style.setProperty("--badge-scale", String(scale));
+    });
+  };
+
+    const map = new mapbox.Map({
+      container: "region-map",
+      style: "mapbox://styles/sonnyduhood/cmloxccwo001k01s48sq3b9um",
+      center: gite.coords,
+      zoom: 10.8,
+      pitch: 60,
+      bearing: -15
+    });
+
+    map.addControl(new mapbox.NavigationControl({ visualizePitch: true }), "top-right");
+
+    map.on("load", () => {
+    // Terrain is optional; marker rendering must still work if this step fails.
+    try {
+      if (!map.getSource("mapbox-dem")) {
+        map.addSource("mapbox-dem", {
+          type: "raster-dem",
+          url: "mapbox://mapbox.mapbox-terrain-dem-v1",
+          tileSize: 512,
+          maxzoom: 14
+        });
+      }
+      map.setTerrain({ source: "mapbox-dem", exaggeration: 1.35 });
+    } catch {
+      // noop
+    }
+
+    const gitePopup = new mapbox.Popup({ offset: 14 }).setHTML(`
+      <div class="map-popup">
+        <img class="map-popup-thumb" src="${assetUrl("/img/GITE_popin.webp")}" alt="${gite.name}" />
+        <div class="map-popup-body">
+          <div class="map-popup-title">${gite.name}</div>
+          <div class="map-popup-meta">Point de départ</div>
+          <div class="map-popup-cat">Domaine d'Arimont</div>
+        </div>
+      </div>
+    `);
+    const giteMarker = new mapbox.Marker({ element: makePinEl(true, assetUrl("/img/GITE_pin.png")) })
+      .setLngLat(gite.coords)
+      .setPopup(gitePopup)
+      .addTo(map);
+    const giteBadgeEl = giteMarker.getElement().querySelector(".map-pin-badge");
+    if (giteBadgeEl) {
+      gitePopup.on("open", () => {
+        giteBadgeEl.classList.add("is-hidden");
+      });
+      gitePopup.on("close", () => {
+        giteBadgeEl.classList.remove("is-hidden");
+      });
+      giteBadgeEl.addEventListener("click", (event) => {
+        event.stopPropagation();
+        if (gitePopup.isOpen()) {
+          gitePopup.remove();
+        } else {
+          giteMarker.togglePopup();
+        }
+      });
+    }
+
+    spots.forEach((spot) => {
+      const markerEl = makePinEl(false, spot.badge || "");
+      const popup = new mapbox.Popup({ offset: 14 }).setHTML(popupHtml(spot));
+      const marker = new mapbox.Marker({ element: markerEl })
+        .setLngLat(spot.coords)
+        .setPopup(popup)
+        .addTo(map);
+
+      const badgeEl = marker.getElement().querySelector(".map-pin-badge");
+      if (badgeEl) {
+        popup.on("open", () => {
+          badgeEl.classList.add("is-hidden");
+        });
+        popup.on("close", () => {
+          badgeEl.classList.remove("is-hidden");
+        });
+        badgeEl.addEventListener("click", (event) => {
+          event.stopPropagation();
+          if (popup.isOpen()) {
+            popup.remove();
+          } else {
+            marker.togglePopup();
+          }
+        });
+      }
+    });
+
+      updateBadgeScale(map);
+      map.on("zoom", () => updateBadgeScale(map));
+    });
+  }
+}
+
+// Effet exploration léger (desktop uniquement)
+if (window.innerWidth > 1024) {
+
+  const initialBearing = -15;
+  const initialPitch = 60;
+
+  map.on("mousemove", (e) => {
+    const { width, height } = map.getCanvas();
+
+    const x = (e.point.x / width - 0.5) * 2;
+    const y = (e.point.y / height - 0.5) * 2;
+
+    map.easeTo({
+      bearing: initialBearing + x * 8,   // rotation douce gauche/droite
+      pitch: initialPitch + y * 6,       // légère variation verticale
+      duration: 300,
+      easing: (t) => t
+    });
+  });
+
+  map.on("mouseleave", () => {
+    map.easeTo({
+      bearing: initialBearing,
+      pitch: initialPitch,
+      duration: 800
+    });
+  });
+
+}

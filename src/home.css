@@ -1077,7 +1077,7 @@ body.is-loading {
   .hero-headline {
     gap: 40px;
     top: auto;
-    bottom: 150px;
+    bottom: 125px;
     left: 6vw;
     right: 6vw;
     transform: none;

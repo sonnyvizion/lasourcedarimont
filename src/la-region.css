@@ -1,0 +1,188 @@
+.region-page-main {
+  margin-top: 0;
+  padding-bottom: 100px;
+}
+
+.region-page:not(.menu-open) .site-header {
+  color: var(--color-forest);
+  background: var(--color-beige);
+  border-bottom: 2px solid var(--color-forest);
+}
+
+.region-page:not(.menu-open) .logo-mark {
+  background-color: var(--color-forest);
+}
+
+.region-page:not(.menu-open) .nav-links,
+.region-page:not(.menu-open) .nav-right {
+  color: var(--color-forest);
+}
+
+.region-page:not(.menu-open) .nav-icon,
+.region-page:not(.menu-open) .nav-icon::after {
+  border-color: var(--color-forest);
+}
+
+.region-page:not(.menu-open) .nav-toggle-bar {
+  background: var(--color-forest);
+}
+
+.region-intro .intro-text {
+  max-width: 900px;
+  margin-bottom: 80px;
+}
+
+.region-map-section {
+  padding-top: 10px;
+  background: var(--color-beige);
+}
+
+.reveal-text .line {
+  display: block;
+  overflow: hidden;
+}
+
+.reveal-text .line-inner {
+  display: inline-block;
+  transform: translateY(100%);
+  transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal-text.is-visible .line-inner {
+  transform: translateY(0);
+}
+
+.region-map {
+  width: 100%;
+  height: 560px;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 3px solid var(--color-forest);
+}
+
+.mapboxgl-popup-content {
+  border-radius: 12px;
+  padding: 8px;
+  min-width: 250px;
+  border: 3px solid var(--color-forest);
+  background: var(--color-beige);
+}
+
+.mapboxgl-popup {
+  z-index: 30;
+}
+
+.mapboxgl-marker {
+  z-index: 10;
+}
+
+.popup-title {
+  font-family: var(--font-body);
+  font-weight: 700;
+  color: var(--color-forest);
+}
+
+.popup-sub {
+  opacity: 0.75;
+  font-size: 12px;
+  margin-top: 4px;
+  font-family: var(--font-body);
+}
+
+.map-popup {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.map-popup-thumb {
+  width: 76px;
+  height: 64px;
+  border-radius: 10px;
+  object-fit: cover;
+  flex: 0 0 auto;
+}
+
+.map-popup-body {
+  display: grid;
+  align-content: center;
+  gap: 2px;
+}
+
+.map-popup-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--color-ink);
+  line-height: 1.2;
+}
+
+.map-popup-meta {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: rgba(24, 53, 40, 0.82);
+}
+
+.map-popup-cat {
+  font-family: var(--font-body);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(24, 53, 40, 0.65);
+}
+
+.pin {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  background: #f6b05f;
+  border: 2px solid #fff;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
+}
+
+.pin--gite {
+  width: 16px;
+  height: 16px;
+  background: #2a5843;
+}
+
+.map-pin-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  overflow: visible;
+}
+
+.map-pin-badge {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%) scale(var(--badge-scale, 1));
+  transform-origin: bottom center;
+  width: 72px;
+  max-width: none;
+  height: auto;
+  pointer-events: auto;
+  cursor: pointer;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.28));
+  opacity: 1;
+  transition: opacity 0.18s ease;
+}
+
+.map-pin-badge.is-hidden {
+  opacity: 0;
+}
+
+@media (max-width: 980px) {
+  .region-intro .intro-text {
+    margin-bottom: 44px;
+  }
+
+  .region-map {
+    height: 62vh;
+    min-height: 420px;
+  }
+}

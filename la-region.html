@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>La région - La Source d'Arimont</title>
+    <link href="https://api.mapbox.com/mapbox-gl-js/v3.18.1/mapbox-gl.css" rel="stylesheet" />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v3.18.1/mapbox-gl.js"></script>
+  </head>
+  <body class="region-page">
+    <header class="site-header">
+      <div class="content-wrap header-inner">
+        <div class="nav-left">
+          <a class="logo" aria-label="La Source d’Arimont" href="./index.html">
+            <span class="logo-mark" role="img" aria-hidden="true"></span>
+          </a>
+          <nav class="nav-links">
+            <a href="./index.html">Accueil</a>
+            <a href="./gites-chambres.html">Gîtes &amp; chambres</a>
+            <a href="./la-region.html">La région</a>
+            <a href="#">Contact</a>
+          </nav>
+        </div>
+        <div class="nav-right">
+          <a class="nav-icon-link" href="#" aria-label="WhatsApp">
+            <span class="nav-icon"></span>
+            WhatsApp
+          </a>
+          <a class="nav-lang" href="#" aria-label="Choisir la langue">
+            <span class="nav-lang-globe" aria-hidden="true"></span>
+            FR · NL · EN
+          </a>
+          <a class="nav-cta" href="#">Je réserve</a>
+          <button class="nav-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false">
+            <span class="nav-toggle-bar"></span>
+            <span class="nav-toggle-bar"></span>
+            <span class="nav-toggle-bar"></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="mobile-menu" aria-hidden="true">
+      <div class="mobile-menu-inner">
+        <a class="menu-link" href="./index.html">Accueil</a>
+        <a class="menu-link" href="./gites-chambres.html">Gîtes &amp; chambres</a>
+        <a class="menu-link" href="./la-region.html">La région</a>
+        <a class="menu-link" href="#">Contact</a>
+        <div class="mobile-menu-social">
+          <a href="#" aria-label="Facebook">
+            <img src="/img/illustrations/fb_icon.png" alt="" />
+          </a>
+          <a href="#" aria-label="Instagram">
+            <img src="/img/illustrations/insta_icon.png" alt="" />
+          </a>
+        </div>
+        <a class="mobile-menu-cta" href="#">Je réserve</a>
+      </div>
+    </div>
+
+    <main class="region-page-main">
+      <section class="section center region-intro">
+        <div class="content-wrap">
+          <div class="label">Découvrir la région</div>
+          <h2 class="intro-text reveal-text">
+            Séjournez au cœur des Ardennes <br class="br-desktop" />
+            et explorez les <span class="semi-italic">incontournables</span> <br class="br-desktop" />
+            autour du Domaine
+          </h2>
+        </div>
+      </section>
+
+      <section class="section region-map-section">
+        <div class="content-wrap">
+          <div id="region-map" class="region-map" aria-label="Carte des activités autour du Domaine"></div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-main">
+        <div class="content-wrap">
+          <div class="footer-grid">
+            <div class="footer-rabbit-col">
+              <img class="footer-rabbit" src="/img/illustrations/lapin_BEIGE.png" alt="" aria-hidden="true" />
+              <button class="btn btn-outline footer-rabbit-cta" type="button">Réservez</button>
+            </div>
+            <div>
+              <div class="footer-title">LA SOURCE D’ARIMONT</div>
+              <div class="footer-links">
+                <span>Adresse à compléter</span>
+                <span>Spa-Francorchamps, Belgique</span>
+                <span>+32 000 00 00</span>
+                <span>contact@domaine-arimont.be</span>
+              </div>
+              <div class="footer-social">
+                <a href="#" aria-label="Facebook">
+                  <img src="/img/illustrations/fb_icon.png" alt="" />
+                </a>
+                <a href="#" aria-label="Instagram">
+                  <img src="/img/illustrations/insta_icon.png" alt="" />
+                </a>
+              </div>
+            </div>
+            <div>
+              <div class="footer-title">Navigation</div>
+              <div class="footer-links">
+                <a href="./index.html">Accueil</a>
+                <a href="./gites-chambres.html">Gîtes &amp; chambres</a>
+                <a href="./la-region.html">Découvrir la région</a>
+                <a href="#">Contact</a>
+              </div>
+            </div>
+            <div>
+              <div class="footer-title">Légales</div>
+              <div class="footer-links">
+                <a href="#">Mentions légales</a>
+                <a href="#">Confidentialité</a>
+                <a href="#">Cookies</a>
+              </div>
+            </div>
+          </div>
+          <div class="footer-bottom">© <span data-year></span> le domaine d’arimont - Website par young, wild &amp; pixels agency</div>
+        </div>
+      </div>
+    </footer>
+
+    <script type="module" src="/src/la-region.js"></script>
+  </body>
+</html>
