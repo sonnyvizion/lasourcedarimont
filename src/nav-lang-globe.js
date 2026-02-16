@@ -27,8 +27,11 @@ const shouldUseGreenGlobe = () => {
   const headerEl = document.querySelector(".site-header");
   const bodyEl = document.body;
   if (!headerEl) return false;
-  if (headerEl.classList.contains("is-solid")) return true;
-  return bodyEl.classList.contains("gites-chambres-page") && !bodyEl.classList.contains("menu-open");
+  const isHomePage = bodyEl.classList.contains("home-page");
+  if (isHomePage) {
+    return headerEl.classList.contains("is-solid");
+  }
+  return true;
 };
 
 const initNavLangGlobe = async () => {

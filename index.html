@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>La Source d'Arimont</title>
   </head>
-  <body class="nav-hidden">
+  <body class="home-page nav-hidden">
     <div class="site-loader" aria-hidden="true">
       <div id="site-loader-animation" class="site-loader-animation"></div>
     </div>
@@ -61,8 +61,11 @@
 
     <section class="hero">
       <div class="hero-media" aria-hidden="true">
-        <video class="hero-video" autoplay muted playsinline preload="auto">
+        <video class="hero-video hero-video-desktop" autoplay muted playsinline preload="auto">
           <source src="/vid/hero_desktop-video.mp4" type="video/mp4" />
+        </video>
+        <video class="hero-video hero-video-mobile" autoplay muted playsinline preload="auto">
+          <source src="/vid/hero_mobile.mp4" type="video/mp4" />
         </video>
         <picture class="hero-image">
           <source srcset="/img/hero_mobile.webp" media="(max-width: 980px)" />

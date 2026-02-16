@@ -98,6 +98,14 @@ body.is-loading {
   opacity: 0.85;
 }
 
+.hero-video.is-hidden {
+  display: none;
+}
+
+.hero-video-mobile {
+  display: none;
+}
+
 .hero-image {
   position: absolute;
   inset: 0;
@@ -1077,7 +1085,7 @@ body.is-loading {
   .hero-headline {
     gap: 40px;
     top: auto;
-    bottom: 125px;
+    bottom: 100px;
     left: 6vw;
     right: 6vw;
     transform: none;
@@ -1150,8 +1158,20 @@ body.is-loading {
     display: none;
   }
 
-  .hero-image {
+  .hero-video-mobile {
     display: block;
+  }
+
+  .hero-image {
+    display: none;
+  }
+
+  .hero-media.use-image-fallback .hero-image {
+    display: block;
+  }
+
+  .hero-media.use-image-fallback .hero-video-mobile {
+    display: none;
   }
 
   .hero-tree {

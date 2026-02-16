@@ -190,15 +190,28 @@
 }
 
 .site-header.is-solid .nav-right,
-.gites-chambres-page:not(.menu-open) .nav-right {
+.gites-chambres-page:not(.menu-open) .nav-right,
+.region-page:not(.menu-open) .nav-right {
   transform: translateX(-138px);
 }
 
 .site-header.is-solid .nav-cta,
-.gites-chambres-page:not(.menu-open) .nav-cta {
+.gites-chambres-page:not(.menu-open) .nav-cta,
+.region-page:not(.menu-open) .nav-cta {
   opacity: 1;
   pointer-events: auto;
   transform: translateY(-50%) translateX(0);
+}
+
+/* On internal pages, keep CTA fixed immediately (no load-in slide). */
+.gites-chambres-page .nav-right,
+.region-page .nav-right {
+  transition: color 0.4s ease;
+}
+
+.gites-chambres-page .nav-cta,
+.region-page .nav-cta {
+  transition: none;
 }
 
 .menu-open .nav-cta {
@@ -378,6 +391,7 @@
 
   .site-header.is-solid .nav-right,
   .gites-chambres-page:not(.menu-open) .nav-right,
+  .region-page:not(.menu-open) .nav-right,
   .menu-open .nav-right {
     transform: translateX(0);
   }
