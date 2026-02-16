@@ -30,7 +30,7 @@
             <span class="nav-lang-globe" aria-hidden="true"></span>
             FR · NL · EN
           </a>
-          <a class="nav-cta" href="#">Je réserve</a>
+          <a class="nav-cta" href="#">Reserver</a>
           <button class="nav-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false">
             <span class="nav-toggle-bar"></span>
             <span class="nav-toggle-bar"></span>
@@ -67,6 +67,11 @@
             et explorez les <span class="semi-italic">incontournables</span> <br class="br-desktop" />
             autour du Domaine
           </h2>
+          <img
+            class="region-intro-frog"
+            src="/img/illustrations/grenouille_illu.png"
+            alt=""
+            aria-hidden="true" />
         </div>
       </section>
 
@@ -75,9 +80,92 @@
           <div id="region-map" class="region-map" aria-label="Carte des activités autour du Domaine"></div>
         </div>
       </section>
+
+      <section class="section region-list-section">
+        <div class="content-wrap">
+          <div class="label" style="text-align: center;">Lieux à visiter</div>
+          <h2 class="intro-text reveal-text" style="margin-bottom: 100px;">Les lieux de la carte,<br> pour préparer vos sorties</h2>
+          <div id="region-spots-list" class="region-spots-grid" aria-live="polite"></div>
+          <div class="region-video-wrap">
+            <video
+              class="region-video region-video-desktop"
+              autoplay
+              muted
+              loop
+              playsinline
+              preload="metadata"
+              aria-label="Vidéo du Domaine d'Arimont">
+              <source src="/vid/arimont_desktop.mp4" type="video/mp4" />
+            </video>
+            <video
+              class="region-video region-video-mobile"
+              autoplay
+              muted
+              loop
+              playsinline
+              preload="metadata"
+              aria-label="Vidéo mobile du Domaine d'Arimont">
+              <source src="/vid/arimont_mobile.mp4" type="video/mp4" />
+            </video>
+          </div>
+        </div>
+      </section>
     </main>
 
     <footer class="site-footer">
+      <section class="section center section-footer-reviews">
+        <div class="content-wrap">
+          <div class="label">Ils ont séjourné au Domaine</div>
+          <h2 class="intro-text reveal-text">
+            Quelques mots <span class="semi-italic">partagés</span> par nos hôtes, à l’issue <br class="br-desktop" />de leur séjour au Domaine d’<span class="semi-italic">Arimont</span>
+          </h2>
+          <div style="margin-top: 18px; margin-bottom: 100px;">
+            <button class="btn btn-outline" type="button">vous aussi laissez un avis</button>
+          </div>
+
+          <div class="testimonials-header">
+            <div class="testimonials-arrows">
+              <button class="gallery-arrow testimonials-prev" type="button" aria-label="Précédent">‹</button>
+              <button class="gallery-arrow testimonials-next" type="button" aria-label="Suivant">›</button>
+            </div>
+          </div>
+          <div class="testimonials-slider">
+            <div class="testimonials-track">
+              <article class="testimonial-card">
+                <div class="testimonial-meta">Le Raidillon</div>
+                <strong>Sophie L.</strong>
+                <p>“Un cadre naturel préservé, le calme et la forêt, un vrai moment d’évasion.”</p>
+              </article>
+              <article class="testimonial-card">
+                <div class="testimonial-meta">Le Raidillon</div>
+                <strong>Claire &amp; Thomas</strong>
+                <p>“Un séjour parfait en pleine nature. Le domaine est magnifique et l’accueil au top.”</p>
+              </article>
+              <article class="testimonial-card">
+                <div class="testimonial-meta">Le Raidillon</div>
+                <strong>Julien P.</strong>
+                <p>“Un lieu authentique et paisible, très bien situé pour découvrir la région.”</p>
+              </article>
+              <article class="testimonial-card">
+                <div class="testimonial-meta">Le Raidillon</div>
+                <strong>Marie D.</strong>
+                <p>“Lieu superbe, très propre, et environnement parfait pour se déconnecter.”</p>
+              </article>
+              <article class="testimonial-card">
+                <div class="testimonial-meta">Le Raidillon</div>
+                <strong>Thomas R.</strong>
+                <p>“Accueil chaleureux et cadre apaisant. Nous reviendrons sans hésiter.”</p>
+              </article>
+              <article class="testimonial-card">
+                <div class="testimonial-meta">Le Raidillon</div>
+                <strong>Anne &amp; Luc</strong>
+                <p>“Un séjour ressourçant, avec un vrai charme et une excellente localisation.”</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <div class="footer-main">
         <div class="content-wrap">
           <div class="footer-grid">

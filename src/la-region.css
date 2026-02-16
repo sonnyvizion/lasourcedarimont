@@ -32,9 +32,117 @@
   margin-bottom: 80px;
 }
 
+.region-intro .content-wrap {
+  position: relative;
+}
+
+.region-intro-frog {
+  position: absolute;
+  left: 50;
+  bottom: -182px;
+  width: clamp(90px, 12vw, 170px);
+  height: auto;
+  pointer-events: none;
+  z-index: 4;
+}
+
 .region-map-section {
   padding-top: 10px;
   background: var(--color-beige);
+}
+
+.region-list-section {
+  padding-top: 24px;
+  background: var(--color-beige);
+}
+
+.region-list-section .intro-text {
+  margin-bottom: 28px;
+}
+
+.region-spots-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.region-video-wrap {
+  margin-top: 28px;
+}
+
+.region-video {
+  width: 100%;
+  border-radius: 18px;
+  border: 3px solid var(--color-forest);
+  display: block;
+  object-fit: cover;
+}
+
+.region-video-desktop {
+  display: block;
+}
+
+.region-video-mobile {
+  display: none;
+}
+
+.region-spot-card {
+  border: 2px solid var(--color-forest);
+  border-radius: 16px;
+  background: rgba(246, 241, 230, 0.8);
+  padding: 16px;
+  gap: 0;
+}
+
+.region-spot-title {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--color-forest);
+  line-height: 1.2;
+}
+
+.region-spot-meta {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(24, 53, 40, 0.85);
+  margin-top: 5px;
+}
+
+.region-spot-location {
+  font-family: var(--font-body);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(24, 53, 40, 0.68);
+  margin-top: 5px;
+}
+
+.region-spot-desc {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--color-ink);
+  margin-top: 10px;
+}
+
+.region-spot-link {
+  display: inline-flex;
+  width: max-content;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  border: 2px solid var(--color-forest);
+  color: var(--color-forest);
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 8px 12px;
+  margin-top: 40px;
 }
 
 .reveal-text .line {
@@ -193,8 +301,31 @@
     margin-bottom: 44px;
   }
 
+  .region-intro-frog {
+    width: clamp(78px, 60vw, 120px);
+    bottom: -148px;
+    left:32%;
+  }
+
   .region-map {
     height: 62vh;
     min-height: 420px;
+  }
+
+  .region-spots-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .region-spot-card {
+    text-align: center;
+    justify-items: center;
+  }
+
+  .region-video-desktop {
+    display: none;
+  }
+
+  .region-video-mobile {
+    display: block;
   }
 }
