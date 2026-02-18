@@ -169,28 +169,59 @@
       <section class="section section-dark">
         <div class="content-wrap center">
           <div class="label">Gîtes &amp; chambres</div>
-          <h2 class="intro-text reveal-text">
+          <h2 class="intro-text reveal-text lodgings-intro-text">
             Des hébergements <span class="semi-italic">chaleureux</span>, pensés pour <br class="br-desktop" />offrir confort, calme et authenticité, au cœur <br class="br-desktop" />du
             Domaine d’<span class="semi-italic">Arimont</span>
           </h2>
 
-          <div class="lodgings-grid">
-            <article class="lodging-card lodging-card-gites">
-              <h3><span style="font-size: 0.5em;">Les</span><br>Gîtes</h3>
-              <p>Espaces généreux pour se retrouver, dans un <br>cadre calme et naturel</p>
-              <a class="btn" href="./gites-chambres.html#gites">Découvrir</a>
-            </article>
-            <article class="lodging-card lodging-card-chambres">
-              <h3><span style="font-size: 0.5em;">Les</span><br>Chambres</h3>
-              <p>Des chambres confortables, pour des nuits <br> paisibles en pleine nature.</p>
-              <a class="btn" href="./gites-chambres.html#chambres">Découvrir</a>
-            </article>
+          <div class="lodgings-showcase js-lodgings-showcase">
+            <div class="lodgings-stage">
+              <div class="lodgings-bg-rise" aria-hidden="true"></div>
+              <article class="lodgings-slide lodgings-slide-gites" data-lodging-slide="gites">
+                <video class="lodgings-slide-video" muted playsinline preload="auto" aria-hidden="true">
+                  <source src="/vid/gites_home2_scrub.mp4" type="video/mp4" />
+                </video>
+                <div class="lodgings-slide-overlay">
+                  <h3 class="lodgings-slide-title">
+                    Petit comité ou <span class="semi-italic">grande</span><br />
+                    tribu ? On a la place !
+                  </h3>
+                  <p>
+                    Au cœur de la nature, nos gîtes accueillent de 3 à 9 personnes pour un séjour tout confort, entre
+                    détente, convivialité et moments partagés.
+                  </p>
+                  <a class="btn btn-outline" href="./gites-chambres.html#gites">Voir les gîtes</a>
+                </div>
+              </article>
+
+              <article class="lodgings-slide lodgings-slide-chambres" data-lodging-slide="chambres">
+                <video class="lodgings-slide-video" muted playsinline preload="auto" aria-hidden="true">
+                  <source src="/vid/chambre_home_scrub.mp4" type="video/mp4" />
+                </video>
+                <div class="lodgings-slide-overlay">
+                  <h3 class="lodgings-slide-title">
+                    Une pause <span class="semi-italic">douce</span>,<br />
+                    en pleine Ardenne
+                  </h3>
+                  <p>
+                    Nos chambres allient confort, calme et authenticité pour des nuits paisibles à deux pas de
+                    Spa-Francorchamps.
+                  </p>
+                  <a class="btn btn-outline" href="./gites-chambres.html#chambres">Voir les chambres</a>
+                </div>
+              </article>
+
+              <div class="lodgings-progress" aria-hidden="true">
+                <span class="lodgings-progress-bar"><span class="lodgings-progress-fill"></span></span>
+                <span class="lodgings-progress-bar"><span class="lodgings-progress-fill"></span></span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       <section class="section center section-feature">
-        <div class="content-wrap" style="margin-top: -100px;">
+        <div class="content-wrap essence" style="margin-top: 100px;">
           <div class="icon-birds" aria-hidden="true">
             <img src="/img/illustrations/birds_J.png" alt="" />
           </div>

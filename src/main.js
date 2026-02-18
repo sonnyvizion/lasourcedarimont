@@ -1073,6 +1073,128 @@ if (!prefersReducedMotion) {
     testimonialsNext.addEventListener("click", () => slideTestimonials(1));
   }
 
+  const lodgingsShowcase = document.querySelector(".js-lodgings-showcase");
+  const lodgingsStage = document.querySelector(".lodgings-stage");
+  const lodgingsBgRise = document.querySelector(".lodgings-bg-rise");
+  const lodgingsSlideGites = document.querySelector('[data-lodging-slide="gites"]');
+  const lodgingsSlideChambres = document.querySelector('[data-lodging-slide="chambres"]');
+  const lodgingsProgressFills = document.querySelectorAll(".lodgings-progress-fill");
+  const lodgingsGitesVideo = document.querySelector(".lodgings-slide-gites .lodgings-slide-video");
+  const lodgingsChambresVideo = document.querySelector(".lodgings-slide-chambres .lodgings-slide-video");
+  const lodgingsIsMobile = window.matchMedia("(max-width: 980px)").matches;
+
+  if (
+    lodgingsShowcase &&
+    lodgingsStage &&
+    lodgingsBgRise &&
+    lodgingsSlideGites &&
+    lodgingsSlideChambres &&
+    lodgingsProgressFills.length >= 2
+  ) {
+    const gitesTitle = lodgingsSlideGites.querySelector(".lodgings-slide-title");
+    const gitesBody = lodgingsSlideGites.querySelectorAll("p, .btn");
+    const chambresTitle = lodgingsSlideChambres.querySelector(".lodgings-slide-title");
+    const chambresBody = lodgingsSlideChambres.querySelectorAll("p, .btn");
+    const firstFill = lodgingsProgressFills[0];
+    const secondFill = lodgingsProgressFills[1];
+    const gitesPhaseEnd = 0.5;
+    const crossDuration = 0.08;
+    const bgStartY = 16;
+    const bgPinStartY = 8;
+
+    gsap.set(lodgingsSlideGites, { opacity: 1 });
+    gsap.set(lodgingsSlideChambres, { opacity: 0 });
+    gsap.set(firstFill, { scaleY: 0 });
+    gsap.set(secondFill, { scaleY: 0 });
+    gsap.set(chambresTitle, { opacity: 0 });
+    gsap.set(chambresBody, { opacity: 0 });
+    gsap.set(gitesTitle, { opacity: 1 });
+    gsap.set(gitesBody, { opacity: 1 });
+    gsap.set(lodgingsBgRise, { yPercent: bgStartY });
+    if (lodgingsGitesVideo) {
+      gsap.set(lodgingsGitesVideo, {
+        scale: 0.72,
+        y: () => window.innerHeight * 0.18
+      });
+    }
+    const primeScrubVideo = (videoEl) => {
+      if (!videoEl) return;
+      videoEl.pause();
+      videoEl.currentTime = 0;
+      const prime = () => {
+        const playback = videoEl.play();
+        if (playback && typeof playback.catch === "function") playback.catch(() => {});
+        window.setTimeout(() => videoEl.pause(), 120);
+      };
+      if (videoEl.readyState >= 1) prime();
+      else videoEl.addEventListener("loadedmetadata", prime, { once: true });
+    };
+
+    primeScrubVideo(lodgingsGitesVideo);
+    primeScrubVideo(lodgingsChambresVideo);
+
+    ScrollTrigger.create({
+      trigger: lodgingsShowcase,
+      start: "top bottom",
+      end: "top top",
+      scrub: 1,
+      onUpdate: (self) => {
+        const y = bgStartY - (bgStartY - bgPinStartY) * self.progress;
+        gsap.set(lodgingsBgRise, { yPercent: y });
+      }
+    });
+
+    ScrollTrigger.create({
+      trigger: lodgingsShowcase,
+      start: "top top",
+      end: lodgingsIsMobile ? "+=260%" : "+=220%",
+      scrub: 1,
+      pin: lodgingsStage,
+      anticipatePin: 1,
+      onUpdate: (self) => {
+        const p = self.progress;
+        const gitesProgress = Math.max(0, Math.min(1, p / gitesPhaseEnd));
+        const chambresProgress = Math.max(0, Math.min(1, (p - gitesPhaseEnd) / (1 - gitesPhaseEnd)));
+        const cross = Math.max(0, Math.min(1, (p - gitesPhaseEnd) / crossDuration));
+
+        gsap.set(firstFill, { scaleY: gitesProgress });
+        gsap.set(secondFill, { scaleY: chambresProgress });
+        gsap.set(lodgingsBgRise, { yPercent: bgPinStartY * (1 - gitesProgress) });
+
+        if (lodgingsGitesVideo) {
+          gsap.set(lodgingsGitesVideo, {
+            scale: 0.72 + 0.28 * gitesProgress,
+            y: (1 - gitesProgress) * window.innerHeight * 0.18
+          });
+        }
+
+        if (lodgingsGitesVideo && lodgingsGitesVideo.duration && Number.isFinite(lodgingsGitesVideo.duration)) {
+          const targetTime = Math.min(
+            Math.max(0, lodgingsGitesVideo.duration - 0.05),
+            lodgingsGitesVideo.duration * gitesProgress
+          );
+          if (Math.abs(lodgingsGitesVideo.currentTime - targetTime) > 0.033) {
+            lodgingsGitesVideo.currentTime = targetTime;
+          }
+        }
+
+        if (lodgingsChambresVideo && lodgingsChambresVideo.duration && Number.isFinite(lodgingsChambresVideo.duration)) {
+          const targetTime = Math.min(
+            Math.max(0, lodgingsChambresVideo.duration - 0.05),
+            lodgingsChambresVideo.duration * chambresProgress
+          );
+          if (Math.abs(lodgingsChambresVideo.currentTime - targetTime) > 0.033) {
+            lodgingsChambresVideo.currentTime = targetTime;
+          }
+        }
+
+        gsap.set([lodgingsSlideGites, gitesTitle, ...gitesBody], { opacity: 1 - cross });
+        gsap.set(lodgingsSlideChambres, { opacity: cross });
+        gsap.set([chambresTitle, ...chambresBody], { opacity: cross });
+      }
+    });
+  }
+
   // Group parallax: all cards move together (desktop only)
   if (!window.matchMedia("(max-width: 980px)").matches) {
     gsap.fromTo(

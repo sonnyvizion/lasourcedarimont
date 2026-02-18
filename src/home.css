@@ -771,10 +771,163 @@ body.is-loading {
   line-height: 1.2;
 }
 
+.section-dark .lodgings-intro-text {
+  margin-bottom: 150px !important;
+}
+
 .section-feature .label,
 .section-feature h2 {
   color: var(--color-yellow);
 }
+
+.lodgings-showcase {
+  position: relative;
+  height: 300vh;
+  margin-top: 24px;
+}
+
+.lodgings-stage {
+  position: sticky;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  overflow: hidden;
+  background: var(--color-beige);
+}
+
+.lodgings-bg-rise {
+  position: absolute;
+  inset: 0;
+  background: var(--color-forest);
+  transform: translateY(16%);
+  z-index: 0;
+  will-change: transform;
+}
+
+.lodgings-slide {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.lodgings-slide img,
+.lodgings-slide video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: brightness(0.76);
+}
+
+.lodgings-slide-gites .lodgings-slide-video {
+  position: absolute;
+  inset: 0;
+  transform-origin: top center;
+  will-change: transform, border-radius;
+}
+
+.lodgings-slide-chambres .lodgings-slide-video {
+  position: absolute;
+  inset: 0;
+}
+
+.lodgings-slide-overlay {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 20vh;
+  width: 100vw;
+  display: grid;
+  gap: 20px;
+  color: var(--color-white);
+  z-index: 2;
+  justify-items: center;
+  text-align: center;
+}
+
+.lodgings-slide-title {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: clamp(54px, 8vw, 188px);
+  letter-spacing: -5px;
+  line-height: 0.92;
+  color: var(--color-white);
+  margin: 0;
+  text-align: center;
+  margin-bottom: 25px;
+  width: 100vw;
+  text-wrap: balance;
+}
+
+.lodgings-slide-title .semi-italic {
+  font-family: "Libre Baskerville", serif;
+  font-style: italic;
+  font-weight: 700;
+}
+
+.lodgings-slide-overlay p {
+  color: rgba(255, 255, 255, 0.88);
+  margin: 0;
+  max-width: 760px;
+  margin-bottom: 10px;
+  font-size: clamp(16px, 1.3vw, 30px);
+  line-height: 1.05;
+  font-weight: 300;
+}
+
+.lodgings-slide-overlay .btn-outline {
+  width: max-content;
+  margin-top: 8px;
+  color: var(--color-white);
+  background-color: rgba(255, 255, 255, 0.293);
+  border: 0;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 14px 26px;
+}
+
+.lodgings-slide-overlay .btn-outline:hover {
+  background: var(--color-white);
+  color: var(--color-forest);
+}
+
+.lodgings-slide-chambres {
+  opacity: 0;
+}
+
+.lodgings-progress {
+  position: absolute;
+  right: 3.2vw;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  z-index: 3;
+}
+
+.lodgings-progress-bar {
+  width: 4px;
+  height: 140px;
+  background: rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  overflow: hidden;
+  display: block;
+}
+
+.lodgings-progress-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  transform-origin: bottom;
+  transform: scaleY(0);
+}
+
 .lodgings-grid {
   margin-top: 150px;
   display: grid;
@@ -1139,6 +1292,82 @@ body.is-loading {
 }
 
 @media (max-width: 980px) {
+  .section-dark .lodgings-intro-text {
+    margin-bottom: 24px !important;
+  }
+
+  .lodgings-showcase {
+    height: 320svh;
+    margin-top: 12px;
+  }
+
+  .lodgings-stage {
+    position: sticky;
+    top: 0;
+    width: 100vw;
+    height: 100svh;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
+    overflow: hidden;
+  }
+
+  .lodgings-slide {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  .lodgings-slide-gites {
+    opacity: 1;
+  }
+
+  .lodgings-slide-overlay {
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 12vh;
+    width: min(92vw, 620px);
+    max-width: 92vw;
+    gap: 12px;
+    justify-items: start;
+    text-align: left;
+  }
+
+  .lodgings-slide-title {
+    font-size: clamp(40px, 11.2vw, 64px);
+    text-align: left;
+    line-height: 0.94;
+    letter-spacing: -2px;
+    width: 100%;
+  }
+
+  .lodgings-slide-overlay p {
+    font-size: 16px;
+    line-height: 1.1;
+    max-width: 90%;
+  }
+
+  .lodgings-slide-overlay .btn-outline {
+    margin-top: 6px;
+    font-size: 12px;
+    padding: 12px 22px;
+  }
+
+  .lodgings-progress {
+    right: 4vw;
+    gap: 10px;
+  }
+
+  .essence {
+    margin-top: 250px !important;
+  }
+
+  .lodgings-progress-bar {
+    height: 92px;
+    width: 3px;
+  }
+
   .section-dark {
     background: none;
   }
