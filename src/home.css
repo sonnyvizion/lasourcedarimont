@@ -1261,6 +1261,10 @@ body.is-loading {
   text-transform: uppercase;
 }
 
+.essence {
+  margin-top: 450px !important;
+}
+
 .footer-links {
   display: grid;
   gap: 8px;
