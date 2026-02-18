@@ -784,6 +784,7 @@ body.is-loading {
   position: relative;
   height: 300vh;
   margin-top: 24px;
+  z-index: 5;
 }
 
 .lodgings-stage {
@@ -795,6 +796,7 @@ body.is-loading {
   margin-right: calc(50% - 50vw);
   overflow: hidden;
   background: var(--color-beige);
+  z-index: 6;
 }
 
 .lodgings-bg-rise {
@@ -836,27 +838,36 @@ body.is-loading {
 .lodgings-slide-overlay {
   position: absolute;
   left: 50%;
-  transform: translateX(-50%);
-  bottom: 20vh;
+  top: 50%;
+  transform: translate(-50%, -50%);
   width: 100vw;
   display: grid;
-  gap: 20px;
+  gap: 0px;
   color: var(--color-white);
   z-index: 2;
   justify-items: center;
   text-align: center;
 }
 
+.lodgings-slide-label {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0;
+}
+
 .lodgings-slide-title {
   font-family: var(--font-body);
-  font-weight: 700;
-  font-size: clamp(54px, 8vw, 188px);
-  letter-spacing: -5px;
-  line-height: 0.92;
+  font-weight: 400;
+  font-size: clamp(54px, 3vw, 188px);
+  letter-spacing: -2px;
+  line-height: 1;
   color: var(--color-white);
   margin: 0;
   text-align: center;
-  margin-bottom: 25px;
   width: 100vw;
   text-wrap: balance;
 }
@@ -870,6 +881,7 @@ body.is-loading {
 .lodgings-slide-overlay p {
   color: rgba(255, 255, 255, 0.88);
   margin: 0;
+  width: fit-content;
   max-width: 760px;
   margin-bottom: 10px;
   font-size: clamp(16px, 1.3vw, 30px);
@@ -879,9 +891,11 @@ body.is-loading {
 
 .lodgings-slide-overlay .btn-outline {
   width: max-content;
-  margin-top: 8px;
+  justify-self: center;
+  align-self: center;
+  margin-top: 40px;
   color: var(--color-white);
-  background-color: rgba(255, 255, 255, 0.293);
+  background-color: rgba(27, 27, 27, 0.363);
   border: 0;
   font-weight: 700;
   font-size: 13px;
@@ -1262,7 +1276,7 @@ body.is-loading {
 }
 
 .essence {
-  margin-top: 450px !important;
+  margin-top: 120px !important;
 }
 
 .footer-links {
@@ -1301,7 +1315,7 @@ body.is-loading {
   }
 
   .lodgings-showcase {
-    height: 320svh;
+    height: 420svh;
     margin-top: 12px;
   }
 
@@ -1309,7 +1323,7 @@ body.is-loading {
     position: sticky;
     top: 0;
     width: 100vw;
-    height: 100svh;
+    height: 100dvh;
     margin-left: calc(50% - 50vw);
     margin-right: calc(50% - 50vw);
     overflow: hidden;
@@ -1333,29 +1347,51 @@ body.is-loading {
     bottom: 12vh;
     width: min(92vw, 620px);
     max-width: 92vw;
-    gap: 12px;
-    justify-items: start;
-    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    text-align: center;
+    height: auto;
   }
 
   .lodgings-slide-title {
-    font-size: clamp(40px, 11.2vw, 64px);
-    text-align: left;
-    line-height: 0.94;
-    letter-spacing: -2px;
+    font-size: clamp(14px, 6.2vw, 64px);
+    text-align: center;
+    line-height: 1;
+    letter-spacing: -1px;
     width: 100%;
+  }
+
+  .lodgings-slide-label {
+    font-size: 11px;
+    letter-spacing: 0.12em;
   }
 
   .lodgings-slide-overlay p {
     font-size: 16px;
     line-height: 1.1;
-    max-width: 90%;
+    max-width: 82vw;
+    margin-top: 2px;
   }
 
   .lodgings-slide-overlay .btn-outline {
-    margin-top: 6px;
-    font-size: 12px;
-    padding: 12px 22px;
+    display: inline-flex;
+    width: fit-content;
+    max-width: max-content;
+    justify-self: center;
+    align-self: center;
+    margin-top: 20px;
+    position: relative;
+    z-index: 5;
+    opacity: 1 !important;
+    visibility: visible !important;
+    font-size: 14px;
+    line-height: 1;
+    padding: 14px 26px;
+    letter-spacing: 0.06em;
+    border-radius: 999px;
+    font-weight: 400;
   }
 
   .lodgings-progress {
@@ -1364,7 +1400,7 @@ body.is-loading {
   }
 
   .essence {
-    margin-top: 250px !important;
+    margin-top: -100px !important;
   }
 
   .lodgings-progress-bar {
@@ -1630,7 +1666,7 @@ body.is-loading {
 
   .feature-grid {
     display: flex;
-    margin-top: -24px;
+    margin-top: 0px;
     gap: 16px;
     width: 100vw;
     margin-left: calc(50% - 50vw);

@@ -803,6 +803,7 @@ if (!prefersReducedMotion) {
 
   if (headerEl && heroEl) {
     let heroHeight = heroEl.getBoundingClientRect().height || 0;
+    const lodgingsShowcaseEl = document.querySelector(".js-lodgings-showcase");
     const updateHeroHeight = () => {
       heroHeight = heroEl.getBoundingClientRect().height || 0;
       updateHeaderTheme();
@@ -811,7 +812,15 @@ if (!prefersReducedMotion) {
       if (!heroHeight) return;
       const trigger = heroHeight * 0.5;
       const scrollY = window.scrollY || window.pageYOffset || 0;
-      headerEl.classList.toggle("is-solid", scrollY >= trigger);
+      let isOverLodgings = false;
+      if (lodgingsShowcaseEl && bodyEl.classList.contains("home-page")) {
+        const lodgingsTop =
+          lodgingsShowcaseEl.getBoundingClientRect().top + scrollY;
+        const lodgingsBottom = lodgingsTop + lodgingsShowcaseEl.offsetHeight;
+        isOverLodgings = scrollY >= lodgingsTop && scrollY < lodgingsBottom;
+      }
+      headerEl.classList.toggle("is-over-lodgings", isOverLodgings);
+      headerEl.classList.toggle("is-solid", scrollY >= trigger && !isOverLodgings);
     };
 
     updateHeroHeight();
@@ -1092,13 +1101,18 @@ if (!prefersReducedMotion) {
     lodgingsProgressFills.length >= 2
   ) {
     const gitesTitle = lodgingsSlideGites.querySelector(".lodgings-slide-title");
-    const gitesBody = lodgingsSlideGites.querySelectorAll("p, .btn");
+    const gitesBody = lodgingsSlideGites.querySelectorAll(".lodgings-slide-label, p, .btn");
     const chambresTitle = lodgingsSlideChambres.querySelector(".lodgings-slide-title");
-    const chambresBody = lodgingsSlideChambres.querySelectorAll("p, .btn");
+    const chambresBody = lodgingsSlideChambres.querySelectorAll(".lodgings-slide-label, p, .btn");
     const firstFill = lodgingsProgressFills[0];
     const secondFill = lodgingsProgressFills[1];
     const gitesPhaseEnd = 0.5;
+    const holdBeforeCross = 0.06;
     const crossDuration = 0.08;
+    const chambresPhaseEnd = 0.88;
+    const chambresStart = gitesPhaseEnd + holdBeforeCross;
+    const gitesFullscreenAt = 0.72;
+    const gitesVideoStartAt = 0.64;
     const bgStartY = 16;
     const bgPinStartY = 8;
 
@@ -1144,18 +1158,35 @@ if (!prefersReducedMotion) {
       }
     });
 
+    const lodgingsTriggerStart = "top top";
+    const lodgingsTriggerEnd = lodgingsIsMobile
+      ? "bottom bottom"
+      : () => `+=${Math.round(window.innerHeight * 2.2)}`;
+    const lodgingsPinTarget = lodgingsIsMobile ? false : lodgingsStage;
+    const lodgingsAnticipatePin = lodgingsIsMobile ? 0 : 1;
+
     ScrollTrigger.create({
       trigger: lodgingsShowcase,
-      start: "top top",
-      end: lodgingsIsMobile ? "+=260%" : "+=220%",
+      start: lodgingsTriggerStart,
+      end: lodgingsTriggerEnd,
       scrub: 1,
-      pin: lodgingsStage,
-      anticipatePin: 1,
+      pin: lodgingsPinTarget,
+      pinSpacing: true,
+      anticipatePin: lodgingsAnticipatePin,
+      invalidateOnRefresh: true,
       onUpdate: (self) => {
         const p = self.progress;
         const gitesProgress = Math.max(0, Math.min(1, p / gitesPhaseEnd));
-        const chambresProgress = Math.max(0, Math.min(1, (p - gitesPhaseEnd) / (1 - gitesPhaseEnd)));
-        const cross = Math.max(0, Math.min(1, (p - gitesPhaseEnd) / crossDuration));
+        const gitesScaleProgress = Math.max(0, Math.min(1, gitesProgress / gitesFullscreenAt));
+        const gitesVideoProgress = Math.max(
+          0,
+          Math.min(1, (gitesProgress - gitesVideoStartAt) / (1 - gitesVideoStartAt))
+        );
+        const chambresProgress = Math.max(
+          0,
+          Math.min(1, (p - chambresStart) / (chambresPhaseEnd - chambresStart))
+        );
+        const cross = Math.max(0, Math.min(1, (p - chambresStart) / crossDuration));
 
         gsap.set(firstFill, { scaleY: gitesProgress });
         gsap.set(secondFill, { scaleY: chambresProgress });
@@ -1163,15 +1194,15 @@ if (!prefersReducedMotion) {
 
         if (lodgingsGitesVideo) {
           gsap.set(lodgingsGitesVideo, {
-            scale: 0.72 + 0.28 * gitesProgress,
-            y: (1 - gitesProgress) * window.innerHeight * 0.18
+            scale: 0.72 + 0.28 * gitesScaleProgress,
+            y: (1 - gitesScaleProgress) * window.innerHeight * 0.18
           });
         }
 
         if (lodgingsGitesVideo && lodgingsGitesVideo.duration && Number.isFinite(lodgingsGitesVideo.duration)) {
           const targetTime = Math.min(
             Math.max(0, lodgingsGitesVideo.duration - 0.05),
-            lodgingsGitesVideo.duration * gitesProgress
+            lodgingsGitesVideo.duration * gitesVideoProgress
           );
           if (Math.abs(lodgingsGitesVideo.currentTime - targetTime) > 0.033) {
             lodgingsGitesVideo.currentTime = targetTime;

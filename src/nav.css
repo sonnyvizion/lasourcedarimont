@@ -16,6 +16,12 @@
   border-bottom: 1px solid rgba(24, 53, 40, 0.15);
 }
 
+.site-header.is-over-lodgings {
+  background: transparent;
+  color: var(--color-white);
+  border-bottom: none;
+}
+
 .nav-hidden .site-header {
   opacity: 0;
   transform: translateY(-24px);
@@ -64,6 +70,10 @@
   background-color: var(--color-forest);
 }
 
+.site-header.is-over-lodgings .logo-mark {
+  background-color: var(--color-white);
+}
+
 .menu-open .logo-mark {
   background-color: var(--color-white);
 }
@@ -110,6 +120,10 @@
   color: var(--color-forest);
 }
 
+.site-header.is-over-lodgings .nav-links {
+  color: var(--color-white);
+}
+
 .nav-right {
   display: flex;
   align-items: center;
@@ -128,6 +142,10 @@
 
 .site-header.is-solid .nav-right {
   color: var(--color-forest);
+}
+
+.site-header.is-over-lodgings .nav-right {
+  color: var(--color-white);
 }
 
 .nav-icon-link {
@@ -259,6 +277,10 @@
 
 .site-header.is-solid .nav-toggle-bar {
   background: var(--color-forest);
+}
+
+.site-header.is-over-lodgings .nav-toggle-bar {
+  background: var(--color-white);
 }
 
 .menu-open .nav-toggle-bar {
