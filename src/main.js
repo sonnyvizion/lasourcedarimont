@@ -1112,7 +1112,6 @@ if (!prefersReducedMotion) {
     const chambresPhaseEnd = 0.88;
     const chambresStart = gitesPhaseEnd + holdBeforeCross;
     const gitesFullscreenAt = 0.72;
-    const gitesVideoStartAt = 0.64;
     const bgStartY = 16;
     const bgPinStartY = 8;
 
@@ -1178,10 +1177,7 @@ if (!prefersReducedMotion) {
         const p = self.progress;
         const gitesProgress = Math.max(0, Math.min(1, p / gitesPhaseEnd));
         const gitesScaleProgress = Math.max(0, Math.min(1, gitesProgress / gitesFullscreenAt));
-        const gitesVideoProgress = Math.max(
-          0,
-          Math.min(1, (gitesProgress - gitesVideoStartAt) / (1 - gitesVideoStartAt))
-        );
+        const gitesVideoProgress = gitesScaleProgress;
         const chambresProgress = Math.max(
           0,
           Math.min(1, (p - chambresStart) / (chambresPhaseEnd - chambresStart))
