@@ -717,6 +717,10 @@ if (!prefersReducedMotion) {
     };
 
     if (activeHeroVideo) {
+      activeHeroVideo.muted = true;
+      activeHeroVideo.playsInline = true;
+      activeHeroVideo.setAttribute("muted", "");
+      activeHeroVideo.setAttribute("playsinline", "");
       activeHeroVideo.addEventListener("ended", playTimeline, { once: true });
       activeHeroVideo.addEventListener(
         "error",
@@ -755,22 +759,22 @@ if (!prefersReducedMotion) {
 
       const tryPlay = () => {
         activeHeroVideo.play().catch(() => {
-          activeHeroVideo.classList.add("is-hidden");
-          if (isMobileViewport && heroMedia) {
-            heroMedia.classList.add("use-image-fallback");
-          }
-          if (isMobileViewport) {
-            const heroImg = document.querySelector(".hero-image img");
-            if (heroImg) heroImg.classList.add("is-zooming");
-          }
-          playTimeline();
+          // On some mobile browsers autoplay can be blocked temporarily.
+          // Retry on first user interaction instead of switching immediately to image fallback.
+          const retryOnInteraction = () => {
+            activeHeroVideo.play().catch(() => {});
+          };
+          document.addEventListener("touchstart", retryOnInteraction, { once: true, passive: true });
+          document.addEventListener("pointerdown", retryOnInteraction, { once: true, passive: true });
         });
       };
 
       if (activeHeroVideo.readyState >= 2) {
         tryPlay();
       } else {
+        activeHeroVideo.load();
         activeHeroVideo.addEventListener("loadeddata", tryPlay, { once: true });
+        activeHeroVideo.addEventListener("canplay", tryPlay, { once: true });
       }
       return;
     }
