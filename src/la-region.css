@@ -38,7 +38,7 @@
 
 .region-intro-frog {
   position: absolute;
-  left: 50;
+  right: 4vw;
   bottom: -182px;
   width: clamp(90px, 12vw, 170px);
   height: auto;
@@ -60,10 +60,157 @@
   margin-bottom: 28px;
 }
 
-.region-spots-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+.region-activities-switch {
+  margin-top: 26px;
+  margin-bottom: 34px;
+  display: flex;
+  border: 2px solid var(--color-forest);
+  border-radius: 999px;
+  padding: 4px;
+  background: rgba(42, 88, 67, 0.06);
+  position: static;
+  top: auto;
+  z-index: auto;
+  width: fit-content;
+  margin-inline: auto;
+}
+
+.region-activities-switch-btn {
+  min-width: 102px;
+  border: 0;
+  background: transparent;
+  color: var(--color-forest);
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 10px 18px;
+  cursor: pointer;
+}
+
+.region-activities-switch-btn.is-active {
+  background: var(--color-forest);
+  color: var(--color-beige);
+}
+
+.region-activities-slider {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}
+
+.region-activities-viewport {
+  overflow: hidden;
+}
+
+.region-activities-track {
+  display: flex;
   gap: 14px;
+  padding-left: 5vw;
+  padding-right: 2vw;
+}
+
+.region-activity-card {
+  position: relative;
+  flex: 0 0 clamp(360px, 42vw, 560px);
+  aspect-ratio: 16 / 9;
+  background-size: cover;
+  background-position: center;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.region-activity-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.18) 0%, rgba(0, 0, 0, 0.66) 100%);
+}
+
+.region-activity-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  padding: 16px;
+  display: grid;
+  align-content: start;
+  color: var(--color-white);
+}
+
+.region-activity-title {
+  margin: 0;
+  font-size: clamp(20px, 1.6vw, 28px);
+  line-height: 1.1;
+  font-family: var(--font-body);
+  font-weight: 500;
+  color: var(--color-white);
+}
+
+.region-activity-meta {
+  margin-top: 4px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.region-activity-more {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  background: rgba(0, 0, 0, 0.35);
+  color: var(--color-white);
+  font-size: 22px;
+  line-height: 1;
+}
+
+.region-activity-details {
+  position: absolute;
+  left: 16px;
+  right: 60px;
+  bottom: 14px;
+  background: rgba(0, 0, 0, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 12px;
+  padding: 10px;
+}
+
+.region-activity-details p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.region-activity-links {
+  margin-top: 8px;
+  display: inline-flex;
+  gap: 8px;
+}
+
+.region-activities-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 55px;
+  height: 55px;
+  border-radius: 999px;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  background: rgba(0, 0, 0, 0.18);
+  color: var(--color-white);
+  font-size: 29px;
+  z-index: 3;
+}
+
+.region-activities-prev {
+  left: 16px;
+}
+
+.region-activities-next {
+  right: 16px;
 }
 
 .region-video-wrap {
@@ -84,68 +231,6 @@
 
 .region-video-mobile {
   display: none;
-}
-
-.region-spot-card {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  border: 2px solid var(--color-forest);
-  border-radius: 16px;
-  background: rgba(246, 241, 230, 0.8);
-  padding: 16px;
-}
-
-.region-spot-title {
-  font-family: var(--font-heading);
-  font-size: 22px;
-  font-weight: 400;
-  font-style: italic;
-  color: var(--color-forest);
-  line-height: 1.2;
-}
-
-.region-spot-meta {
-  font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: 600;
-  color: rgba(24, 53, 40, 0.85);
-  margin-top: 5px;
-}
-
-.region-spot-location {
-  font-family: var(--font-body);
-  font-size: 12px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(24, 53, 40, 0.68);
-  margin-top: 5px;
-}
-
-.region-spot-desc {
-  font-family: var(--font-body);
-  font-size: 14px;
-  line-height: 1.45;
-  color: var(--color-ink);
-  margin-top: 10px;
-}
-
-.region-spot-address {
-  font-family: var(--font-body);
-  font-size: 13px;
-  line-height: 1.4;
-  color: rgba(24, 53, 40, 0.82);
-  margin-top: 10px;
-}
-
-.region-spot-nav {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: auto;
-  width: 100%;
-  justify-content: flex-end;
-  padding-top: 8px;
 }
 
 .region-spot-icon-link {
@@ -171,30 +256,6 @@
   object-fit: contain;
 }
 
-.region-spot-link {
-  display: inline-flex;
-  width: max-content;
-  align-items: center;
-  justify-content: center;
-  align-self: center;
-  border-radius: 999px;
-  border: 2px solid var(--color-forest);
-  color: var(--color-forest);
-  font-family: var(--font-body);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 8px 12px;
-  margin-top: 25px;
-  transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
-}
-
-.region-spot-link:hover {
-  background: var(--color-forest);
-  color: var(--color-beige);
-  transform: translateY(-1px);
-}
 
 .reveal-text .line {
   display: block;
@@ -224,11 +285,13 @@
 }
 
 .region-map {
-  width: 100%;
+  width: 80%;
   height: 560px;
   border-radius: 18px;
   overflow: hidden;
   border: 3px solid var(--color-forest);
+
+  margin : auto;
 }
 
 .mapboxgl-popup-content {
@@ -355,25 +418,39 @@
   .region-intro-frog {
     width: clamp(78px, 60vw, 120px);
     bottom: -148px;
-    left:32%;
+    right: 4vw;
   }
 
   .region-map {
-    height: 62vh;
+    height: 50vh;
     min-height: 420px;
+    width: 90%;
   }
 
-  .region-spots-grid {
-    grid-template-columns: 1fr;
+  .region-activities-switch {
+    top: auto;
   }
 
-  .region-spot-card {
-    text-align: center;
-    justify-items: center;
+  .region-activities-viewport {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
-  .region-spot-title {
-    text-align: center;
+  .region-activities-track {
+    width: max-content;
+    padding-right: 6vw;
+  }
+
+  .region-activity-card {
+    flex-basis: 86vw;
+  }
+
+  .region-activities-arrow {
+    display: none;
+  }
+
+  .region-activity-title {
+    font-size: 26px;
   }
 
   .region-video-desktop {

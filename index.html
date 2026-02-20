@@ -20,7 +20,7 @@
             <a href="./index.html">Accueil</a>
             <a href="./gites-chambres.html">Gîtes &amp; chambres</a>
             <a href="./la-region.html">La région</a>
-            <a href="#">Contact</a>
+            <a href="#">Restauration</a>
           </nav>
         </div>
         <div class="nav-right">
@@ -28,11 +28,19 @@
             <span class="nav-icon"></span>
             WhatsApp
           </a>
-          <a class="nav-lang" href="#" aria-label="Choisir la langue">
-            <span class="nav-lang-globe" aria-hidden="true"></span>
-            FR · NL · EN
-          </a>
-          <a class="nav-cta" href="https://www.booking.com/hotel/be/la-source-d-39-arimont.fr.html?aid=304142&label=gen173nr-10CAEoggI46AdIM1gEaE2IAQGYATO4AQfIAQzYAQPoAQH4AQGIAgGoAgG4Atm0zMwGwAIB0gIkZmQzMWUxZTItNzdlMi00OTlmLTlmMjMtN2RiY2M5ODU1ODFm2AIB4AIB&sid=2669329a65d46b400be3dd2134ff9f3c&dist=0&group_adults=2&group_children=0&hapos=1&hpos=1&no_rooms=1&req_adults=2&req_children=0&room1=A%2CA&sb_price_type=total&sr_order=popularity&srepoch=1771248229&srpvid=a3d45e30c58d045c&type=total&ucfs=1&" target="_blank" rel="noopener noreferrer">Reservez</a>
+          <div class="nav-lang" aria-label="Choisir la langue">
+            <button class="nav-lang-trigger" type="button" aria-expanded="false">
+              <span class="nav-lang-globe" aria-hidden="true"></span>
+              <span class="nav-lang-current">FR</span>
+              <span class="nav-lang-caret" aria-hidden="true">▾</span>
+            </button>
+            <div class="nav-lang-menu" role="menu" aria-label="Autres langues">
+              <a href="#" role="menuitem">NL</a>
+              <a href="#" role="menuitem">DE</a>
+              <a href="#" role="menuitem">EN</a>
+            </div>
+          </div>
+          <a class="nav-cta" data-booking-request-trigger href="#">Reservez</a>
           <button class="nav-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false">
             <span class="nav-toggle-bar"></span>
             <span class="nav-toggle-bar"></span>
@@ -46,7 +54,7 @@
         <a class="menu-link" href="./index.html">Accueil</a>
         <a class="menu-link" href="./gites-chambres.html">Gîtes &amp; chambres</a>
         <a class="menu-link" href="./la-region.html">La région</a>
-        <a class="menu-link" href="#">Contact</a>
+        <a class="menu-link" href="#">Restauration</a>
         <div class="mobile-menu-social">
           <a href="#" aria-label="Facebook">
             <img src="/img/illustrations/fb_icon.png" alt="" />
@@ -55,17 +63,17 @@
             <img src="/img/illustrations/insta_icon.png" alt="" />
           </a>
         </div>
-        <a class="mobile-menu-cta" href="https://www.booking.com/hotel/be/la-source-d-39-arimont.fr.html?aid=304142&label=gen173nr-10CAEoggI46AdIM1gEaE2IAQGYATO4AQfIAQzYAQPoAQH4AQGIAgGoAgG4Atm0zMwGwAIB0gIkZmQzMWUxZTItNzdlMi00OTlmLTlmMjMtN2RiY2M5ODU1ODFm2AIB4AIB&sid=2669329a65d46b400be3dd2134ff9f3c&dist=0&group_adults=2&group_children=0&hapos=1&hpos=1&no_rooms=1&req_adults=2&req_children=0&room1=A%2CA&sb_price_type=total&sr_order=popularity&srepoch=1771248229&srpvid=a3d45e30c58d045c&type=total&ucfs=1&" target="_blank" rel="noopener noreferrer">Reservez</a>
+        <a class="mobile-menu-cta" data-booking-request-trigger href="#">Reservez</a>
       </div>
     </div>
 
     <section class="hero">
       <div class="hero-media" aria-hidden="true">
         <video class="hero-video hero-video-desktop" autoplay muted playsinline preload="auto">
-          <source src="/vid/hero_desktop-video.mp4" type="video/mp4" />
+          <source src="/vid/desktop_Home.mp4" type="video/mp4" />
         </video>
         <video class="hero-video hero-video-mobile" autoplay muted playsinline preload="auto">
-          <source src="/vid/hero_mobile.mp4" type="video/mp4" />
+          <source src="/vid/mobile_home_drone.mp4" type="video/mp4" />
         </video>
         <picture class="hero-image">
           <source srcset="/img/hero_mobile.webp" media="(max-width: 980px)" />
@@ -121,10 +129,8 @@
           </div>
           <a
             class="btn hero-cta"
-            data-booking-base="https://www.booking.com/hotel/be/la-source-d-39-arimont.fr.html?aid=304142&label=gen173nr-10CAEoggI46AdIM1gEaE2IAQGYATO4AQfIAQzYAQPoAQH4AQGIAgGoAgG4Atm0zMwGwAIB0gIkZmQzMWUxZTItNzdlMi00OTlmLTlmMjMtN2RiY2M5ODU1ODFm2AIB4AIB&sid=2669329a65d46b400be3dd2134ff9f3c&age=4&age=5&checkin=2026-02-18&checkout=2026-02-19&dest_id=-1964595&dest_type=city&dist=0&group_adults=4&group_children=2&hapos=1&hpos=1&no_rooms=2&req_adults=4&req_age=4&req_age=5&req_children=2&room1=A%2CA%2C5&room2=A%2CA%2C4&sb_price_type=total&soh=1&sr_order=popularity&srepoch=1771248761&srpvid=27c05f2a8bb80029&type=total&ucfs=1"
-            href="https://www.booking.com/hotel/be/la-source-d-39-arimont.fr.html?aid=304142&label=gen173nr-10CAEoggI46AdIM1gEaE2IAQGYATO4AQfIAQzYAQPoAQH4AQGIAgGoAgG4Atm0zMwGwAIB0gIkZmQzMWUxZTItNzdlMi00OTlmLTlmMjMtN2RiY2M5ODU1ODFm2AIB4AIB&sid=2669329a65d46b400be3dd2134ff9f3c&age=4&age=5&checkin=2026-02-18&checkout=2026-02-19&dest_id=-1964595&dest_type=city&dist=0&group_adults=4&group_children=2&hapos=1&hpos=1&no_rooms=2&req_adults=4&req_age=4&req_age=5&req_children=2&room1=A%2CA%2C5&room2=A%2CA%2C4&sb_price_type=total&soh=1&sr_order=popularity&srepoch=1771248761&srpvid=27c05f2a8bb80029&type=total&ucfs=1"
-            target="_blank"
-            rel="noopener noreferrer">Reservez maintenant</a>
+            href="#"
+            data-booking-request-trigger>Reservez maintenant</a>
         </div>
         <div class="hero-note">Séjournez entre forêts<br>et virages mythiques</div>
         <div class="scroll-cue" aria-hidden="true">
@@ -146,13 +152,11 @@
           de nature et de confort.
         </h2>
 
-        <div class="gallery-header">
-          <div class="gallery-arrows">
-            <button class="gallery-arrow gallery-prev" type="button" aria-label="Précédent">‹</button>
-            <button class="gallery-arrow gallery-next" type="button" aria-label="Suivant">›</button>
-          </div>
-        </div>
         <div class="gallery-slider">
+          <div class="gallery-arrows">
+            <button class="gallery-arrow gallery-slider-arrow gallery-prev" type="button" aria-label="Précédent">‹</button>
+            <button class="gallery-arrow gallery-slider-arrow gallery-next" type="button" aria-label="Suivant">›</button>
+          </div>
           <div class="gallery-track">
             <div class="card-photo" style="background-image: url('/img/slider/cheval2_16_11zon.jpg');"></div>
             <div class="card-photo" style="background-image: url('/img/slider/cheval_15_11zon.jpg');"></div>
@@ -311,48 +315,69 @@
           </div>
           <div class="testimonials-slider">
             <div class="testimonials-track">
+
               <article class="testimonial-card">
-                <div class="testimonial-meta">Le Raidillon</div>
-                <strong>Sophie L.</strong>
-                <p>
-                  “Un cadre naturel préservé, le calme et la forêt, un vrai moment d’évasion.”
-                </p>
+                <div class="testimonial-meta">Gîte 2 chambres</div>
+                <strong>Efthymia</strong>
+                <p>"Hôtes très attentionnés, cadre de ferme superbe et séjour parfait en famille."</p>
+                <div class="testimonial-stars" aria-label="5 sur 5">★★★★★</div>
               </article>
               <article class="testimonial-card">
-                <div class="testimonial-meta">Le Raidillon</div>
-                <strong>Claire &amp; Thomas</strong>
-                <p>
-                  “Un séjour parfait en pleine nature. Le domaine est magnifique et l’accueil au top.”
-                </p>
+                <div class="testimonial-meta">Gîte 2 chambres</div>
+                <strong>Teus</strong>
+                <p>"Week-end familial très agréable, logements spacieux et terrasse vraiment appréciée."</p>
+                <div class="testimonial-stars" aria-label="5 sur 5">★★★★★</div>
               </article>
               <article class="testimonial-card">
-                <div class="testimonial-meta">Le Raidillon</div>
-                <strong>Julien P.</strong>
-                <p>
-                  “Un lieu authentique et paisible, très bien situé pour découvrir la région.”
-                </p>
+                <div class="testimonial-meta">Gîte 2 chambres</div>
+                <strong>Nicholas</strong>
+                <p>"Emplacement excellent, maison calme, salon confortable et patio très sympa."</p>
+                <div class="testimonial-stars" aria-label="5 sur 5">★★★★★</div>
               </article>
               <article class="testimonial-card">
-                <div class="testimonial-meta">Le Raidillon</div>
-                <strong>Marie D.</strong>
-                <p>
-                  “Lieu superbe, très propre, et environnement parfait pour se déconnecter.”
-                </p>
+                <div class="testimonial-meta">Gîte 2 chambres</div>
+                <strong>Jamila</strong>
+                <p>"Lieu paisible dans la nature, parfait avec enfants et animaux autour."</p>
+                <div class="testimonial-stars" aria-label="5 sur 5">★★★★★</div>
               </article>
               <article class="testimonial-card">
-                <div class="testimonial-meta">Le Raidillon</div>
-                <strong>Thomas R.</strong>
-                <p>
-                  “Accueil chaleureux et cadre apaisant. Nous reviendrons sans hésiter.”
-                </p>
+                <div class="testimonial-meta">Gîte 2 chambres</div>
+                <strong>Robert</strong>
+                <p>"Très bon cadre en bord de ville, hôte chaleureux et logement fonctionnel."</p>
+                <div class="testimonial-stars" aria-label="4 sur 5">★★★★☆</div>
               </article>
               <article class="testimonial-card">
-                <div class="testimonial-meta">Le Raidillon</div>
-                <strong>Anne &amp; Luc</strong>
-                <p>
-                  “Un séjour ressourçant, avec un vrai charme et une excellente localisation.”
-                </p>
+                <div class="testimonial-meta">Chambre d'hôtes</div>
+                <strong>David</strong>
+                <p>"Endroit très calme avec un propriétaire professionnel et accueillant."</p>
+                <div class="testimonial-stars" aria-label="5 sur 5">★★★★★</div>
               </article>
+              <article class="testimonial-card">
+                <div class="testimonial-meta">Chambre d'hôtes</div>
+                <strong>Andrew</strong>
+                <p>"Hôte très sympathique, super énergie et excellent accueil."</p>
+                <div class="testimonial-stars" aria-label="5 sur 5">★★★★★</div>
+              </article>
+              <article class="testimonial-card">
+                <div class="testimonial-meta">Chambre d'hôtes</div>
+                <strong>Graham</strong>
+                <p>"Grande chambre confortable, belle maison de caractère et très bon petit déjeuner."</p>
+                <div class="testimonial-stars" aria-label="5 sur 5">★★★★★</div>
+              </article>
+              <article class="testimonial-card">
+                <div class="testimonial-meta">Chambre d'hôtes</div>
+                <strong>William</strong>
+                <p>"Hôte accueillant, literie confortable et séjour serein."</p>
+                <div class="testimonial-stars" aria-label="5 sur 5">★★★★★</div>
+              </article>
+              <article class="testimonial-card">
+                <div class="testimonial-meta">Chambre d'hôtes</div>
+                <strong>E</strong>
+                <p>"Petit déjeuner local excellent, équipe disponible et chambre bien équipée."</p>
+                <div class="testimonial-stars" aria-label="5 sur 5">★★★★★</div>
+              </article>
+
+
             </div>
           </div>
         </div>
@@ -363,7 +388,7 @@
           <div class="footer-grid">
             <div class="footer-rabbit-col">
               <img class="footer-rabbit" src="/img/illustrations/lapin_BEIGE.png" alt="" aria-hidden="true" />
-              <a class="btn btn-outline footer-rabbit-cta" href="https://www.booking.com/hotel/be/la-source-d-39-arimont.fr.html?aid=304142&label=gen173nr-10CAEoggI46AdIM1gEaE2IAQGYATO4AQfIAQzYAQPoAQH4AQGIAgGoAgG4Atm0zMwGwAIB0gIkZmQzMWUxZTItNzdlMi00OTlmLTlmMjMtN2RiY2M5ODU1ODFm2AIB4AIB&sid=2669329a65d46b400be3dd2134ff9f3c&dist=0&group_adults=2&group_children=0&hapos=1&hpos=1&no_rooms=1&req_adults=2&req_children=0&room1=A%2CA&sb_price_type=total&sr_order=popularity&srepoch=1771248229&srpvid=a3d45e30c58d045c&type=total&ucfs=1&" target="_blank" rel="noopener noreferrer">Réservez</a>
+              <a class="btn btn-outline footer-rabbit-cta" data-booking-request-trigger href="#">Réservez</a>
             </div>
             <div>
               <div class="footer-title">LA SOURCE D’ARIMONT</div>
@@ -388,7 +413,8 @@
                 <a href="./index.html">Accueil</a>
                 <a href="./gites-chambres.html">Gîtes &amp; chambres</a>
                 <a href="./la-region.html">Découvrir la région</a>
-                <a href="#">Contact</a>
+                <a href="#">Restauration</a>
+                <a href="#">Nos partenaires</a>
               </div>
             </div>
             <div>

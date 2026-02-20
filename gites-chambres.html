@@ -16,7 +16,7 @@
             <a href="./index.html">Accueil</a>
             <a href="./gites-chambres.html">Gîtes &amp; chambres</a>
             <a href="./la-region.html">La région</a>
-            <a href="#">Contact</a>
+            <a href="#">Restauration</a>
           </nav>
         </div>
         <div class="nav-right">
@@ -24,11 +24,19 @@
             <span class="nav-icon"></span>
             WhatsApp
           </a>
-          <a class="nav-lang" href="#" aria-label="Choisir la langue">
-            <span class="nav-lang-globe" aria-hidden="true"></span>
-            FR · NL · EN
-          </a>
-          <a class="nav-cta" href="https://www.booking.com/hotel/be/la-source-d-39-arimont.fr.html?aid=304142&label=gen173nr-10CAEoggI46AdIM1gEaE2IAQGYATO4AQfIAQzYAQPoAQH4AQGIAgGoAgG4Atm0zMwGwAIB0gIkZmQzMWUxZTItNzdlMi00OTlmLTlmMjMtN2RiY2M5ODU1ODFm2AIB4AIB&sid=2669329a65d46b400be3dd2134ff9f3c&dist=0&group_adults=2&group_children=0&hapos=1&hpos=1&no_rooms=1&req_adults=2&req_children=0&room1=A%2CA&sb_price_type=total&sr_order=popularity&srepoch=1771248229&srpvid=a3d45e30c58d045c&type=total&ucfs=1&" target="_blank" rel="noopener noreferrer">Je réserve</a>
+          <div class="nav-lang" aria-label="Choisir la langue">
+            <button class="nav-lang-trigger" type="button" aria-expanded="false">
+              <span class="nav-lang-globe" aria-hidden="true"></span>
+              <span class="nav-lang-current">FR</span>
+              <span class="nav-lang-caret" aria-hidden="true">▾</span>
+            </button>
+            <div class="nav-lang-menu" role="menu" aria-label="Autres langues">
+              <a href="#" role="menuitem">NL</a>
+              <a href="#" role="menuitem">DE</a>
+              <a href="#" role="menuitem">EN</a>
+            </div>
+          </div>
+          <a class="nav-cta" data-booking-request-trigger href="#">Je réserve</a>
           <button class="nav-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false">
             <span class="nav-toggle-bar"></span>
             <span class="nav-toggle-bar"></span>
@@ -43,7 +51,7 @@
         <a class="menu-link" href="./index.html">Accueil</a>
         <a class="menu-link" href="./gites-chambres.html">Gîtes &amp; chambres</a>
         <a class="menu-link" href="./la-region.html">La région</a>
-        <a class="menu-link" href="#">Contact</a>
+        <a class="menu-link" href="#">Restauration</a>
         <div class="mobile-menu-social">
           <a href="#" aria-label="Facebook">
             <img src="/img/illustrations/fb_icon.png" alt="" />
@@ -52,7 +60,7 @@
             <img src="/img/illustrations/insta_icon.png" alt="" />
           </a>
         </div>
-        <a class="mobile-menu-cta" href="https://www.booking.com/hotel/be/la-source-d-39-arimont.fr.html?aid=304142&label=gen173nr-10CAEoggI46AdIM1gEaE2IAQGYATO4AQfIAQzYAQPoAQH4AQGIAgGoAgG4Atm0zMwGwAIB0gIkZmQzMWUxZTItNzdlMi00OTlmLTlmMjMtN2RiY2M5ODU1ODFm2AIB4AIB&sid=2669329a65d46b400be3dd2134ff9f3c&dist=0&group_adults=2&group_children=0&hapos=1&hpos=1&no_rooms=1&req_adults=2&req_children=0&room1=A%2CA&sb_price_type=total&sr_order=popularity&srepoch=1771248229&srpvid=a3d45e30c58d045c&type=total&ucfs=1&" target="_blank" rel="noopener noreferrer">Reservez</a>
+        <a class="mobile-menu-cta" data-booking-request-trigger href="#">Reservez</a>
       </div>
     </div>
 
@@ -79,9 +87,9 @@
           <div class="stays-list" data-panel="gites">
             <article class="stay-card">
               <div class="stay-content">
-                <h3 class="stay-title"><span style="font-size: 0.7em;">Le </span><span>Raidillon</span></h3>
-                <p class="stay-subtitle">Grand format, esprit famille</p>
-                <p class="stay-description">Raidillon offre un grand séjour, une cuisine équipée, de belles chambres et un cadre naturel idéal pour se retrouver.</p>
+                <h3 class="stay-title"><span style="font-size: 0.7em;"> </span><span>Raidillon</span></h3>
+                <p class="stay-subtitle">Accommodation 9 personnes</p>
+                <p class="stay-description">Hall d’entrée, séjour avec poêle à bois, cuisine équipée (percolateur, lave-vaisselle, four, bouilloire, machine à laver, micro-ondes), TV et Wifi, 1 chambre, w.c., véranda, jardin privatif et mobilier de jardin. À l’étage : 4 chambres, 2 salles de bain avec douche, évier et w.c.</p>
                 <div class="stay-meta">
                   <div class="stay-meta-title">Jusqu'à <strong>9</strong> personnes</div>
                   <div class="stay-meta-label">Équipements</div>
@@ -92,8 +100,9 @@
                     <img src="/img/DOUCHE_ICON.png" alt="Douche" />
                     <img src="/img/KITCHEN_ICON.png" alt="Cuisine" />
                   </div>
+                  <p class="stay-meta-extra">Terrasse / jardin privatif / 3 WC</p>
                 </div>
-                <a class="btn stay-cta" href="https://www.booking.com/hotel/be/la-source-d-39-arimont.fr.html?aid=304142&label=gen173nr-10CAEoggI46AdIM1gEaE2IAQGYATO4AQfIAQzYAQPoAQH4AQGIAgGoAgG4Atm0zMwGwAIB0gIkZmQzMWUxZTItNzdlMi00OTlmLTlmMjMtN2RiY2M5ODU1ODFm2AIB4AIB&sid=2669329a65d46b400be3dd2134ff9f3c&dist=0&group_adults=2&group_children=0&hapos=1&hpos=1&no_rooms=1&req_adults=2&req_children=0&room1=A%2CA&sb_price_type=total&sr_order=popularity&srepoch=1771248229&srpvid=a3d45e30c58d045c&type=total&ucfs=1&" target="_blank" rel="noopener noreferrer">Je réserve</a>
+                <a class="btn stay-cta" data-booking-request-trigger href="#">Je réserve</a>
               </div>
               <div class="stay-media" data-carousel>
                 <button class="stay-arrow stay-arrow-prev" type="button" aria-label="Image précédente">‹</button>
@@ -108,11 +117,11 @@
 
             <article class="stay-card is-reverse">
               <div class="stay-content">
-                <h3 class="stay-title"><span style="font-size: 0.7em;">La </span><span>Source</span></h3>
-                <p class="stay-subtitle">Cocon authentique</p>
-                <p class="stay-description">Parfait pour un séjour calme à deux ou en famille, avec accès à une grande pièce de vie et un environnement boisé.</p>
+                <h3 class="stay-title"><span style="font-size: 0.7em;"></span><span>Source</span></h3>
+                <p class="stay-subtitle">Accommodation 4 personnes</p>
+                <p class="stay-description">Au rez-de-chaussée : séjour avec cuisine ouverte équipée (percolateur, four, mixeur, bouilloire), TV et Wifi. Terrasse Est/Sud-Est avec entrée particulière. À l’étage : 1 chambre double (160x200), 1 chambre avec 2 lits simples (90x200), salle de bain avec douche, évier et w.c.</p>
                 <div class="stay-meta">
-                  <div class="stay-meta-title">De <strong>4 à 6</strong> personnes</div>
+                  <div class="stay-meta-title"><strong>4</strong> personnes</div>
                   <div class="stay-meta-label">Équipements</div>
                   <div class="stay-icons">
                     <img src="/img/WIFI_ICON.png" alt="WiFi" />
@@ -121,8 +130,9 @@
                     <img src="/img/DOUCHE_ICON.png" alt="Douche" />
                     <img src="/img/KITCHEN_ICON.png" alt="Cuisine" />
                   </div>
+                  <p class="stay-meta-extra">Terrasse</p>
                 </div>
-                <a class="btn stay-cta" href="https://www.booking.com/hotel/be/la-source-d-39-arimont.fr.html?aid=304142&label=gen173nr-10CAEoggI46AdIM1gEaE2IAQGYATO4AQfIAQzYAQPoAQH4AQGIAgGoAgG4Atm0zMwGwAIB0gIkZmQzMWUxZTItNzdlMi00OTlmLTlmMjMtN2RiY2M5ODU1ODFm2AIB4AIB&sid=2669329a65d46b400be3dd2134ff9f3c&dist=0&group_adults=2&group_children=0&hapos=1&hpos=1&no_rooms=1&req_adults=2&req_children=0&room1=A%2CA&sb_price_type=total&sr_order=popularity&srepoch=1771248229&srpvid=a3d45e30c58d045c&type=total&ucfs=1&" target="_blank" rel="noopener noreferrer">Je réserve</a>
+                <a class="btn stay-cta" data-booking-request-trigger href="#">Je réserve</a>
               </div>
               <div class="stay-media" data-carousel>
                 <button class="stay-arrow stay-arrow-prev" type="button" aria-label="Image précédente">‹</button>
@@ -136,52 +146,114 @@
             </article>
 
             <article class="stay-card">
-              <div class="stay-content">
-                <h3 class="stay-title"><span style="font-size: 0.7em;">Le </span><span>Blanchimont</span></h3>
-                <p class="stay-subtitle">Esprit cocon</p>
-                <p class="stay-description">Une ambiance simple et chaleureuse, des chambres confortables et un accès direct aux espaces extérieurs du domaine.</p>
-                <div class="stay-meta">
-                  <div class="stay-meta-title">De <strong>4 à 6</strong> personnes</div>
-                  <div class="stay-meta-label">Équipements</div>
-                  <div class="stay-icons">
-                    <img src="/img/WIFI_ICON.png" alt="WiFi" />
-                    <img src="/img/TV_ICON.png" alt="Télévision" />
-                    <img src="/img/WC_ICON.png" alt="WC" />
-                    <img src="/img/DOUCHE_ICON.png" alt="Douche" />
-                    <img src="/img/KITCHEN_ICON.png" alt="Cuisine" />
+                <div class="stay-content">
+                  <h3 class="stay-title"><span style="font-size: 0.7em;"></span><span>Blanchimont</span></h3>
+                  <p class="stay-subtitle">Accommodation 4-6 personnes</p>
+                  <p class="stay-description">Au rez-de-chaussée : séjour avec cuisine ouverte équipée (percolateur, four, mixeur, bouilloire), TV et Wifi. Terrasse Est/Sud-Est avec entrée particulière. Étage : 1 chambre double (140x200), 1 chambre avec 2 lits simples (90x200), salle de bain avec douche, évier et w.c.</p>
+                  <div class="stay-meta">
+                    <div class="stay-meta-title">De <strong>4 à 6</strong> personnes</div>
+                    <div class="stay-meta-label">Équipements</div>
+                    <div class="stay-icons">
+                      <img src="/img/WIFI_ICON.png" alt="WiFi" />
+                      <img src="/img/TV_ICON.png" alt="Télévision" />
+                      <img src="/img/WC_ICON.png" alt="WC" />
+                      <img src="/img/DOUCHE_ICON.png" alt="Douche" />
+                      <img src="/img/KITCHEN_ICON.png" alt="Cuisine" />
+                    </div>
+                    <p class="stay-meta-extra">Terrasse</p>
                   </div>
+                  <a class="btn stay-cta" data-booking-request-trigger href="#">Je réserve</a>
                 </div>
-                <a class="btn stay-cta" href="https://www.booking.com/hotel/be/la-source-d-39-arimont.fr.html?aid=304142&label=gen173nr-10CAEoggI46AdIM1gEaE2IAQGYATO4AQfIAQzYAQPoAQH4AQGIAgGoAgG4Atm0zMwGwAIB0gIkZmQzMWUxZTItNzdlMi00OTlmLTlmMjMtN2RiY2M5ODU1ODFm2AIB4AIB&sid=2669329a65d46b400be3dd2134ff9f3c&dist=0&group_adults=2&group_children=0&hapos=1&hpos=1&no_rooms=1&req_adults=2&req_children=0&room1=A%2CA&sb_price_type=total&sr_order=popularity&srepoch=1771248229&srpvid=a3d45e30c58d045c&type=total&ucfs=1&" target="_blank" rel="noopener noreferrer">Je réserve</a>
-              </div>
-              <div class="stay-media" data-carousel>
-                <button class="stay-arrow stay-arrow-prev" type="button" aria-label="Image précédente">‹</button>
-                <div class="stay-track">
-                  <img src="/img/slider/ponts.jpg" alt="Le Blanchimont" />
-                  <img src="/img/chambres-card.jpg" alt="Le Blanchimont" />
-                  <img src="/img/slider/fox.jpg" alt="Le Blanchimont" />
+                <div class="stay-media" data-carousel>
+                  <button class="stay-arrow stay-arrow-prev" type="button" aria-label="Image précédente">‹</button>
+                  <div class="stay-track">
+                    <img src="/img/slider/ponts.jpg" alt="Le Blanchimont" />
+                    <img src="/img/chambres-card.jpg" alt="Le Blanchimont" />
+                    <img src="/img/slider/fox.jpg" alt="Le Blanchimont" />
+                  </div>
+                  <button class="stay-arrow stay-arrow-next" type="button" aria-label="Image suivante">›</button>
                 </div>
-                <button class="stay-arrow stay-arrow-next" type="button" aria-label="Image suivante">›</button>
-              </div>
-            </article>
+              </article>
+
+              <article class="stay-card is-reverse">
+                <div class="stay-content">
+                  <h3 class="stay-title"><span style="font-size: 0.7em;"></span><span>Combes</span></h3>
+                  <p class="stay-subtitle">Accommodation 4-6 personnes</p>
+                  <p class="stay-description">Au rez-de-chaussée : séjour avec cuisine ouverte équipée (percolateur, four, mixeur, bouilloire), fauteuil convertible (lit 140x200), TV et Wifi. Terrasse Est/Sud-Est avec entrée particulière. Étage : 1 chambre double (140x200), 1 chambre avec 2 lits simples (90x200), salle de bain avec douche, évier et w.c.</p>
+                  <div class="stay-meta">
+                    <div class="stay-meta-title">De <strong>4 à 6</strong> personnes</div>
+                    <div class="stay-meta-label">Équipements</div>
+                    <div class="stay-icons">
+                      <img src="/img/WIFI_ICON.png" alt="WiFi" />
+                      <img src="/img/TV_ICON.png" alt="Télévision" />
+                      <img src="/img/WC_ICON.png" alt="WC" />
+                      <img src="/img/DOUCHE_ICON.png" alt="Douche" />
+                      <img src="/img/KITCHEN_ICON.png" alt="Cuisine" />
+                    </div>
+                    <p class="stay-meta-extra">Terrasse + canapé convertible</p>
+                  </div>
+                  <a class="btn stay-cta" data-booking-request-trigger href="#">Je réserve</a>
+                </div>
+                <div class="stay-media" data-carousel>
+                  <button class="stay-arrow stay-arrow-prev" type="button" aria-label="Image précédente">‹</button>
+                  <div class="stay-track">
+                    <img src="/img/chambres-card.jpg" alt="Le Combes" />
+                    <img src="/img/gites-card.jpg" alt="Le Combes" />
+                    <img src="/img/slider/domaine.jpg" alt="Le Combes" />
+                  </div>
+                  <button class="stay-arrow stay-arrow-next" type="button" aria-label="Image suivante">›</button>
+                </div>
+              </article>
+
+              <article class="stay-card">
+                <div class="stay-content">
+                  <h3 class="stay-title"><span style="font-size: 0.7em;"></span><span>Kemel</span></h3>
+                  <p class="stay-subtitle">Accommodation 4-6 personnes</p>
+                  <p class="stay-description">Au rez-de-chaussée : séjour avec cuisine ouverte équipée (percolateur, four, mixeur, bouilloire), fauteuil convertible (lit 140x200), feu ouvert, TV et Wifi. Terrasse Est/Sud-Est avec entrée particulière. Étage : 1 chambre double (140x200), 1 chambre avec 2 lits simples (90x200), salle de bain avec douche, évier et w.c.</p>
+                  <div class="stay-meta">
+                    <div class="stay-meta-title">De <strong>4 à 6</strong> personnes</div>
+                    <div class="stay-meta-label">Équipements</div>
+                    <div class="stay-icons">
+                      <img src="/img/WIFI_ICON.png" alt="WiFi" />
+                      <img src="/img/TV_ICON.png" alt="Télévision" />
+                      <img src="/img/WC_ICON.png" alt="WC" />
+                      <img src="/img/DOUCHE_ICON.png" alt="Douche" />
+                      <img src="/img/KITCHEN_ICON.png" alt="Cuisine" />
+                    </div>
+                    <p class="stay-meta-extra">Terrasse + feu ouvert</p>
+                  </div>
+                  <a class="btn stay-cta" data-booking-request-trigger href="#">Je réserve</a>
+                </div>
+                <div class="stay-media" data-carousel>
+                  <button class="stay-arrow stay-arrow-prev" type="button" aria-label="Image précédente">‹</button>
+                  <div class="stay-track">
+                    <img src="/img/slider/fox.jpg" alt="Le Kemel" />
+                    <img src="/img/chambres-card.jpg" alt="Le Kemel" />
+                    <img src="/img/slider/ponts.jpg" alt="Le Kemel" />
+                  </div>
+                  <button class="stay-arrow stay-arrow-next" type="button" aria-label="Image suivante">›</button>
+                </div>
+              </article>
           </div>
 
           <div class="stays-list" data-panel="chambres" hidden>
             <article class="stay-card is-reverse">
               <div class="stay-content">
-                <h3 class="stay-title"><span style="font-size: 0.7em;">Chambre </span> <span>Ardenne</span></h3>
-                <p class="stay-subtitle">Double cosy</p>
-                <p class="stay-description">Une chambre lumineuse avec literie confortable, salle de bain privative et vue sur les prairies du domaine.</p>
+                <h3 class="stay-title"> <span>Speaker Corner</span></h3>
+                <p class="stay-subtitle">Accommodation 2-3 personnes</p>
+                <p class="stay-description">Lits jumeaux (lit double 160 cm ou 2 lits simples), grande baie vitrée sur la cour intérieure, salle de bain privative (douche, évier, toilette), Wifi. Les hôtes disposent d’une salle à manger, d’un salon avec poêle à bois et d’un coin cuisine. Petit déjeuner maison et local compris.</p>
                 <div class="stay-meta">
-                  <div class="stay-meta-title"><strong>2</strong> personnes</div>
+                  <div class="stay-meta-title"><strong>2 à 3</strong> personnes</div>
                   <div class="stay-meta-label">Équipements</div>
                   <div class="stay-icons">
                     <img src="/img/WIFI_ICON.png" alt="WiFi" />
-                    <img src="/img/TV_ICON.png" alt="Télévision" />
                     <img src="/img/WC_ICON.png" alt="WC" />
                     <img src="/img/DOUCHE_ICON.png" alt="Douche" />
+                    <img src="/img/KITCHEN_ICON.png" alt="Cuisine commune" />
                   </div>
+                  <p class="stay-meta-extra">Petit déjeuner inclus</p>
                 </div>
-                <a class="btn stay-cta" href="https://www.booking.com/hotel/be/la-source-d-39-arimont.fr.html?aid=304142&label=gen173nr-10CAEoggI46AdIM1gEaE2IAQGYATO4AQfIAQzYAQPoAQH4AQGIAgGoAgG4Atm0zMwGwAIB0gIkZmQzMWUxZTItNzdlMi00OTlmLTlmMjMtN2RiY2M5ODU1ODFm2AIB4AIB&sid=2669329a65d46b400be3dd2134ff9f3c&dist=0&group_adults=2&group_children=0&hapos=1&hpos=1&no_rooms=1&req_adults=2&req_children=0&room1=A%2CA&sb_price_type=total&sr_order=popularity&srepoch=1771248229&srpvid=a3d45e30c58d045c&type=total&ucfs=1&" target="_blank" rel="noopener noreferrer">Je réserve</a>
+                <a class="btn stay-cta" data-booking-request-trigger href="#">Je réserve</a>
               </div>
               <div class="stay-media" data-carousel>
                 <button class="stay-arrow stay-arrow-prev" type="button" aria-label="Image précédente">‹</button>
@@ -195,20 +267,21 @@
 
             <article class="stay-card">
               <div class="stay-content">
-                <h3 class="stay-title"><span style="font-size: 0.7em;">Chambre </span><span>Forêt</span></h3>
-                <p class="stay-subtitle">Double premium</p>
-                <p class="stay-description">Un espace paisible avec coin salon, idéal pour les séjours courts à Spa-Francorchamps et dans les Ardennes.</p>
+                <h3 class="stay-title"><span>Eau Rouge</span></h3>
+                <p class="stay-subtitle">Accommodation 2-4 personnes</p>
+                <p class="stay-description">Lit double de 140 cm, salle de bain privative avec douche, évier et toilette, Wifi. Accès aux espaces communs : salle à manger, salon avec poêle à bois et coin cuisine (micro-ondes, bouilloire, percolateur, frigo). Cour intérieure orientée plein sud. Petit déjeuner maison et local compris.</p>
                 <div class="stay-meta">
-                  <div class="stay-meta-title"><strong>2 à 3</strong> personnes</div>
+                  <div class="stay-meta-title"><strong>2 à 4</strong> personnes</div>
                   <div class="stay-meta-label">Équipements</div>
                   <div class="stay-icons">
                     <img src="/img/WIFI_ICON.png" alt="WiFi" />
-                    <img src="/img/TV_ICON.png" alt="Télévision" />
                     <img src="/img/WC_ICON.png" alt="WC" />
                     <img src="/img/DOUCHE_ICON.png" alt="Douche" />
+                    <img src="/img/KITCHEN_ICON.png" alt="Cuisine commune" />
                   </div>
+                  <p class="stay-meta-extra">Petit déjeuner inclus</p>
                 </div>
-                <a class="btn stay-cta" href="https://www.booking.com/hotel/be/la-source-d-39-arimont.fr.html?aid=304142&label=gen173nr-10CAEoggI46AdIM1gEaE2IAQGYATO4AQfIAQzYAQPoAQH4AQGIAgGoAgG4Atm0zMwGwAIB0gIkZmQzMWUxZTItNzdlMi00OTlmLTlmMjMtN2RiY2M5ODU1ODFm2AIB4AIB&sid=2669329a65d46b400be3dd2134ff9f3c&dist=0&group_adults=2&group_children=0&hapos=1&hpos=1&no_rooms=1&req_adults=2&req_children=0&room1=A%2CA&sb_price_type=total&sr_order=popularity&srepoch=1771248229&srpvid=a3d45e30c58d045c&type=total&ucfs=1&" target="_blank" rel="noopener noreferrer">Je réserve</a>
+                <a class="btn stay-cta" data-booking-request-trigger href="#">Je réserve</a>
               </div>
               <div class="stay-media" data-carousel>
                 <button class="stay-arrow stay-arrow-prev" type="button" aria-label="Image précédente">‹</button>
@@ -291,36 +364,69 @@
           </div>
           <div class="testimonials-slider">
             <div class="testimonials-track">
+
               <article class="testimonial-card">
-                <div class="testimonial-meta">Le Raidillon</div>
-                <strong>Sophie L.</strong>
-                <p>“Un cadre naturel préservé, le calme et la forêt, un vrai moment d’évasion.”</p>
+                <div class="testimonial-meta">Gîte 2 chambres</div>
+                <strong>Efthymia</strong>
+                <p>"Hôtes très attentionnés, cadre de ferme superbe et séjour parfait en famille."</p>
+                <div class="testimonial-stars" aria-label="5 sur 5">★★★★★</div>
               </article>
               <article class="testimonial-card">
-                <div class="testimonial-meta">Le Raidillon</div>
-                <strong>Claire &amp; Thomas</strong>
-                <p>“Un séjour parfait en pleine nature. Le domaine est magnifique et l’accueil au top.”</p>
+                <div class="testimonial-meta">Gîte 2 chambres</div>
+                <strong>Teus</strong>
+                <p>"Week-end familial très agréable, logements spacieux et terrasse vraiment appréciée."</p>
+                <div class="testimonial-stars" aria-label="5 sur 5">★★★★★</div>
               </article>
               <article class="testimonial-card">
-                <div class="testimonial-meta">Le Raidillon</div>
-                <strong>Julien P.</strong>
-                <p>“Un lieu authentique et paisible, très bien situé pour découvrir la région.”</p>
+                <div class="testimonial-meta">Gîte 2 chambres</div>
+                <strong>Nicholas</strong>
+                <p>"Emplacement excellent, maison calme, salon confortable et patio très sympa."</p>
+                <div class="testimonial-stars" aria-label="5 sur 5">★★★★★</div>
               </article>
               <article class="testimonial-card">
-                <div class="testimonial-meta">Le Raidillon</div>
-                <strong>Marie D.</strong>
-                <p>“Lieu superbe, très propre, et environnement parfait pour se déconnecter.”</p>
+                <div class="testimonial-meta">Gîte 2 chambres</div>
+                <strong>Jamila</strong>
+                <p>"Lieu paisible dans la nature, parfait avec enfants et animaux autour."</p>
+                <div class="testimonial-stars" aria-label="5 sur 5">★★★★★</div>
               </article>
               <article class="testimonial-card">
-                <div class="testimonial-meta">Le Raidillon</div>
-                <strong>Thomas R.</strong>
-                <p>“Accueil chaleureux et cadre apaisant. Nous reviendrons sans hésiter.”</p>
+                <div class="testimonial-meta">Gîte 2 chambres</div>
+                <strong>Robert</strong>
+                <p>"Très bon cadre en bord de ville, hôte chaleureux et logement fonctionnel."</p>
+                <div class="testimonial-stars" aria-label="4 sur 5">★★★★☆</div>
               </article>
               <article class="testimonial-card">
-                <div class="testimonial-meta">Le Raidillon</div>
-                <strong>Anne &amp; Luc</strong>
-                <p>“Un séjour ressourçant, avec un vrai charme et une excellente localisation.”</p>
+                <div class="testimonial-meta">Chambre d'hôtes</div>
+                <strong>David</strong>
+                <p>"Endroit très calme avec un propriétaire professionnel et accueillant."</p>
+                <div class="testimonial-stars" aria-label="5 sur 5">★★★★★</div>
               </article>
+              <article class="testimonial-card">
+                <div class="testimonial-meta">Chambre d'hôtes</div>
+                <strong>Andrew</strong>
+                <p>"Hôte très sympathique, super énergie et excellent accueil."</p>
+                <div class="testimonial-stars" aria-label="5 sur 5">★★★★★</div>
+              </article>
+              <article class="testimonial-card">
+                <div class="testimonial-meta">Chambre d'hôtes</div>
+                <strong>Graham</strong>
+                <p>"Grande chambre confortable, belle maison de caractère et très bon petit déjeuner."</p>
+                <div class="testimonial-stars" aria-label="5 sur 5">★★★★★</div>
+              </article>
+              <article class="testimonial-card">
+                <div class="testimonial-meta">Chambre d'hôtes</div>
+                <strong>William</strong>
+                <p>"Hôte accueillant, literie confortable et séjour serein."</p>
+                <div class="testimonial-stars" aria-label="5 sur 5">★★★★★</div>
+              </article>
+              <article class="testimonial-card">
+                <div class="testimonial-meta">Chambre d'hôtes</div>
+                <strong>E</strong>
+                <p>"Petit déjeuner local excellent, équipe disponible et chambre bien équipée."</p>
+                <div class="testimonial-stars" aria-label="5 sur 5">★★★★★</div>
+              </article>
+
+
             </div>
           </div>
         </div>
@@ -331,7 +437,7 @@
           <div class="footer-grid">
             <div class="footer-rabbit-col">
               <img class="footer-rabbit" src="/img/illustrations/lapin_BEIGE.png" alt="" aria-hidden="true" />
-              <a class="btn btn-outline footer-rabbit-cta" href="https://www.booking.com/hotel/be/la-source-d-39-arimont.fr.html?aid=304142&label=gen173nr-10CAEoggI46AdIM1gEaE2IAQGYATO4AQfIAQzYAQPoAQH4AQGIAgGoAgG4Atm0zMwGwAIB0gIkZmQzMWUxZTItNzdlMi00OTlmLTlmMjMtN2RiY2M5ODU1ODFm2AIB4AIB&sid=2669329a65d46b400be3dd2134ff9f3c&dist=0&group_adults=2&group_children=0&hapos=1&hpos=1&no_rooms=1&req_adults=2&req_children=0&room1=A%2CA&sb_price_type=total&sr_order=popularity&srepoch=1771248229&srpvid=a3d45e30c58d045c&type=total&ucfs=1&" target="_blank" rel="noopener noreferrer">Réservez</a>
+              <a class="btn btn-outline footer-rabbit-cta" data-booking-request-trigger href="#">Réservez</a>
             </div>
             <div>
               <div class="footer-title">LA SOURCE D’ARIMONT</div>
@@ -356,7 +462,8 @@
                 <a href="./index.html">Accueil</a>
                 <a href="./gites-chambres.html">Gîtes &amp; chambres</a>
                 <a href="./la-region.html">Découvrir la région</a>
-                <a href="#">Contact</a>
+                <a href="#">Restauration</a>
+                <a href="#">Nos partenaires</a>
               </div>
             </div>
             <div>

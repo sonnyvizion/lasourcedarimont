@@ -5,6 +5,7 @@ import "./nav-lang-globe.js";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
+import { initBookingRequest } from "./booking-request.js";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -53,7 +54,7 @@ const heroMedia = document.querySelector(".hero-media");
 const heroVideoDesktop = document.querySelector(".hero-video-desktop");
 const heroVideoMobile = document.querySelector(".hero-video-mobile");
 const heroBookingForm = document.querySelector("[data-hero-booking-form]");
-const heroBookingCta = document.querySelector(".hero-cta[data-booking-base]");
+const heroBookingCta = document.querySelector(".hero-cta[data-booking-request-trigger]");
 const heroBookingInline = document.querySelector(".hero-booking-inline");
 
 const formatDateFr = (raw) => {
@@ -236,7 +237,6 @@ if (heroBookingForm && heroBookingCta) {
   let bookingOpen = false;
   let bookingAnimating = false;
 
-  const baseHref = heroBookingCta.getAttribute("data-booking-base") || heroBookingCta.getAttribute("href") || "";
   const setDefaultDates = () => {
     if (!checkinInput || !checkoutInput) return;
     const today = new Date();
@@ -252,29 +252,6 @@ if (heroBookingForm && heroBookingCta) {
     if (!checkoutInput.value) checkoutInput.value = toIso(checkout);
   };
 
-  const refreshBookingHref = () => {
-    if (!baseHref) return;
-    const url = new URL(baseHref);
-    const checkin = checkinInput?.value || "";
-    const checkout = checkoutInput?.value || "";
-    const adults = adultsInput?.value || "2";
-    const children = childrenInput?.value || "0";
-    const rooms = roomsInput?.value || "1";
-
-    ["age", "req_age", "room1", "room2", "room3", "room4", "room5"].forEach((key) =>
-      url.searchParams.delete(key)
-    );
-    url.searchParams.set("checkin", checkin);
-    url.searchParams.set("checkout", checkout);
-    url.searchParams.set("group_adults", adults);
-    url.searchParams.set("req_adults", adults);
-    url.searchParams.set("group_children", children);
-    url.searchParams.set("req_children", children);
-    url.searchParams.set("no_rooms", rooms);
-
-    heroBookingCta.href = url.toString();
-  };
-
   if (checkinInput && checkoutInput) {
     checkinInput.addEventListener("change", () => {
       if (checkinInput.value) {
@@ -285,16 +262,10 @@ if (heroBookingForm && heroBookingCta) {
           checkoutInput.value = nextDay.toISOString().slice(0, 10);
         }
       }
-      refreshBookingHref();
     });
   }
 
   setDefaultDates();
-  refreshBookingHref();
-  heroBookingForm.querySelectorAll("input, select").forEach((field) => {
-    field.addEventListener("change", refreshBookingHref);
-    field.addEventListener("input", refreshBookingHref);
-  });
 
   const setClosedMobileState = (immediate = false) => {
     if (!mobileMedia.matches) return;
@@ -353,17 +324,27 @@ if (heroBookingForm && heroBookingCta) {
     if (heroTitle) tl.to(heroTitle, { y: 0, duration: 0.45, ease: "power4.inOut" }, 0);
   };
 
-  heroBookingCta.addEventListener("click", (event) => {
-    if (!mobileMedia.matches) return;
-    if (!bookingOpen) {
-      event.preventDefault();
-      openMobileBooking();
-    }
-  });
-
   closeButton?.addEventListener("click", (event) => {
     event.preventDefault();
     closeMobileBooking();
+  });
+
+  initBookingRequest({
+    triggersSelector: "[data-booking-request-trigger]",
+    getBookingValues: () => ({
+      checkin: checkinInput?.value || "",
+      checkout: checkoutInput?.value || "",
+      adults: adultsInput?.value || "0",
+      children: childrenInput?.value || "0",
+      rooms: roomsInput?.value || "0"
+    }),
+    beforeOpen: ({ trigger }) => {
+      if (trigger === heroBookingCta && mobileMedia.matches && !bookingOpen) {
+        openMobileBooking();
+        return false;
+      }
+      return true;
+    }
   });
 
   mobileMedia.addEventListener("change", () => {

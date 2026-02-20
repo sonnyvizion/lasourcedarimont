@@ -82,3 +82,43 @@ const initNavLangGlobe = async () => {
 };
 
 initNavLangGlobe();
+
+const initNavLangMenu = () => {
+  const langBlocks = document.querySelectorAll(".nav-lang");
+  if (!langBlocks.length) return;
+
+  const closeAll = () => {
+    langBlocks.forEach((block) => {
+      block.classList.remove("is-open");
+      const trigger = block.querySelector(".nav-lang-trigger");
+      if (trigger) trigger.setAttribute("aria-expanded", "false");
+    });
+  };
+
+  langBlocks.forEach((block) => {
+    const trigger = block.querySelector(".nav-lang-trigger");
+    if (!trigger) return;
+    trigger.addEventListener("click", (event) => {
+      event.preventDefault();
+      const isOpen = block.classList.contains("is-open");
+      closeAll();
+      if (!isOpen) {
+        block.classList.add("is-open");
+        trigger.setAttribute("aria-expanded", "true");
+      }
+    });
+  });
+
+  document.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof Node)) return;
+    const insideAny = Array.from(langBlocks).some((block) => block.contains(target));
+    if (!insideAny) closeAll();
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeAll();
+  });
+};
+
+initNavLangMenu();

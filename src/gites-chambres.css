@@ -200,6 +200,13 @@
   object-fit: contain;
 }
 
+.stay-meta-extra {
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
 .stay-cta {
   margin-top: 14px;
   width: 100%;

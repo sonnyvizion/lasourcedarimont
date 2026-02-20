@@ -3,6 +3,7 @@ import "./nav.css";
 import "./home.css";
 import "./gites-chambres.css";
 import "./nav-lang-globe.js";
+import { initBookingRequest } from "./booking-request.js";
 
 const yearEl = document.querySelector("[data-year]");
 if (yearEl) yearEl.textContent = new Date().getFullYear();
@@ -48,6 +49,10 @@ if (navToggle && mobileMenu) {
     if (event.key === "Escape") closeMenu();
   });
 }
+
+initBookingRequest({
+  triggersSelector: "[data-booking-request-trigger]"
+});
 
 const splitRevealLines = (el) => {
   const raw = (el.innerHTML || "").trim();

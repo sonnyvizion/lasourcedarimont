@@ -3,6 +3,7 @@ import "./nav.css";
 import "./home.css";
 import "./la-region.css";
 import "./nav-lang-globe.js";
+import { initBookingRequest } from "./booking-request.js";
 
 const BASE_URL = import.meta.env.BASE_URL || "/";
 const assetUrl = (path) => `${BASE_URL}${path.replace(/^\/+/, "")}`;
@@ -53,6 +54,10 @@ if (navToggle && mobileMenu) {
   });
 }
 
+initBookingRequest({
+  triggersSelector: "[data-booking-request-trigger]"
+});
+
 const splitRevealLines = (el) => {
   const raw = (el.innerHTML || "").trim();
   const parts = raw
@@ -83,6 +88,7 @@ const spots = [
   {
     name: "Circuit de Spa-Francorchamps",
     coords: [5.9695, 50.4357],
+    activityType: "outdoor",
     cat: "Sport",
     img: assetUrl("/img/SPA_popin.webp"),
     badge: assetUrl("/img/SPA_pin.png"),
@@ -94,6 +100,7 @@ const spots = [
   {
     name: "Musée de la Ville d’eaux (Spa)",
     coords: [5.85753, 50.49173],
+    activityType: "indoor",
     cat: "Culture",
     img: assetUrl("/img/slider/domaine.jpg"),
     location: "Spa",
@@ -104,6 +111,7 @@ const spots = [
   {
     name: "Château de Reinhardstein",
     coords: [6.1024676, 50.4527748],
+    activityType: "outdoor",
     cat: "Patrimoine",
     img: assetUrl("/img/slider/ponts.jpg"),
     location: "Ovifat",
@@ -114,6 +122,7 @@ const spots = [
   {
     name: "Abbaye de Stavelot",
     coords: [5.9315672, 50.3934194],
+    activityType: "indoor",
     cat: "Patrimoine",
     img: assetUrl("/img/slider/fox.jpg"),
     location: "Stavelot",
@@ -124,6 +133,7 @@ const spots = [
   {
     name: "Stavelot (centre)",
     coords: [5.9304413, 50.3940981],
+    activityType: "outdoor",
     cat: "Ville",
     img: assetUrl("/img/slider/domaine.jpg"),
     location: "Stavelot",
@@ -134,6 +144,7 @@ const spots = [
   {
     name: "Lac de Bütgenbach",
     coords: [6.228, 50.427],
+    activityType: "outdoor",
     cat: "Nature",
     img: assetUrl("/img/slider/chevres.jpg"),
     location: "Bütgenbach",
@@ -144,6 +155,7 @@ const spots = [
   {
     name: "Thermes de Spa",
     coords: [5.8640616, 50.4942814],
+    activityType: "indoor",
     cat: "Wellness",
     img: assetUrl("/img/slider/cheval_15_11zon.jpg"),
     location: "Spa",
@@ -154,6 +166,7 @@ const spots = [
   {
     name: "Grottes de Remouchamps",
     coords: [5.712157, 50.4801118],
+    activityType: "indoor",
     cat: "Nature",
     img: assetUrl("/img/slider/ponts.jpg"),
     location: "Remouchamps",
@@ -164,6 +177,7 @@ const spots = [
   {
     name: "Monde Sauvage (Aywaille)",
     coords: [5.741914, 50.502887],
+    activityType: "outdoor",
     cat: "Famille",
     img: assetUrl("/img/slider/fox.jpg"),
     location: "Aywaille",
@@ -174,6 +188,7 @@ const spots = [
   {
     name: "Parc Naturel des Hautes-Fagnes",
     coords: [6.0753965, 50.5111275],
+    activityType: "outdoor",
     cat: "Nature",
     img: assetUrl("/img/slider/chevres.jpg"),
     location: "Hautes-Fagnes",
@@ -224,34 +239,34 @@ const popupHtml = (spot) => {
   `;
 };
 
-const renderSpotsList = () => {
+const renderSpotsList = (filter = "outdoor") => {
   const listRoot = document.querySelector("#region-spots-list");
   if (!listRoot) return;
 
   listRoot.innerHTML = spots
+    .filter((spot) => spot.activityType === filter)
     .map((spot) => {
       const km = Math.round(distanceKmBetween(gite.coords, spot.coords));
       const drive = formatDrive(driveMinutesFromGite(spot.coords));
       const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${spot.coords[1]},${spot.coords[0]}`;
       const wazeUrl = `https://waze.com/ul?ll=${spot.coords[1]},${spot.coords[0]}&navigate=yes`;
-      const siteLink = spot.site
-        ? `<a class="region-spot-link" href="${spot.site}" target="_blank" rel="noopener noreferrer">Site officiel</a>`
-        : "";
       return `
-        <article class="region-spot-card">
-          <h3 class="region-spot-title">${spot.name}</h3>
-          <div class="region-spot-meta">${km} km · ${drive}</div>
-          <div class="region-spot-location">${spot.location}</div>
-          <p class="region-spot-desc">${spot.desc}</p>
-          <div class="region-spot-address">${spot.address || `${spot.location}, Belgique`}</div>
-          ${siteLink}
-          <div class="region-spot-nav">
-            <a class="region-spot-icon-link" href="${mapsUrl}" target="_blank" rel="noopener noreferrer" aria-label="Ouvrir ${spot.name} dans Google Maps">
-              <img src="${assetUrl("/img/maps_icon.png")}" alt="" aria-hidden="true" />
-            </a>
-            <a class="region-spot-icon-link" href="${wazeUrl}" target="_blank" rel="noopener noreferrer" aria-label="Ouvrir ${spot.name} dans Waze">
-              <img src="${assetUrl("/img/waze_icon.png")}" alt="" aria-hidden="true" />
-            </a>
+        <article class="region-activity-card" style="background-image:url('${spot.img}');">
+          <div class="region-activity-overlay">
+            <h3 class="region-activity-title">${spot.name}</h3>
+            <div class="region-activity-meta">${km} km · ${drive}</div>
+            <button class="region-activity-more" type="button" aria-expanded="false" aria-label="Afficher les détails de ${spot.name}">+</button>
+            <div class="region-activity-details" hidden>
+              <p>${spot.desc}</p>
+              <div class="region-activity-links">
+                <a class="region-spot-icon-link" href="${mapsUrl}" target="_blank" rel="noopener noreferrer" aria-label="Ouvrir ${spot.name} dans Google Maps">
+                  <img src="${assetUrl("/img/maps_icon.png")}" alt="" aria-hidden="true" />
+                </a>
+                <a class="region-spot-icon-link" href="${wazeUrl}" target="_blank" rel="noopener noreferrer" aria-label="Ouvrir ${spot.name} dans Waze">
+                  <img src="${assetUrl("/img/waze_icon.png")}" alt="" aria-hidden="true" />
+                </a>
+              </div>
+            </div>
           </div>
         </article>
       `;
@@ -259,7 +274,52 @@ const renderSpotsList = () => {
     .join("");
 };
 
-renderSpotsList();
+let activeFilter = "outdoor";
+renderSpotsList(activeFilter);
+
+const activityFilterButtons = document.querySelectorAll("[data-activity-filter]");
+const activitiesViewport = document.querySelector(".region-activities-viewport");
+const activitiesPrev = document.querySelector(".region-activities-prev");
+const activitiesNext = document.querySelector(".region-activities-next");
+const listRoot = document.querySelector("#region-spots-list");
+
+activityFilterButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    activeFilter = button.getAttribute("data-activity-filter") || "outdoor";
+    activityFilterButtons.forEach((btn) => {
+      const isActive = btn === button;
+      btn.classList.toggle("is-active", isActive);
+      btn.setAttribute("aria-selected", String(isActive));
+    });
+    renderSpotsList(activeFilter);
+    if (activitiesViewport) activitiesViewport.scrollTo({ left: 0, behavior: "smooth" });
+  });
+});
+
+if (listRoot) {
+  listRoot.addEventListener("click", (event) => {
+    const target = event.target;
+    if (!(target instanceof Element)) return;
+    const toggle = target.closest(".region-activity-more");
+    if (!toggle) return;
+    const card = toggle.closest(".region-activity-card");
+    const details = card?.querySelector(".region-activity-details");
+    if (!card || !details) return;
+    const isOpen = card.classList.toggle("is-open");
+    details.hidden = !isOpen;
+    toggle.setAttribute("aria-expanded", String(isOpen));
+    toggle.textContent = isOpen ? "−" : "+";
+  });
+}
+
+const slideActivities = (direction) => {
+  if (!activitiesViewport) return;
+  const step = activitiesViewport.clientWidth * 0.9;
+  activitiesViewport.scrollBy({ left: step * direction, behavior: "smooth" });
+};
+
+activitiesPrev?.addEventListener("click", () => slideActivities(-1));
+activitiesNext?.addEventListener("click", () => slideActivities(1));
 
 const mapRoot = document.querySelector("#region-map");
 if (mapRoot && window.mapboxgl) {
