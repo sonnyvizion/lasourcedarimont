@@ -718,9 +718,15 @@ if (!prefersReducedMotion) {
 
     if (activeHeroVideo) {
       activeHeroVideo.muted = true;
+      activeHeroVideo.defaultMuted = true;
+      activeHeroVideo.volume = 0;
+      activeHeroVideo.autoplay = true;
       activeHeroVideo.playsInline = true;
       activeHeroVideo.setAttribute("muted", "");
+      activeHeroVideo.setAttribute("autoplay", "");
       activeHeroVideo.setAttribute("playsinline", "");
+      activeHeroVideo.setAttribute("webkit-playsinline", "");
+      activeHeroVideo.loop = false;
       activeHeroVideo.addEventListener("ended", playTimeline, { once: true });
       activeHeroVideo.addEventListener(
         "error",
@@ -768,6 +774,17 @@ if (!prefersReducedMotion) {
           document.addEventListener("pointerdown", retryOnInteraction, { once: true, passive: true });
         });
       };
+
+      // Extra retry window for iOS/Safari autoplay quirks on first load.
+      let autoplayRetries = 0;
+      const autoplayInterval = window.setInterval(() => {
+        if (!activeHeroVideo.paused || autoplayRetries >= 10) {
+          window.clearInterval(autoplayInterval);
+          return;
+        }
+        autoplayRetries += 1;
+        activeHeroVideo.play().catch(() => {});
+      }, 300);
 
       if (activeHeroVideo.readyState >= 2) {
         tryPlay();
