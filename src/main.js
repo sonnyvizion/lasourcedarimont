@@ -735,10 +735,6 @@ if (!prefersReducedMotion) {
           if (isMobileViewport && heroMedia) {
             heroMedia.classList.add("use-image-fallback");
           }
-          if (isMobileViewport) {
-            const heroImg = document.querySelector(".hero-image img");
-            if (heroImg) heroImg.classList.add("is-zooming");
-          }
           playTimeline();
         },
         { once: true }
@@ -796,9 +792,8 @@ if (!prefersReducedMotion) {
       return;
     }
 
-    if (isMobileViewport) {
-      const heroImg = document.querySelector(".hero-image img");
-      if (heroImg) heroImg.classList.add("is-zooming");
+  if (isMobileViewport) {
+      // Keep mobile hero media static (no zoom-in effect).
     }
     playTimeline();
   });

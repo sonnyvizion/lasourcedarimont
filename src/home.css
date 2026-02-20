@@ -1679,15 +1679,6 @@ body.is-loading {
     width: 64px;
   }
 
-  .hero-image img {
-    transform: scale(1.06);
-  }
-
-  .hero-image img.is-zooming {
-    transform: scale(1.24);
-    transition: transform 2.2s ease;
-  }
-
   .hero-video {
     display: none;
   }
@@ -1695,14 +1686,12 @@ body.is-loading {
   .hero-video-mobile {
     display: block;
     object-position: 58% 8% !important;
-    transform: scale(1.14) translateY(-9%);
-    transform-origin: center top;
+    transform: none;
   }
 
   .hero-image img {
     object-position: 58% 8% !important;
-    transform: scale(1.14) translateY(-9%);
-    transform-origin: center top;
+    transform: none;
   }
 
   .hero-image {
