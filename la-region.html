@@ -67,12 +67,33 @@
     </div>
 
     <main class="region-page-main">
+      
+
+      <section class="section region-list-section">
+        <div class="content-wrap">
+          <div class="label" style="text-align: center;">Lieux à visiter</div>
+          <h2 class="intro-text reveal-text" style="margin-bottom: 50px; margin-top: 150px;">Séjournez au cœur des Ardennes<br>et explorez les incontournables<br>autour du Domaine</h2>
+          <div class="region-activities-switch" role="tablist" aria-label="Filtrer les activités">
+            <button class="region-activities-switch-btn is-active" type="button" role="tab" aria-selected="true" data-activity-filter="outdoor">En extérieures</button>
+            <button class="region-activities-switch-btn" type="button" role="tab" aria-selected="false" data-activity-filter="indoor">À l'intérieures</button>
+          </div>
+          <div class="region-activities-slider">
+            <button class="region-activities-arrow region-activities-prev" type="button" aria-label="Précédent">‹</button>
+            <div class="region-activities-viewport">
+              <div id="region-spots-list" class="region-activities-track" aria-live="polite"></div>
+            </div>
+            <button class="region-activities-arrow region-activities-next" type="button" aria-label="Suivant">›</button>
+          </div>
+          
+        </div>
+      </section>
+
       <section class="section center region-intro">
         <div class="content-wrap" style="margin-top: -50px !important;">
           <div class="label">Découvrir la région</div>
           <h2 class="intro-text reveal-text">
             Séjournez au cœur des Ardennes <br class="br-desktop" />
-            et explorez les <span class="semi-italic">incontournables</span> <br class="br-desktop" />
+            et explorez les incontournables <br class="br-desktop" />
             autour du Domaine
           </h2>
           <img
@@ -88,23 +109,7 @@
           <div id="region-map" class="region-map" aria-label="Carte des activités autour du Domaine"></div>
         </div>
       </section>
-
-      <section class="section region-list-section">
-        <div class="content-wrap">
-          <div class="label" style="text-align: center;">Lieux à visiter</div>
-          <h2 class="intro-text reveal-text" style="margin-bottom: 100px;">Les lieux de la carte,<br> pour préparer vos sorties</h2>
-          <div class="region-activities-switch" role="tablist" aria-label="Filtrer les activités">
-            <button class="region-activities-switch-btn is-active" type="button" role="tab" aria-selected="true" data-activity-filter="outdoor">En extérieures</button>
-            <button class="region-activities-switch-btn" type="button" role="tab" aria-selected="false" data-activity-filter="indoor">À l'intérieures</button>
-          </div>
-          <div class="region-activities-slider">
-            <button class="region-activities-arrow region-activities-prev" type="button" aria-label="Précédent">‹</button>
-            <div class="region-activities-viewport">
-              <div id="region-spots-list" class="region-activities-track" aria-live="polite"></div>
-            </div>
-            <button class="region-activities-arrow region-activities-next" type="button" aria-label="Suivant">›</button>
-          </div>
-          <div class="region-video-wrap">
+      <div class="region-video-wrap">
             <video
               class="region-video region-video-desktop"
               autoplay
@@ -126,8 +131,6 @@
               <source src="/vid/arimont_mobile.mp4" type="video/mp4" />
             </video>
           </div>
-        </div>
-      </section>
     </main>
 
     <footer class="site-footer">
@@ -214,6 +217,8 @@
 
             </div>
           </div>
+
+          
         </div>
       </section>
 

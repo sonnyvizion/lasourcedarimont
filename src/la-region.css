@@ -61,8 +61,8 @@
 }
 
 .region-activities-switch {
-  margin-top: 26px;
-  margin-bottom: 34px;
+
+  margin-bottom: 74px;
   display: flex;
   border: 2px solid var(--color-forest);
   border-radius: 999px;
@@ -103,6 +103,17 @@
 
 .region-activities-viewport {
   overflow: hidden;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .region-activities-viewport.is-draggable {
+    cursor: grab;
+    user-select: none;
+  }
+
+  .region-activities-viewport.is-draggable.is-dragging {
+    cursor: grabbing;
+  }
 }
 
 .region-activities-track {
@@ -158,14 +169,37 @@
   position: absolute;
   right: 12px;
   bottom: 12px;
+  display: grid;
+  place-items: center;
   width: 36px;
   height: 36px;
+  padding: 0;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.7);
   background: rgba(0, 0, 0, 0.35);
   color: var(--color-white);
+  font-family: var(--font-body);
+  font-weight: 500;
   font-size: 22px;
   line-height: 1;
+  transform-origin: center;
+  transition: transform 0.2s ease;
+}
+
+.region-activity-more.is-clicked {
+  animation: region-more-pop 220ms cubic-bezier(0.2, 0.9, 0.25, 1.2);
+}
+
+@keyframes region-more-pop {
+  0% {
+    transform: scale(1);
+  }
+  35% {
+    transform: scale(0.84);
+  }
+  100% {
+    transform: scale(1.08);
+  }
 }
 
 .region-activity-details {
@@ -189,6 +223,67 @@
   margin-top: 8px;
   display: inline-flex;
   gap: 8px;
+}
+
+.region-activity-card.is-open {
+  background-image: none !important;
+  background-color: #fff;
+}
+
+.region-activity-card.is-open::after {
+  background: #fff;
+}
+
+.region-activity-card.is-open .region-activity-overlay {
+  color: #171717;
+  gap: 8px;
+  padding: 18px 18px 16px;
+  align-content: start;
+}
+
+.region-activity-card.is-open .region-activity-title {
+  color: #111;
+}
+
+.region-activity-card.is-open .region-activity-meta {
+  color: #444;
+  margin-top: 0;
+}
+
+.region-activity-card.is-open .region-activity-more {
+  border: 1px solid #1f1f1f;
+  background: #fff;
+  color: #111;
+}
+
+.region-activity-card.is-open .region-activity-details {
+  position: static;
+  left: auto;
+  right: auto;
+  bottom: auto;
+  margin-top: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.region-activity-card.is-open .region-activity-details p {
+  color: #1c1c1c;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.region-activity-card.is-open .region-activity-links {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.region-activity-card.is-open .region-spot-icon-link {
+  border-color: #1f1f1f;
+  background: #f4f4f4;
 }
 
 .region-activities-arrow {
@@ -215,6 +310,9 @@
 
 .region-video-wrap {
   margin-top: 28px;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
 }
 
 .region-video {
@@ -227,6 +325,11 @@
 
 .region-video-desktop {
   display: block;
+  width: 100vw;
+  max-width: none;
+  border-radius: 0;
+  border: 0;
+  cursor: pointer;
 }
 
 .region-video-mobile {

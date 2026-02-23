@@ -58,6 +58,19 @@ initBookingRequest({
   triggersSelector: "[data-booking-request-trigger]"
 });
 
+const desktopRegionVideo = document.querySelector(".region-video-desktop");
+if (desktopRegionVideo instanceof HTMLVideoElement) {
+  desktopRegionVideo.addEventListener("click", () => {
+    if (desktopRegionVideo.paused) {
+      desktopRegionVideo.play().catch(() => {
+        // noop
+      });
+    } else {
+      desktopRegionVideo.pause();
+    }
+  });
+}
+
 const splitRevealLines = (el) => {
   const raw = (el.innerHTML || "").trim();
   const parts = raw
@@ -90,8 +103,8 @@ const spots = [
     coords: [5.9695, 50.4357],
     activityType: "outdoor",
     cat: "Sport",
-    img: assetUrl("/img/SPA_popin.webp"),
-    badge: assetUrl("/img/SPA_pin.png"),
+    img: assetUrl("/img/region/spa_card.webp"),
+    badge: assetUrl("/img/region/"),
     location: "Francorchamps",
     desc: "Circuit mythique, paddocks, événements auto et sensations fortes au cœur des Ardennes.",
     address: "Route du Circuit 55, 4970 Stavelot, Belgique",
@@ -102,7 +115,7 @@ const spots = [
     coords: [5.85753, 50.49173],
     activityType: "indoor",
     cat: "Culture",
-    img: assetUrl("/img/slider/domaine.jpg"),
+    img: assetUrl("/img/region/villedeaux_card.webp"),
     location: "Spa",
     desc: "Un parcours culturel autour de l’histoire thermale et du patrimoine de Spa.",
     address: "Avenue Reine Astrid 77B, 4900 Spa, Belgique",
@@ -113,7 +126,7 @@ const spots = [
     coords: [6.1024676, 50.4527748],
     activityType: "outdoor",
     cat: "Patrimoine",
-    img: assetUrl("/img/slider/ponts.jpg"),
+    img: assetUrl("/img/region/reinhardstein_card.webp"),
     location: "Ovifat",
     desc: "Château emblématique des Hautes-Fagnes, visites et panoramas naturels.",
     address: "Chemin du Cheneux 50, 4950 Waimes, Belgique",
@@ -124,7 +137,7 @@ const spots = [
     coords: [5.9315672, 50.3934194],
     activityType: "indoor",
     cat: "Patrimoine",
-    img: assetUrl("/img/slider/fox.jpg"),
+    img: assetUrl("/img/region/abbaye_card.webp"),
     location: "Stavelot",
     desc: "Complexe historique avec musées, expositions et architecture remarquable.",
     address: "Cour de l'Abbaye 1, 4970 Stavelot, Belgique",
@@ -135,7 +148,7 @@ const spots = [
     coords: [5.9304413, 50.3940981],
     activityType: "outdoor",
     cat: "Ville",
-    img: assetUrl("/img/slider/domaine.jpg"),
+    img: assetUrl("/img/region/stavelot_card.webp"),
     location: "Stavelot",
     desc: "Centre vivant avec commerces, terrasses et ambiance ardennaise conviviale.",
     address: "Place Saint-Remacle, 4970 Stavelot, Belgique",
@@ -146,7 +159,7 @@ const spots = [
     coords: [6.228, 50.427],
     activityType: "outdoor",
     cat: "Nature",
-    img: assetUrl("/img/slider/chevres.jpg"),
+    img: assetUrl("/img/region/lac_card.webp"),
     location: "Bütgenbach",
     desc: "Balades, sports nautiques et détente en bord de lac dans un cadre ouvert.",
     address: "Seestraße, 4750 Bütgenbach, Belgique",
@@ -157,7 +170,7 @@ const spots = [
     coords: [5.8640616, 50.4942814],
     activityType: "indoor",
     cat: "Wellness",
-    img: assetUrl("/img/slider/cheval_15_11zon.jpg"),
+    img: assetUrl("/img/region/thermesspa_card.webp"),
     location: "Spa",
     desc: "Bains, saunas et soins bien-être dans un établissement thermal de référence.",
     address: "Colline d'Annette et Lubin, 4900 Spa, Belgique",
@@ -168,7 +181,7 @@ const spots = [
     coords: [5.712157, 50.4801118],
     activityType: "indoor",
     cat: "Nature",
-    img: assetUrl("/img/slider/ponts.jpg"),
+    img: assetUrl("/img/region/grotte_card.webp"),
     location: "Remouchamps",
     desc: "Visite souterraine spectaculaire, avec parcours guidé et rivière intérieure.",
     address: "Rue de Louveigne 3, 4920 Aywaille, Belgique",
@@ -179,7 +192,7 @@ const spots = [
     coords: [5.741914, 50.502887],
     activityType: "outdoor",
     cat: "Famille",
-    img: assetUrl("/img/slider/fox.jpg"),
+    img: assetUrl("/img/region/mondesauvage_card.webp"),
     location: "Aywaille",
     desc: "Parc animalier idéal en famille, entre safari, promenade et activités.",
     address: "Fange de Deigné 3, 4920 Aywaille, Belgique",
@@ -190,7 +203,7 @@ const spots = [
     coords: [6.0753965, 50.5111275],
     activityType: "outdoor",
     cat: "Nature",
-    img: assetUrl("/img/slider/chevres.jpg"),
+    img: assetUrl("/img/region/parcnat_card.webp"),
     location: "Hautes-Fagnes",
     desc: "Réserve naturelle unique pour randonnées, paysages de landes et points de vue.",
     address: "Route de Botrange 131, 4950 Waimes, Belgique",
@@ -309,6 +322,9 @@ if (listRoot) {
     details.hidden = !isOpen;
     toggle.setAttribute("aria-expanded", String(isOpen));
     toggle.textContent = isOpen ? "−" : "+";
+    toggle.classList.remove("is-clicked");
+    void toggle.offsetWidth;
+    toggle.classList.add("is-clicked");
   });
 }
 
@@ -321,6 +337,59 @@ const slideActivities = (direction) => {
 activitiesPrev?.addEventListener("click", () => slideActivities(-1));
 activitiesNext?.addEventListener("click", () => slideActivities(1));
 
+if (activitiesViewport) {
+  const desktopPointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+  if (desktopPointer.matches) {
+    activitiesViewport.classList.add("is-draggable");
+    let isDragging = false;
+    let didDrag = false;
+    let startX = 0;
+    let startScrollLeft = 0;
+
+    const stopDragging = () => {
+      if (!isDragging) return;
+      isDragging = false;
+      activitiesViewport.classList.remove("is-dragging");
+    };
+
+    activitiesViewport.addEventListener("mousedown", (event) => {
+      didDrag = false;
+      if (event.button !== 0) return;
+      const target = event.target;
+      if (
+        target instanceof Element &&
+        target.closest("a, button, input, textarea, select, label, [role='button']")
+      ) {
+        return;
+      }
+      isDragging = true;
+      didDrag = false;
+      startX = event.pageX;
+      startScrollLeft = activitiesViewport.scrollLeft;
+      activitiesViewport.classList.add("is-dragging");
+      event.preventDefault();
+    });
+
+    window.addEventListener("mousemove", (event) => {
+      if (!isDragging) return;
+      const deltaX = event.pageX - startX;
+      if (Math.abs(deltaX) > 4) didDrag = true;
+      activitiesViewport.scrollLeft = startScrollLeft - deltaX;
+    });
+
+    window.addEventListener("mouseup", stopDragging);
+    activitiesViewport.addEventListener(
+      "click",
+      (event) => {
+        if (!didDrag) return;
+        event.preventDefault();
+        event.stopPropagation();
+      },
+      true
+    );
+  }
+}
+
 const mapRoot = document.querySelector("#region-map");
 if (mapRoot && window.mapboxgl) {
   const mapbox = window.mapboxgl;
@@ -330,7 +399,7 @@ if (mapRoot && window.mapboxgl) {
   } else {
     mapbox.accessToken = MAPBOX_TOKEN;
 
-    const makePinEl = (isGite = false, badge = "") => {
+    const makePinEl = (isGite = false, badge = "", pinColor = "#F6B05F") => {
       const wrap = document.createElement("div");
       wrap.className = "map-pin-wrap";
 
@@ -338,7 +407,7 @@ if (mapRoot && window.mapboxgl) {
       pin.style.width = isGite ? "16px" : "14px";
       pin.style.height = isGite ? "16px" : "14px";
       pin.style.borderRadius = "999px";
-      pin.style.background = isGite ? "#2A5843" : "#F6B05F";
+      pin.style.background = isGite ? "#2A5843" : pinColor;
       pin.style.border = "2px solid #fff";
       pin.style.boxShadow = "0 6px 18px rgba(0,0,0,.18)";
       wrap.appendChild(pin);
@@ -418,7 +487,8 @@ if (mapRoot && window.mapboxgl) {
       }
 
       spots.forEach((spot) => {
-        const markerEl = makePinEl(false, spot.badge || "");
+        const isOutdoor = spot.activityType === "outdoor";
+        const markerEl = makePinEl(false, spot.badge || "", isOutdoor ? "#2A5843" : "#F6B05F");
         const popup = new mapbox.Popup({ offset: 14 }).setHTML(popupHtml(spot));
         const marker = new mapbox.Marker({ element: markerEl })
           .setLngLat(spot.coords)
