@@ -131,6 +131,15 @@ body.is-loading {
   display: block;
 }
 
+.hero-media.use-image-fallback .hero-image {
+  display: block;
+}
+
+.hero-media.use-image-fallback .hero-video-desktop,
+.hero-media.use-image-fallback .hero-video-mobile {
+  display: none;
+}
+
 .hero-tree {
   position: absolute;
   bottom: -2%;
@@ -678,6 +687,17 @@ body.is-loading {
   width: 100vw;
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .gallery-slider.is-draggable {
+    cursor: grab;
+    user-select: none;
+  }
+
+  .gallery-slider.is-draggable.is-dragging {
+    cursor: grabbing;
+  }
 }
 
 .gallery-slider .gallery-arrows {

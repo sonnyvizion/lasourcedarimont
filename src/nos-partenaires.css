@@ -1,0 +1,234 @@
+.partners-page {
+  background: var(--color-beige);
+}
+
+.partners-page:not(.menu-open) .site-header {
+  color: var(--color-forest);
+  background: var(--color-beige);
+  border-bottom: 2px solid var(--color-forest);
+}
+
+.partners-page:not(.menu-open) .logo-mark {
+  background-color: var(--color-forest);
+}
+
+.partners-page:not(.menu-open) .nav-links,
+.partners-page:not(.menu-open) .nav-right {
+  color: var(--color-forest);
+}
+
+.partners-page:not(.menu-open) .nav-icon,
+.partners-page:not(.menu-open) .nav-icon::after {
+  border-color: var(--color-forest);
+}
+
+.partners-page:not(.menu-open) .nav-toggle-bar {
+  background: var(--color-forest);
+}
+
+.partners-page-main {
+  padding-top: 110px;
+  padding-bottom: 100px;
+}
+
+.partners-intro .content-wrap {
+  position: relative;
+  text-align: center;
+}
+
+.partners-intro-illu {
+  position: absolute;
+  right: 8%;
+  top: -36px;
+  width: clamp(64px, 9vw, 124px);
+  pointer-events: none;
+}
+
+.partners-title {
+  margin-top: 12px;
+}
+
+.partners-lead {
+  margin: 18px auto 0;
+  max-width: 760px;
+  font-size: clamp(16px, 2vw, 18px);
+}
+
+.partners-highlight {
+  margin-top: 0px;
+}
+
+.partner-featured-card {
+  border: 2px solid var(--color-forest);
+  border-radius: 24px;
+  overflow: hidden;
+  background: #f3ecdd;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.partner-featured-media img {
+  width: 100%;
+  height: 100%;
+  min-height: 300px;
+  object-fit: cover;
+}
+
+.partner-featured-content {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.partner-badge {
+  display: inline-flex;
+  align-self: flex-start;
+  border: 1px solid var(--color-forest);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+}
+
+.partner-featured-content h2 {
+  text-align: left;
+  font-size: clamp(28px, 3vw, 40px);
+  margin-top: 2px;
+  margin-bottom: 2px;
+}
+
+.partner-distance {
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.partner-offer-row {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.partner-offer {
+  background: var(--color-orange);
+  color: #fff;
+  border-radius: 999px;
+  min-height: 42px;
+  padding: 10px 18px;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.partner-btn {
+  background: var(--color-forest);
+  color: var(--color-beige);
+  min-height: 42px;
+  padding: 10px 18px;
+  font-size: 13px;
+}
+
+.partners-list-section {
+  margin-top: 52px;
+}
+
+.partners-list-section .label {
+  text-align: center;
+}
+
+.partners-list-section .intro-text {
+  margin-top: 14px;
+}
+
+.partners-grid {
+  margin-top: 34px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.partner-card {
+  border: 2px solid var(--color-forest);
+  border-radius: 20px;
+  overflow: hidden;
+  background: rgba(246, 241, 230, 0.8);
+}
+
+.partner-card-media {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+
+.partner-card-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.partner-card-body h3 {
+  font-size: clamp(24px, 2.2vw, 32px);
+  line-height: 1.05;
+}
+
+.partner-card-meta {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  font-weight: 800;
+}
+
+.partner-card-body p {
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+@media (max-width: 1100px) {
+  .partners-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 980px) {
+  .partners-page-main {
+    padding-top: 94px;
+  }
+
+  .partners-intro-illu {
+    top: -28px;
+    right: 6%;
+  }
+
+  .partner-featured-card {
+    grid-template-columns: 1fr;
+  }
+
+  .partner-featured-media img {
+    min-height: 220px;
+  }
+
+  .partner-featured-content {
+    padding: 18px;
+  }
+
+  .partners-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .partner-card-media {
+    height: 210px;
+  }
+}
