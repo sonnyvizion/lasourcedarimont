@@ -35,7 +35,7 @@ body {
   font-family: var(--font-body);
   color: var(--color-forest);
   background: var(--color-beige);
-  line-height: 1.4;
+  line-height: 1.55;
   overflow-x: hidden;
 }
 
@@ -78,7 +78,7 @@ h2 {
 h3 {
   font-family: var(--font-heading);
   font-weight: 700;
-  font-size: clamp(34px, 2.5vw, 32px);
+  font-size: clamp(22px, 2.5vw, 32px);
   color: var(--color-forest);
   text-align: left;
   line-height: 1.1;
@@ -144,6 +144,7 @@ small,
   background: var(--color-orange);
   color: #ffffff;
   border: none;
+  cursor: pointer;
 }
 
 .btn-outline {
