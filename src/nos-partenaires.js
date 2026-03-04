@@ -4,6 +4,7 @@ import "./home.css";
 import "./nos-partenaires.css";
 import "./nav-lang-globe.js";
 import { initBookingRequest } from "./booking-request.js";
+import { client, urlFor } from "./sanity.js";
 
 const yearEl = document.querySelector("[data-year]");
 if (yearEl) yearEl.textContent = new Date().getFullYear();
@@ -78,3 +79,65 @@ if (revealEls.length) {
   );
   revealEls.forEach((el) => observer.observe(el));
 }
+
+// ─── Sanity content ───────────────────────────────────────────────────────────
+
+const CATEGORIE_LABELS = {
+  bienEtre:      "Bien-être",
+  outdoor:       "Outdoor",
+  restauration:  "Restauration",
+  famille:       "Famille",
+  culture:       "Culture",
+  autre:         "Autre",
+};
+
+const renderPartenaireVedette = (p) => `
+  <article class="partner-featured-card">
+    ${p.image ? `<div class="partner-featured-media"><img src="${urlFor(p.image).width(800).url()}" alt="${p.name}" /></div>` : ""}
+    <div class="partner-featured-content">
+      <div class="partner-badge">Partenaire à la une</div>
+      <h2>${p.name}</h2>
+      ${p.distance ? `<p class="partner-distance">${p.distance}</p>` : ""}
+      <p>${p.description || ""}</p>
+      <div class="partner-offer-row">
+        ${p.offre ? `<span class="partner-offer">${p.offre}</span>` : ""}
+        ${p.siteWeb ? `<a class="btn partner-btn" href="${p.siteWeb}" target="_blank" rel="noopener">Voir l'offre</a>` : `<a class="btn partner-btn" href="#">Voir l'offre</a>`}
+      </div>
+    </div>
+  </article>`;
+
+const renderPartenaire = (p) => {
+  const meta = [CATEGORIE_LABELS[p.categorie], p.distance].filter(Boolean).join(" · ");
+  return `
+    <article class="partner-card">
+      ${p.image ? `<img class="partner-card-media" src="${urlFor(p.image).width(600).url()}" alt="${p.name}" loading="lazy" />` : ""}
+      <div class="partner-card-body">
+        <h3>${p.name}</h3>
+        ${meta ? `<p class="partner-card-meta">${meta}</p>` : ""}
+        ${p.description ? `<p>${p.description}</p>` : ""}
+        ${p.offre ? `<span class="partner-offer">${p.offre}</span>` : ""}
+      </div>
+    </article>`;
+};
+
+async function initSanityContent() {
+  const highlightWrap = document.querySelector(".partners-highlight .content-wrap");
+  const grid = document.querySelector(".partners-grid");
+
+  if (highlightWrap) highlightWrap.innerHTML = "";
+  if (grid) grid.innerHTML = "";
+
+  try {
+    const partenaires = await client.fetch(`*[_type == "partenaire"] | order(order asc)`);
+
+    const featured = partenaires.find((p) => p.isFeatured);
+    const others = partenaires.filter((p) => !p.isFeatured);
+
+    if (highlightWrap && featured) highlightWrap.innerHTML = renderPartenaireVedette(featured);
+    if (grid) grid.innerHTML = others.map(renderPartenaire).join("");
+  } catch (err) {
+    console.error("Erreur Sanity:", err);
+  }
+}
+
+initSanityContent();
