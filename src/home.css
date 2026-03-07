@@ -1588,7 +1588,8 @@ body.is-loading {
     top: auto;
     z-index: 1;
     height: 100vh;
-    min-height: 100vh;
+    height: 100svh;
+    min-height: 0;
     padding-bottom: 0;
   }
 
@@ -1703,27 +1704,13 @@ body.is-loading {
     display: none;
   }
 
-  .hero-video-mobile {
-    display: block;
-    object-position: 58% 8% !important;
-    transform: none;
-  }
-
   .hero-image img {
     object-position: 58% 8% !important;
     transform: none;
   }
 
   .hero-image {
-    display: none;
-  }
-
-  .hero-media.use-image-fallback .hero-image {
     display: block;
-  }
-
-  .hero-media.use-image-fallback .hero-video-mobile {
-    display: none;
   }
 
   .hero-tree {

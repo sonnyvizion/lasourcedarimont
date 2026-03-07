@@ -6,6 +6,9 @@ import "./nav-lang-globe.js";
 import { initBookingRequest } from "./booking-request.js";
 import { client, urlFor } from "./sanity.js";
 
+const BASE_URL = import.meta.env.BASE_URL || "/";
+const assetUrl = (path) => `${BASE_URL}${path.replace(/^\/+/, "")}`;
+
 const yearEl = document.querySelector("[data-year]");
 if (yearEl) yearEl.textContent = new Date().getFullYear();
 
@@ -139,12 +142,12 @@ const setupCardCarousel = (root) => {
 // ─── Sanity content ───────────────────────────────────────────────────────────
 
 const ICONS = {
-  wifi:          { src: "/img/WIFI_ICON.png",    alt: "WiFi" },
-  tv:            { src: "/img/TV_ICON.png",      alt: "Télévision" },
-  wc:            { src: "/img/WC_ICON.png",      alt: "WC" },
-  douche:        { src: "/img/DOUCHE_ICON.png",  alt: "Douche" },
-  cuisine:       { src: "/img/KITCHEN_ICON.png", alt: "Cuisine équipée" },
-  cuisineCommune:{ src: "/img/KITCHEN_ICON.png", alt: "Cuisine commune" },
+  wifi:          { src: assetUrl("/img/WIFI_ICON.png"),    alt: "WiFi" },
+  tv:            { src: assetUrl("/img/TV_ICON.png"),      alt: "Télévision" },
+  wc:            { src: assetUrl("/img/WC_ICON.png"),      alt: "WC" },
+  douche:        { src: assetUrl("/img/DOUCHE_ICON.png"),  alt: "Douche" },
+  cuisine:       { src: assetUrl("/img/KITCHEN_ICON.png"), alt: "Cuisine équipée" },
+  cuisineCommune:{ src: assetUrl("/img/KITCHEN_ICON.png"), alt: "Cuisine commune" },
 };
 
 const renderCapacite = (min, max) => {

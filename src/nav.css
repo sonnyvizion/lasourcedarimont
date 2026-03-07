@@ -1,6 +1,7 @@
 .site-header {
   position: fixed;
   width: 100%;
+  height: 70px;
   top: 0;
   left: 0;
   z-index: 12;
@@ -37,7 +38,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 0;
+  padding: 2px 0;
 }
 
 .site-header .content-wrap {
@@ -58,11 +59,13 @@
 }
 
 .logo-mark {
-  height: 70px;
-  width: 70px;
+  height: 50px;
+  width: 50px;
+  position: relative;
+  top: -5px;
   background-color: var(--color-white);
-  -webkit-mask: url("/img/LOGOTYPE_SYMETRIK.svg") no-repeat center / contain;
-  mask: url("/img/LOGOTYPE_SYMETRIK.svg") no-repeat center / contain;
+  -webkit-mask: url("/img/VectorLogo.svg") no-repeat center / contain;
+  mask: url("/img/VectorLogo.svg") no-repeat center / contain;
   transition: background-color 0.4s ease;
 }
 
@@ -82,7 +85,7 @@
   display: flex;
   align-items: center;
   gap: 28px;
-  font-size: 14px;
+  font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--color-white);
@@ -94,6 +97,7 @@
 .nav-links a {
   position: relative;
   display: inline-flex;
+  padding-top: 6px;
   padding-bottom: 6px;
 }
 
@@ -128,7 +132,7 @@
   display: flex;
   align-items: center;
   gap: 0px;
-  font-size: 14px;
+  font-size: 12px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-family: var(--font-body);
@@ -520,12 +524,19 @@
     display: inline-flex;
   }
 
+  .site-header {
+    height: 60px;
+  }
+
   .header-inner {
-    padding: 12px var(--content-padding);
+    padding: 8px var(--content-padding);
   }
 
   .logo-mark {
-    height: 60px;
-    width: 60px;
+    height: 38px;
+    width: 38px;
+    top: 0;
   }
+
+  
 }

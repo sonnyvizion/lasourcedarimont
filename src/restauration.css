@@ -54,8 +54,41 @@
   font-size: clamp(16px, 2vw, 18px);
 }
 
-.restauration-featured {
-  margin-top: 36px;
+/* ── Section headers ─────────────────────────────────────────────────────── */
+
+.restauration-section-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.restauration-section-header .intro-text {
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+.section-note {
+  margin-top: 10px;
+  font-size: 14px;
+  opacity: 0.7;
+  letter-spacing: 0.02em;
+}
+
+/* ── Sections (override home.css 250px padding) ──────────────────────────── */
+
+.restauration-dejeuners,
+.restauration-repas {
+  padding-top: 64px;
+  padding-bottom: 0;
+}
+
+/* ── Featured card (Le Complet) ──────────────────────────────────────────── */
+
+.restauration-dejeuners {
+  margin-top: 0;
+}
+
+.dejeuners-featured-wrap {
+  margin-top: 16px;
 }
 
 .menu-featured-card {
@@ -63,22 +96,36 @@
   border-radius: 24px;
   overflow: hidden;
   display: grid;
-  grid-template-columns: 1.05fr 1fr;
+  grid-template-columns: 1fr 1.6fr;
   background: #f2ecdf;
+}
+
+.menu-featured-media {
+  background: var(--color-forest);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 280px;
 }
 
 .menu-featured-media img {
   width: 100%;
   height: 100%;
-  min-height: 320px;
   object-fit: cover;
 }
 
+.menu-featured-media--illu img {
+  width: 52%;
+  height: auto;
+  object-fit: contain;
+  opacity: 0.45;
+}
+
 .menu-featured-content {
-  padding: 26px;
+  padding: 32px 28px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .menu-badge {
@@ -86,7 +133,7 @@
   align-self: flex-start;
   border: 1px solid var(--color-forest);
   border-radius: 999px;
-  padding: 6px 12px;
+  padding: 6px 14px;
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -95,25 +142,38 @@
 
 .menu-featured-content h2 {
   text-align: left;
-  font-size: clamp(28px, 3vw, 40px);
+  font-size: clamp(28px, 3vw, 44px);
 }
 
 .menu-meta {
   font-size: 12px;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   font-weight: 700;
+  opacity: 0.6;
 }
 
 .menu-lines {
-  margin: 6px 0 0;
-  padding-left: 18px;
+  margin: 4px 0 0;
+  padding-left: 0;
+  list-style: none;
   display: grid;
-  gap: 6px;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 24px;
 }
 
 .menu-lines li {
-  font-size: 15px;
+  font-size: 14px;
+  padding-left: 16px;
+  position: relative;
+}
+
+.menu-lines li::before {
+  content: "·";
+  position: absolute;
+  left: 0;
+  color: var(--color-orange);
+  font-weight: 700;
 }
 
 .menu-featured-footer {
@@ -132,38 +192,33 @@
   background: var(--color-orange);
   color: #fff;
   min-height: 42px;
-  padding: 10px 16px;
-  font-size: 13px;
+  padding: 10px 18px;
+  font-size: 14px;
   font-weight: 800;
   letter-spacing: 0.04em;
-  text-transform: uppercase;
 }
 
 .menu-btn {
   min-height: 42px;
-  padding: 10px 16px;
+  padding: 10px 18px;
   background: var(--color-forest);
   color: var(--color-beige);
   font-size: 13px;
 }
 
-.restauration-offers {
-  margin-top: 54px;
-}
-
-.restauration-offers .label {
-  text-align: center;
-}
-
-.restauration-offers .intro-text {
-  margin-top: 12px;
-}
+/* ── Standard cards grid ─────────────────────────────────────────────────── */
 
 .menu-grid {
-  margin-top: 30px;
   display: grid;
   gap: 16px;
+}
+
+.dejeuners-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.repas-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .menu-card {
@@ -171,72 +226,74 @@
   border-radius: 18px;
   overflow: hidden;
   background: rgba(246, 241, 230, 0.8);
-}
-
-.menu-card img {
-  width: 100%;
-  height: 210px;
-  object-fit: cover;
+  display: flex;
+  flex-direction: column;
 }
 
 .menu-card-body {
-  padding: 16px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
+  flex: 1;
   gap: 10px;
 }
 
+.menu-card-body .menu-badge {
+  align-self: flex-start;
+}
+
 .menu-card h3 {
-  font-size: clamp(24px, 2.2vw, 32px);
+  font-size: clamp(22px, 2vw, 30px);
   line-height: 1.05;
 }
 
-.menu-card p {
-  font-size: 14px;
-  line-height: 1.45;
-}
-
-.restauration-weekly {
-  margin-top: 48px;
-}
-
-.restauration-weekly .label {
-  text-align: center;
-}
-
-.weekly-table-wrap {
-  margin-top: 16px;
-  border: 2px solid var(--color-forest);
-  border-radius: 18px;
-  overflow: hidden;
-  background: rgba(246, 241, 230, 0.82);
-}
-
-.weekly-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.weekly-table th,
-.weekly-table td {
-  text-align: left;
-  padding: 14px 16px;
-  border-bottom: 1px solid rgba(42, 88, 67, 0.3);
-  font-size: 14px;
-}
-
-.weekly-table th {
+.menu-service {
   font-size: 12px;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  font-weight: 700;
+  opacity: 0.55;
 }
 
-.weekly-table tbody tr:last-child td {
-  border-bottom: 0;
+.menu-items-list {
+  padding-left: 0;
+  list-style: none;
+  display: grid;
+  gap: 5px;
+  flex: 1;
 }
+
+.menu-items-list li {
+  font-size: 14px;
+  line-height: 1.4;
+  padding-left: 16px;
+  position: relative;
+}
+
+.menu-items-list li::before {
+  content: "·";
+  position: absolute;
+  left: 0;
+  color: var(--color-orange);
+  font-weight: 700;
+}
+
+.menu-card-footer {
+  margin-top: auto;
+  padding-top: 12px;
+  border-top: 1px solid rgba(42, 88, 67, 0.15);
+}
+
+/* ── Repas section ───────────────────────────────────────────────────────── */
+
+.restauration-repas {
+  margin-top: 64px;
+}
+
+/* ── Responsive ──────────────────────────────────────────────────────────── */
 
 @media (max-width: 1100px) {
-  .menu-grid {
+  .dejeuners-grid {
     grid-template-columns: 1fr 1fr;
   }
 }
@@ -255,25 +312,24 @@
     grid-template-columns: 1fr;
   }
 
-  .menu-featured-media img {
-    min-height: 220px;
+  .menu-featured-media {
+    min-height: 200px;
+  }
+
+  .menu-featured-media--illu img {
+    width: 38%;
   }
 
   .menu-featured-content {
-    padding: 18px;
+    padding: 20px;
   }
 
-  .menu-grid {
+  .menu-lines {
     grid-template-columns: 1fr;
   }
 
-  .menu-card img {
-    height: 200px;
-  }
-
-  .weekly-table th,
-  .weekly-table td {
-    font-size: 13px;
-    padding: 12px;
+  .dejeuners-grid,
+  .repas-grid {
+    grid-template-columns: 1fr;
   }
 }

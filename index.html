@@ -4,7 +4,37 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Domaine de la Source d'Arimont – Gîte de charme au cœur de la nature. Séjours ressourçants en famille ou en couple, hébergements authentiques, grands espaces verts." />
-    <title>La Source d'Arimont</title>
+    <title>La Source d'Arimont – Gîtes &amp; Chambres d'hôtes aux Ardennes</title>
+    <link rel="canonical" href="https://www.lasourcedarimont.be/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="La Source d'Arimont" />
+    <meta property="og:locale" content="fr_BE" />
+    <meta property="og:title" content="La Source d'Arimont – Gîtes & Chambres d'hôtes aux Ardennes" />
+    <meta property="og:description" content="Domaine de la Source d'Arimont – Gîte de charme au cœur de la nature. Séjours ressourçants en famille ou en couple, hébergements authentiques, grands espaces verts." />
+    <meta property="og:image" content="https://www.lasourcedarimont.be/img/hero_v3.webp" />
+    <meta property="og:url" content="https://www.lasourcedarimont.be/" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LodgingBusiness",
+      "name": "La Source d'Arimont",
+      "description": "Gîtes et chambres d'hôtes de charme au cœur des Ardennes belges, à quelques minutes de Spa-Francorchamps.",
+      "url": "https://www.lasourcedarimont.be",
+      "image": "https://www.lasourcedarimont.be/img/hero_v3.webp",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "BE",
+        "addressRegion": "Wallonie",
+        "addressLocality": "Arimont"
+      },
+      "priceRange": "€€",
+      "amenityFeature": [
+        { "@type": "LocationFeatureSpecification", "name": "WiFi", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "Petit-déjeuner", "value": true },
+        { "@type": "LocationFeatureSpecification", "name": "Parking", "value": true }
+      ]
+    }
+    </script>
   </head>
   <body class="home-page nav-hidden">
     <div class="site-loader" aria-hidden="true">
@@ -73,9 +103,6 @@
         <video class="hero-video hero-video-desktop" autoplay muted playsinline webkit-playsinline preload="auto" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback" x-webkit-airplay="deny">
           <source src="/vid/desktop_Home.mp4" type="video/mp4" />
         </video>
-        <video class="hero-video hero-video-mobile" autoplay muted playsinline webkit-playsinline preload="auto" disablepictureinpicture controlslist="nodownload noplaybackrate noremoteplayback" x-webkit-airplay="deny">
-          <source src="/vid/mobile_home_drone.mp4" type="video/mp4" />
-        </video>
         <picture class="hero-image">
           <source srcset="/img/hero_mobile.webp" media="(max-width: 980px)" />
           <img src="/img/hero_v3.webp" alt="" />
@@ -143,9 +170,9 @@
 
     <section class="section center">
       <div class="content-wrap">
-        <div class="label">Domaine de la Source d’Arimont</div>
+        <div class="label" data-home-intro-label>Domaine de la Source d’Arimont</div>
         <img class="intro-illu" src="/img/illustrations/butterfly.png" alt="" aria-hidden="true" />
-        <h2 class="intro-text reveal-text">
+        <h2 class="intro-text reveal-text" data-home-intro-text>
           Entre forêts profondes et légendes du circuit <br class="br-desktop" />
           de <strong><em>Spa-Francorchamps</em></strong>, le Domaine d’<strong><em>Arimont</em></strong>
           <br class="br-desktop" />
@@ -158,7 +185,7 @@
             <button class="gallery-arrow gallery-slider-arrow gallery-prev" type="button" aria-label="Précédent">‹</button>
             <button class="gallery-arrow gallery-slider-arrow gallery-next" type="button" aria-label="Suivant">›</button>
           </div>
-          <div class="gallery-track">
+          <div class="gallery-track" data-home-gallery>
             <div class="card-photo" style="background-image: url('/img/slider/cheval2_16_11zon.jpg');"></div>
             <div class="card-photo" style="background-image: url('/img/slider/cheval_15_11zon.jpg');"></div>
             <div class="card-photo" style="background-image: url('/img/slider/chevres.jpg');"></div>
@@ -226,14 +253,14 @@
           <div class="icon-birds" aria-hidden="true">
             <img src="/img/illustrations/birds_J.png" alt="" />
           </div>
-          <div class="label">L’essence du Domaine d’Arimont</div>
-          <h2 class="intro-text reveal-text">
+          <div class="label" data-home-features-label>L’essence du Domaine d’Arimont</div>
+          <h2 class="intro-text reveal-text" data-home-features-intro>
             Nature, calme et caractère se rencontrent ici, <br class="br-desktop" />au cœur des <span class="semi-italic">Ardennes</span>, à quelques minutes <br class="br-desktop" />
             seulement de <span class="semi-italic">Spa</span>.
           </h2>
 
           <div class="feature-grid">
-            <article class="feature-card feature-card-plaine">
+            <article class="feature-card feature-card-plaine" data-home-feature="0">
               <h3>Nature &amp; <br>Silence</h3>
               <p class="p-card-illu">Un cadre verdoyant et une atmosphère paisible pour se ressourcer.</p>
               <video
@@ -245,7 +272,7 @@
                 aria-hidden="true"
               ></video>
             </article>
-            <article class="feature-card feature-card-spa">
+            <article class="feature-card feature-card-spa" data-home-feature="1">
               <h3>À deux pas <br>de Spa</h3>
               <p class="p-card-illu">La proximité des thermes et du circuit emblématique pour varier les plaisirs.</p>
               <video
@@ -257,7 +284,7 @@
                 aria-hidden="true"
               ></video>
             </article>
-            <article class="feature-card feature-card-gites">
+            <article class="feature-card feature-card-gites" data-home-feature="2">
               <h3>Domaine de <br>caractère</h3>
               <p class="p-card-illu">Des bâtiments authentiques, rénovés avec soin et charme.</p>
               <video

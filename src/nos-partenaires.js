@@ -4,6 +4,7 @@ import "./home.css";
 import "./nos-partenaires.css";
 import "./nav-lang-globe.js";
 import { initBookingRequest } from "./booking-request.js";
+import { initTestimonialsSlider } from "./testimonials.js";
 import { client, urlFor } from "./sanity.js";
 
 const yearEl = document.querySelector("[data-year]");
@@ -141,3 +142,4 @@ async function initSanityContent() {
 }
 
 initSanityContent();
+initTestimonialsSlider();

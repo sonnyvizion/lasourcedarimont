@@ -6,6 +6,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import { initBookingRequest } from "./booking-request.js";
+import { client, urlFor } from "./sanity.js";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -119,6 +120,104 @@ const waitForHeroMediaReady = () =>
   });
 
 const heroMediaGate = waitForHeroMediaReady();
+
+const renderPortableText = (blocks) => {
+  if (!blocks?.length) return "";
+  return blocks
+    .map((block) => {
+      if (block._type !== "block") return "";
+      return (block.children || [])
+        .map((span) => {
+          let text = span.text || "";
+          const marks = span.marks || [];
+          if (marks.includes("strong") && marks.includes("em")) return `<strong><em>${text}</em></strong>`;
+          if (marks.includes("strong")) return `<strong>${text}</strong>`;
+          if (marks.includes("em")) return `<em>${text}</em>`;
+          return text;
+        })
+        .join("");
+    })
+    .join("<br />");
+};
+
+const renderTemoignage = (t) => {
+  const stars = "★".repeat(t.rating) + "☆".repeat(5 - t.rating);
+  return `<article class="testimonial-card">
+    <div class="testimonial-meta">${t.stayType || ""}</div>
+    <strong>${t.author}</strong>
+    <p>"${t.quote}"</p>
+    <div class="testimonial-stars" aria-label="${t.rating} sur 5">${stars}</div>
+  </article>`;
+};
+
+async function fetchHomeContent() {
+  try {
+    const [home, temoignages] = await Promise.all([
+      client.fetch(`*[_type == "homePage"][0]`),
+      client.fetch(`*[_type == "temoignage"] | order(order asc)`),
+    ]);
+
+    if (home?.heroLines?.length) {
+      const split = document.querySelector(".hero-split");
+      if (split) split.innerHTML = home.heroLines.map((l) => `<span class="hero-line">${l}</span>`).join("");
+    }
+    if (home?.heroNote) {
+      const note = document.querySelector(".hero-note");
+      if (note) note.textContent = home.heroNote;
+    }
+    if (home?.heroImage) {
+      const img = document.querySelector(".hero-image img");
+      if (img) img.src = urlFor(home.heroImage).width(1920).url();
+    }
+    if (home?.heroImageMobile) {
+      const src = document.querySelector(".hero-image source");
+      if (src) src.srcset = urlFor(home.heroImageMobile).width(980).url();
+    }
+    if (home?.introLabel) {
+      const el = document.querySelector("[data-home-intro-label]");
+      if (el) el.textContent = home.introLabel;
+    }
+    if (home?.introText) {
+      const el = document.querySelector("[data-home-intro-text]");
+      if (el) el.innerHTML = renderPortableText(home.introText);
+    }
+    if (home?.galleryImages?.length) {
+      const track = document.querySelector("[data-home-gallery]");
+      if (track) {
+        track.innerHTML = home.galleryImages
+          .map((img) => `<div class="card-photo" style="background-image: url('${urlFor(img).width(1200).url()}')"></div>`)
+          .join("");
+      }
+    }
+    if (home?.featuresLabel) {
+      const el = document.querySelector("[data-home-features-label]");
+      if (el) el.textContent = home.featuresLabel;
+    }
+    if (home?.featuresIntro) {
+      const el = document.querySelector("[data-home-features-intro]");
+      if (el) el.innerHTML = renderPortableText(home.featuresIntro);
+    }
+    if (home?.featureCards?.length) {
+      document.querySelectorAll("[data-home-feature]").forEach((card) => {
+        const i = Number(card.dataset.homeFeature);
+        const f = home.featureCards[i];
+        if (!f) return;
+        const h3 = card.querySelector("h3");
+        const p = card.querySelector("p");
+        if (h3 && f.title) h3.textContent = f.title;
+        if (p && f.description) p.textContent = f.description;
+      });
+    }
+    if (temoignages?.length) {
+      const track = document.querySelector(".testimonials-track");
+      if (track) track.innerHTML = temoignages.map(renderTemoignage).join("");
+    }
+  } catch (err) {
+    console.error("Erreur Sanity home:", err);
+  }
+}
+
+const homeContentGate = fetchHomeContent();
 
 const formatDateFr = (raw) => {
   if (!raw) return "";
@@ -535,7 +634,7 @@ if (loaderEl) {
     };
 
     let lottieInstance = null;
-    heroMediaGate.then(() => {
+    Promise.all([heroMediaGate, homeContentGate]).then(() => {
       mediaReady = true;
       tryCloseLoader();
     });
@@ -572,7 +671,7 @@ if (loaderEl) {
     }, maxVisibleMs);
   } else {
     loaderEl.remove();
-    heroMediaGate.then(resolveIntroGate);
+    Promise.all([heroMediaGate, homeContentGate]).then(resolveIntroGate);
   }
 } else {
   heroMediaGate.then(resolveIntroGate);
@@ -1347,6 +1446,25 @@ if (!prefersReducedMotion) {
         gsap.set([chambresTitle, ...chambresBody], { opacity: cross });
       }
     });
+
+    // Parallax sur la dernière frame après dépingage (desktop uniquement)
+    if (!lodgingsIsMobile && lodgingsChambresVideo) {
+      gsap.fromTo(
+        lodgingsChambresVideo,
+        { y: 0 },
+        {
+          y: () => window.innerHeight * 0.18,
+          ease: "none",
+          scrollTrigger: {
+            trigger: lodgingsShowcase,
+            start: "bottom 70%",
+            end: "bottom top",
+            scrub: true,
+            invalidateOnRefresh: true,
+          },
+        }
+      );
+    }
   }
 
   // Group parallax: all cards move together (desktop only)

@@ -4,7 +4,11 @@ import "./home.css";
 import "./restauration.css";
 import "./nav-lang-globe.js";
 import { initBookingRequest } from "./booking-request.js";
+import { initTestimonialsSlider } from "./testimonials.js";
 import { client, urlFor } from "./sanity.js";
+
+const BASE_URL = import.meta.env.BASE_URL || "/";
+const assetUrl = (path) => `${BASE_URL}${path.replace(/^\/+/, "")}`;
 
 const yearEl = document.querySelector("[data-year]");
 if (yearEl) yearEl.textContent = new Date().getFullYear();
@@ -90,9 +94,14 @@ if (revealEls.length) {
 
 // ─── Sanity content ───────────────────────────────────────────────────────────
 
-const renderMenuFeatured = (f) => `
+const renderMenuFeatured = (f) => {
+  const mediaHtml = f.image
+    ? `<div class="menu-featured-media"><img src="${urlFor(f.image).width(900).url()}" alt="${f.name}" /></div>`
+    : `<div class="menu-featured-media menu-featured-media--illu"><img src="${assetUrl("/img/illustrations/lapin_BEIGE.png")}" alt="" aria-hidden="true" /></div>`;
+
+  return `
   <article class="menu-featured-card">
-    ${f.image ? `<div class="menu-featured-media"><img src="${urlFor(f.image).width(800).url()}" alt="${f.name}" /></div>` : ""}
+    ${mediaHtml}
     <div class="menu-featured-content">
       ${f.badge ? `<div class="menu-badge">${f.badge}</div>` : ""}
       <h2>${f.name}</h2>
@@ -100,39 +109,50 @@ const renderMenuFeatured = (f) => `
       ${f.plats?.length ? `<ul class="menu-lines">${f.plats.map((p) => `<li>${p}</li>`).join("")}</ul>` : ""}
       <div class="menu-featured-footer">
         ${f.prix ? `<span class="menu-price">${f.prix}</span>` : ""}
-        <a class="btn menu-btn" data-booking-request-trigger href="#">Réserver ce menu</a>
+        <a class="btn menu-btn" data-booking-request-trigger href="#">Réserver</a>
       </div>
     </div>
   </article>`;
+};
 
 const renderFormule = (f) => `
   <article class="menu-card">
-    ${f.image ? `<img src="${urlFor(f.image).width(600).url()}" alt="${f.name}" loading="lazy" />` : ""}
     <div class="menu-card-body">
+      ${f.badge ? `<div class="menu-badge">${f.badge}</div>` : ""}
       <h3>${f.name}</h3>
-      ${f.description ? `<p>${f.description}</p>` : ""}
-      ${f.prix ? `<span class="menu-price">${f.prix}</span>` : ""}
+      ${f.service ? `<p class="menu-service">${f.service}</p>` : ""}
+      ${f.plats?.length ? `<ul class="menu-items-list">${f.plats.map((p) => `<li>${p}</li>`).join("")}</ul>` : ""}
+      ${f.prix ? `<div class="menu-card-footer"><span class="menu-price">${f.prix}</span></div>` : ""}
     </div>
   </article>`;
 
 async function initSanityContent() {
-  const featuredWrap = document.querySelector(".restauration-featured .content-wrap");
-  const grid = document.querySelector(".menu-grid");
+  const dejeunerFeaturedWrap = document.querySelector(".dejeuners-featured-wrap");
+  const dejeunerGrid = document.querySelector(".dejeuners-grid");
+  const repasGrid = document.querySelector(".repas-grid");
 
-  if (featuredWrap) featuredWrap.innerHTML = "";
-  if (grid) grid.innerHTML = "";
+  if (dejeunerFeaturedWrap) dejeunerFeaturedWrap.innerHTML = "";
+  if (dejeunerGrid) dejeunerGrid.innerHTML = "";
+  if (repasGrid) repasGrid.innerHTML = "";
 
   try {
     const formules = await client.fetch(`*[_type == "formule"] | order(order asc)`);
 
-    const featured = formules.find((f) => f.type === "featured");
-    const standards = formules.filter((f) => f.type === "standard");
+    const dejeuners = formules.filter((f) => f.categorie === "petitDejeuner");
+    const repas = formules.filter((f) => f.categorie === "repas");
 
-    if (featuredWrap && featured) featuredWrap.innerHTML = renderMenuFeatured(featured);
-    if (grid) grid.innerHTML = standards.map(renderFormule).join("");
+    const dejeunerFeatured = dejeuners.find((f) => f.type === "featured");
+    const dejeunerStandards = dejeuners.filter((f) => f.type !== "featured");
+
+    if (dejeunerGrid) dejeunerGrid.innerHTML = dejeunerStandards.map(renderFormule).join("");
+    if (dejeunerFeaturedWrap && dejeunerFeatured) {
+      dejeunerFeaturedWrap.innerHTML = renderMenuFeatured(dejeunerFeatured);
+    }
+    if (repasGrid) repasGrid.innerHTML = repas.map(renderFormule).join("");
   } catch (err) {
     console.error("Erreur Sanity:", err);
   }
 }
 
 initSanityContent();
+initTestimonialsSlider();
