@@ -4,6 +4,7 @@ import "./home.css";
 import "./la-region.css";
 import "./nav-lang-globe.js";
 import { initBookingRequest } from "./booking-request.js";
+import { client, urlFor } from "./sanity.js";
 
 const BASE_URL = import.meta.env.BASE_URL || "/";
 const assetUrl = (path) => `${BASE_URL}${path.replace(/^\/+/, "")}`;
@@ -97,119 +98,7 @@ if (revealEls.length) {
 }
 
 const gite = { name: "Le gîte", coords: [6.06545, 50.42131] };
-const spots = [
-  {
-    name: "Circuit de Spa-Francorchamps",
-    coords: [5.9695, 50.4357],
-    activityType: "outdoor",
-    cat: "Sport",
-    img: assetUrl("/img/region/spa_card.webp"),
-    badge: assetUrl("/img/region/"),
-    location: "Francorchamps",
-    desc: "Circuit mythique, paddocks, événements auto et sensations fortes au cœur des Ardennes.",
-    address: "Route du Circuit 55, 4970 Stavelot, Belgique",
-    site: "https://www.spa-francorchamps.be"
-  },
-  {
-    name: "Musée de la Ville d’eaux (Spa)",
-    coords: [5.85753, 50.49173],
-    activityType: "indoor",
-    cat: "Culture",
-    img: assetUrl("/img/region/villedeaux_card.webp"),
-    location: "Spa",
-    desc: "Un parcours culturel autour de l’histoire thermale et du patrimoine de Spa.",
-    address: "Avenue Reine Astrid 77B, 4900 Spa, Belgique",
-    site: ""
-  },
-  {
-    name: "Château de Reinhardstein",
-    coords: [6.1024676, 50.4527748],
-    activityType: "outdoor",
-    cat: "Patrimoine",
-    img: assetUrl("/img/region/reinhardstein_card.webp"),
-    location: "Ovifat",
-    desc: "Château emblématique des Hautes-Fagnes, visites et panoramas naturels.",
-    address: "Chemin du Cheneux 50, 4950 Waimes, Belgique",
-    site: ""
-  },
-  {
-    name: "Abbaye de Stavelot",
-    coords: [5.9315672, 50.3934194],
-    activityType: "indoor",
-    cat: "Patrimoine",
-    img: assetUrl("/img/region/abbaye_card.webp"),
-    location: "Stavelot",
-    desc: "Complexe historique avec musées, expositions et architecture remarquable.",
-    address: "Cour de l'Abbaye 1, 4970 Stavelot, Belgique",
-    site: "https://www.abbayedestavelot.be"
-  },
-  {
-    name: "Stavelot (centre)",
-    coords: [5.9304413, 50.3940981],
-    activityType: "outdoor",
-    cat: "Ville",
-    img: assetUrl("/img/region/stavelot_card.webp"),
-    location: "Stavelot",
-    desc: "Centre vivant avec commerces, terrasses et ambiance ardennaise conviviale.",
-    address: "Place Saint-Remacle, 4970 Stavelot, Belgique",
-    site: ""
-  },
-  {
-    name: "Lac de Bütgenbach",
-    coords: [6.228, 50.427],
-    activityType: "outdoor",
-    cat: "Nature",
-    img: assetUrl("/img/region/lac_card.webp"),
-    location: "Bütgenbach",
-    desc: "Balades, sports nautiques et détente en bord de lac dans un cadre ouvert.",
-    address: "Seestraße, 4750 Bütgenbach, Belgique",
-    site: ""
-  },
-  {
-    name: "Thermes de Spa",
-    coords: [5.8640616, 50.4942814],
-    activityType: "indoor",
-    cat: "Wellness",
-    img: assetUrl("/img/region/thermesspa_card.webp"),
-    location: "Spa",
-    desc: "Bains, saunas et soins bien-être dans un établissement thermal de référence.",
-    address: "Colline d'Annette et Lubin, 4900 Spa, Belgique",
-    site: "https://www.thermesdespa.com"
-  },
-  {
-    name: "Grottes de Remouchamps",
-    coords: [5.712157, 50.4801118],
-    activityType: "indoor",
-    cat: "Nature",
-    img: assetUrl("/img/region/grotte_card.webp"),
-    location: "Remouchamps",
-    desc: "Visite souterraine spectaculaire, avec parcours guidé et rivière intérieure.",
-    address: "Rue de Louveigne 3, 4920 Aywaille, Belgique",
-    site: ""
-  },
-  {
-    name: "Monde Sauvage (Aywaille)",
-    coords: [5.741914, 50.502887],
-    activityType: "outdoor",
-    cat: "Famille",
-    img: assetUrl("/img/region/mondesauvage_card.webp"),
-    location: "Aywaille",
-    desc: "Parc animalier idéal en famille, entre safari, promenade et activités.",
-    address: "Fange de Deigné 3, 4920 Aywaille, Belgique",
-    site: "https://www.mondesauvage.be"
-  },
-  {
-    name: "Parc Naturel des Hautes-Fagnes",
-    coords: [6.0753965, 50.5111275],
-    activityType: "outdoor",
-    cat: "Nature",
-    img: assetUrl("/img/region/parcnat_card.webp"),
-    location: "Hautes-Fagnes",
-    desc: "Réserve naturelle unique pour randonnées, paysages de landes et points de vue.",
-    address: "Route de Botrange 131, 4950 Waimes, Belgique",
-    site: ""
-  }
-];
+let spots = [];
 
 const toRad = (deg) => (deg * Math.PI) / 180;
 const distanceKmBetween = (a, b) => {
@@ -288,7 +177,26 @@ const renderSpotsList = (filter = "outdoor") => {
 };
 
 let activeFilter = "outdoor";
-renderSpotsList(activeFilter);
+
+// Fetch des lieux depuis Sanity
+client.fetch(`*[_type == "lieuRegion"] | order(order asc)`).then((data) => {
+  spots = data.map((s) => ({
+    name: s.name,
+    activityType: s.activityType,
+    cat: s.cat || "",
+    location: s.location || "",
+    desc: s.desc || "",
+    address: s.address || "",
+    site: s.site || "",
+    coords: s.coords ? [s.coords.lng, s.coords.lat] : [0, 0],
+    img: s.image ? urlFor(s.image).width(600).url() : "",
+  }));
+  renderSpotsList(activeFilter);
+  initMap();
+}).catch((err) => {
+  console.error("Erreur Sanity lieux:", err);
+  renderSpotsList(activeFilter);
+});
 
 const activityFilterButtons = document.querySelectorAll("[data-activity-filter]");
 const activitiesViewport = document.querySelector(".region-activities-viewport");
@@ -390,6 +298,7 @@ if (activitiesViewport) {
   }
 }
 
+const initMap = () => {
 const mapRoot = document.querySelector("#region-map");
 if (mapRoot && window.mapboxgl) {
   const mapbox = window.mapboxgl;
@@ -537,6 +446,7 @@ if (mapRoot && window.mapboxgl) {
     }
   }
 }
+}; // fin initMap
 
 const testimonialsSlider = document.querySelector(".testimonials-slider");
 const testimonialsTrack = document.querySelector(".testimonials-track");

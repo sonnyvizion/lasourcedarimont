@@ -478,6 +478,7 @@
   width: 54px;
   height: 54px;
   object-fit: contain;
+  filter: brightness(0) invert(1) sepia(0.15);
 }
 
 .menu-open .mobile-menu {

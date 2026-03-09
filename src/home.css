@@ -1440,8 +1440,9 @@ body.is-loading {
 
 .footer-social img {
   width: 55px;
-  height:55px;
+  height: 55px;
   display: block;
+  filter: brightness(0) invert(1) sepia(0.15);
 }
 
 .footer-bottom {
@@ -1587,8 +1588,8 @@ body.is-loading {
     position: relative;
     top: auto;
     z-index: 1;
-    height: 100vh;
-    height: 100svh;
+    height: 88vh;
+    height: 88svh;
     min-height: 0;
     padding-bottom: 0;
   }
@@ -1710,7 +1711,13 @@ body.is-loading {
   }
 
   .hero-image {
-    display: block;
+    display: none;
+  }
+
+  .hero-media {
+    background-image: url('/img/hero_mobile.webp');
+    background-size: cover;
+    background-position: 58% 8%;
   }
 
   .hero-tree {

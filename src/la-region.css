@@ -1,5 +1,6 @@
 .region-page-main {
   margin-top: 0;
+  padding-top: 110px;
   padding-bottom: 100px;
 }
 
@@ -27,9 +28,15 @@
   background: var(--color-forest);
 }
 
+.region-intro {
+  padding-top: 120px;
+  padding-bottom: 80px;
+  z-index: 2;
+}
+
 .region-intro .intro-text {
   max-width: 900px;
-  margin-bottom: 80px;
+  margin-bottom: 40px;
 }
 
 .region-intro .content-wrap {
@@ -47,22 +54,24 @@
 }
 
 .region-map-section {
-  padding-top: 10px;
+  padding-top: 60px;
   background: var(--color-beige);
 }
 
 .region-list-section {
-  padding-top: 24px;
+  padding-top: 0;
+  padding-bottom: 60px;
   background: var(--color-beige);
 }
 
 .region-list-section .intro-text {
-  margin-bottom: 28px;
+  margin-bottom: 32px;
 }
 
 .region-activities-switch {
 
   margin-bottom: 74px;
+  margin-top: 14px;
   display: flex;
   border: 2px solid var(--color-forest);
   border-radius: 999px;
@@ -129,6 +138,7 @@
   aspect-ratio: 16 / 9;
   background-size: cover;
   background-position: center;
+  background-color: #2a5843;
   border-radius: 16px;
   overflow: hidden;
 }
@@ -519,8 +529,8 @@
   }
 
   .region-intro-frog {
-    width: clamp(78px, 60vw, 120px);
-    bottom: -148px;
+    width: clamp(74px, 14vw, 80px);
+    bottom: -100px;
     right: 4vw;
   }
 
