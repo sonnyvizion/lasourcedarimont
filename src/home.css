@@ -2016,7 +2016,7 @@ body.is-loading {
   font-size: clamp(2rem, 4vw, 3.5rem);
   line-height: 1.1;
   margin: 16px 0 28px;
-  font-family: var(--font-display);
+  font-family: var(--font-heading);
 }
 
 .groups-lead {
@@ -2025,6 +2025,12 @@ body.is-loading {
   opacity: 0.78;
   max-width: 480px;
   margin-bottom: 48px;
+}
+
+.groups-cta {
+  display: block;
+  width: fit-content;
+  margin: 50px auto 0;
 }
 
 .groups-lead strong {
@@ -2126,6 +2132,7 @@ body.is-loading {
 
   .groups-lead {
     max-width: 100%;
+    text-align: center;
   }
 }
 
