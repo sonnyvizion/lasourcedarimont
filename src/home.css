@@ -1980,3 +1980,136 @@ body.is-loading {
 
 
 }
+
+/* ─── Groupes & Séminaires ──────────────────────────────────────────────── */
+
+.section-groups {
+  background: var(--color-ink);
+  color: var(--color-beige);
+  overflow: hidden;
+}
+
+.groups-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  padding-top: 120px;
+  padding-bottom: 120px;
+}
+
+.groups-label {
+  color: var(--color-orange);
+  opacity: 1;
+}
+
+.groups-title {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: 1.1;
+  margin: 16px 0 28px;
+  font-family: var(--font-display);
+}
+
+.groups-lead {
+  font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+  line-height: 1.75;
+  opacity: 0.78;
+  max-width: 480px;
+  margin-bottom: 48px;
+}
+
+.groups-lead strong {
+  color: var(--color-orange);
+  opacity: 1;
+  font-weight: 700;
+}
+
+.groups-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 52px;
+  display: flex;
+  gap: 40px;
+}
+
+.groups-features li {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.groups-feat-number {
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-family: var(--font-display);
+  line-height: 1;
+  color: var(--color-orange);
+}
+
+.groups-feat-label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.55;
+  font-weight: 600;
+}
+
+.groups-visuals {
+  position: relative;
+  height: 580px;
+}
+
+.groups-img {
+  position: absolute;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+}
+
+.groups-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.groups-img--main {
+  top: 0;
+  left: 0;
+  width: 72%;
+  height: 75%;
+}
+
+.groups-img--secondary {
+  bottom: 0;
+  right: 0;
+  width: 58%;
+  height: 55%;
+  border: 3px solid var(--color-ink);
+}
+
+@media (max-width: 900px) {
+  .groups-inner {
+    grid-template-columns: 1fr;
+    gap: 56px;
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+
+  .groups-visuals {
+    height: 420px;
+  }
+
+  .groups-lead {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 540px) {
+  .groups-features {
+    gap: 24px;
+  }
+
+  .groups-visuals {
+    height: 300px;
+  }
+}
