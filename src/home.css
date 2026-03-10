@@ -1989,6 +1989,15 @@ body.is-loading {
   overflow: hidden;
 }
 
+.section-groups h2,
+.section-groups h3,
+.section-groups p,
+.section-groups span,
+.section-groups strong,
+.section-groups li {
+  color: var(--color-beige);
+}
+
 .groups-inner {
   display: grid;
   grid-template-columns: 1fr 1fr;
