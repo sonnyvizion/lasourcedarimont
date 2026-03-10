@@ -2017,6 +2017,7 @@ body.is-loading {
   line-height: 1.1;
   margin: 16px 0 28px;
   font-family: var(--font-heading);
+  text-align: left;
 }
 
 .groups-lead {
@@ -2030,7 +2031,7 @@ body.is-loading {
 .groups-cta {
   display: block;
   width: fit-content;
-  margin: 50px auto 0;
+  margin: 64px 0 0;
 }
 
 .groups-lead strong {
@@ -2042,9 +2043,13 @@ body.is-loading {
 .groups-features {
   list-style: none;
   padding: 0;
-  margin: auto 25px;
+  margin: 0 0 0;
   display: flex;
   gap: 40px;
+}
+
+.groups-features li {
+  align-items: flex-start;
 }
 
 .groups-features li {
@@ -2118,12 +2123,20 @@ body.is-loading {
     text-align: center;
   }
 
+  .groups-title {
+    text-align: center;
+  }
+
   .groups-features {
     justify-content: center;
   }
 
+  .groups-features li {
+    align-items: center;
+  }
+
   .groups-cta {
-    align-self: center;
+    margin: 64px auto 0;
   }
 
   .groups-visuals {
