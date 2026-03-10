@@ -317,6 +317,50 @@
   transition: none;
 }
 
+/* Contact & Mentions légales — nav solide dès le chargement */
+.contact-page .site-header,
+.legal-page .site-header {
+  background: rgba(246, 241, 230, 0.95);
+  color: var(--color-forest);
+  border-bottom: 1px solid rgba(24, 53, 40, 0.15);
+}
+
+.contact-page .logo-mark,
+.legal-page .logo-mark {
+  background-color: var(--color-forest);
+}
+
+.contact-page .nav-links,
+.legal-page .nav-links {
+  color: var(--color-forest);
+}
+
+.contact-page .nav-right,
+.legal-page .nav-right {
+  color: var(--color-forest);
+  transition: color 0.4s ease;
+  transform: translateX(-138px);
+}
+
+.contact-page .nav-cta,
+.legal-page .nav-cta {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(-50%) translateX(0);
+  transition: none;
+}
+
+.contact-page .nav-lang-menu,
+.legal-page .nav-lang-menu {
+  background: rgba(246, 241, 230, 0.96);
+  border: 1px solid rgba(24, 53, 40, 0.2);
+}
+
+.contact-page .nav-lang-menu a,
+.legal-page .nav-lang-menu a {
+  color: var(--color-forest);
+}
+
 .menu-open .nav-cta {
   opacity: 0;
   pointer-events: none;
