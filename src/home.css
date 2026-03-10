@@ -2104,6 +2104,21 @@ body.is-loading {
     padding-bottom: 80px;
   }
 
+  .groups-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .groups-features {
+    justify-content: center;
+  }
+
+  .groups-cta {
+    align-self: center;
+  }
+
   .groups-visuals {
     height: 420px;
   }
