@@ -12,7 +12,8 @@ export default defineConfig({
         nosPartenaires: resolve(__dirname, "nos-partenaires.html"),
         restauration: resolve(__dirname, "restauration.html"),
         contact: resolve(__dirname, "contact.html"),
-        mentionsLegales: resolve(__dirname, "mentions-legales.html")
+        mentionsLegales: resolve(__dirname, "mentions-legales.html"),
+        confidentialiteCookies: resolve(__dirname, "confidentialite-cookies.html")
       }
     }
   },

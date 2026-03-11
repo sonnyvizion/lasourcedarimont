@@ -1987,6 +1987,16 @@ body.is-loading {
   background: var(--color-forest);
   color: var(--color-beige);
   overflow: hidden;
+  padding-bottom: 0;
+}
+
+.section-groups + .section.center {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.section-groups + .section.center .banner {
+  margin-top: 0;
 }
 
 .section-groups h2,
@@ -2004,7 +2014,7 @@ body.is-loading {
   gap: 80px;
   align-items: center;
   padding-top: 120px;
-  padding-bottom: 120px;
+  padding-bottom: 150px;
 }
 
 .groups-label {
