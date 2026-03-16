@@ -4,7 +4,8 @@ import "./home.css";
 import "./gites-chambres.css";
 import "./nav-lang-globe.js";
 import { initBookingRequest } from "./booking-request.js";
-import { client, urlFor } from "./sanity.js";
+import { fetchLocalizedCollection, urlFor } from "./sanity.js";
+import { t } from "./static-translations.js";
 
 const BASE_URL = import.meta.env.BASE_URL || "/";
 const assetUrl = (path) => `${BASE_URL}${path.replace(/^\/+/, "")}`;
@@ -151,8 +152,8 @@ const ICONS = {
 };
 
 const renderCapacite = (min, max) => {
-  if (min === max) return `<strong>${max}</strong> personnes`;
-  return `De <strong>${min} à ${max}</strong> personnes`;
+  if (min === max) return t("common.ui.maxPeople", { max });
+  return t("common.ui.fromToPeople", { min, max });
 };
 
 const renderLogement = (logement, isReverse) => {
@@ -169,9 +170,9 @@ const renderLogement = (logement, isReverse) => {
 
   const mediaHtml = images.length > 0
     ? `<div class="stay-media" data-carousel>
-        <button class="stay-arrow stay-arrow-prev" type="button" aria-label="Image précédente">‹</button>
+        <button class="stay-arrow stay-arrow-prev" type="button" aria-label="${t("common.ui.previousImage")}">‹</button>
         <div class="stay-track">${imagesHtml}</div>
-        <button class="stay-arrow stay-arrow-next" type="button" aria-label="Image suivante">›</button>
+        <button class="stay-arrow stay-arrow-next" type="button" aria-label="${t("common.ui.nextImage")}">›</button>
       </div>`
     : "";
 
@@ -183,23 +184,23 @@ const renderLogement = (logement, isReverse) => {
         ${description ? `<p class="stay-description">${description}</p>` : ""}
         <div class="stay-meta">
           <div class="stay-meta-title">${renderCapacite(capaciteMin, capaciteMax)}</div>
-          ${iconsHtml ? `<div class="stay-meta-label">Équipements</div><div class="stay-icons">${iconsHtml}</div>` : ""}
+          ${iconsHtml ? `<div class="stay-meta-label">${t("common.ui.amenities")}</div><div class="stay-icons">${iconsHtml}</div>` : ""}
           ${extras ? `<p class="stay-meta-extra">${extras}</p>` : ""}
         </div>
-        <a class="btn stay-cta" data-booking-request-trigger href="#">Je réserve</a>
+        <a class="btn stay-cta" data-booking-request-trigger href="#">${t("common.nav.book")}</a>
       </div>
       ${mediaHtml}
     </article>`;
 };
 
-const renderTemoignage = (t) => {
-  const stars = "★".repeat(t.rating) + "☆".repeat(5 - t.rating);
+const renderTemoignage = (testimonial) => {
+  const stars = "★".repeat(testimonial.rating) + "☆".repeat(5 - testimonial.rating);
   return `
     <article class="testimonial-card">
-      <div class="testimonial-meta">${t.stayType || ""}</div>
-      <strong>${t.author}</strong>
-      <p>"${t.quote}"</p>
-      <div class="testimonial-stars" aria-label="${t.rating} sur 5">${stars}</div>
+      <div class="testimonial-meta">${testimonial.stayType || ""}</div>
+      <strong>${testimonial.author}</strong>
+      <p>"${testimonial.quote}"</p>
+      <div class="testimonial-stars" aria-label="${t("common.testimonials.rating", { rating: testimonial.rating })}">${stars}</div>
     </article>`;
 };
 
@@ -214,8 +215,8 @@ async function initSanityContent() {
 
   try {
     const [logements, temoignages] = await Promise.all([
-      client.fetch(`*[_type == "logement"] | order(order asc)`),
-      client.fetch(`*[_type == "temoignage"]`),
+      fetchLocalizedCollection("logement", { orderBy: "order asc" }),
+      fetchLocalizedCollection("temoignage", { orderBy: "order asc" }),
     ]);
 
     const gites = logements.filter((l) => l.type === "gite");

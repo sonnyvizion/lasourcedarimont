@@ -5,7 +5,8 @@ import "./nos-partenaires.css";
 import "./nav-lang-globe.js";
 import { initBookingRequest } from "./booking-request.js";
 import { initTestimonialsSlider } from "./testimonials.js";
-import { client, urlFor } from "./sanity.js";
+import { fetchLocalizedCollection, urlFor } from "./sanity.js";
+import { t } from "./static-translations.js";
 
 const yearEl = document.querySelector("[data-year]");
 if (yearEl) yearEl.textContent = new Date().getFullYear();
@@ -84,25 +85,25 @@ if (revealEls.length) {
 // ─── Sanity content ───────────────────────────────────────────────────────────
 
 const CATEGORIE_LABELS = {
-  bienEtre:      "Bien-être",
+  bienEtre:      t("partners.categoryWellness"),
   outdoor:       "Outdoor",
-  restauration:  "Restauration",
-  famille:       "Famille",
-  culture:       "Culture",
-  autre:         "Autre",
+  restauration:  t("partners.categoryDining"),
+  famille:       t("partners.categoryFamily"),
+  culture:       t("partners.categoryCulture"),
+  autre:         t("partners.categoryOther"),
 };
 
 const renderPartenaireVedette = (p) => `
   <article class="partner-featured-card">
     ${p.image ? `<div class="partner-featured-media"><img src="${urlFor(p.image).width(800).url()}" alt="${p.name}" /></div>` : ""}
     <div class="partner-featured-content">
-      <div class="partner-badge">Partenaire à la une</div>
+      <div class="partner-badge">${t("partners.featuredBadge")}</div>
       <h2>${p.name}</h2>
       ${p.distance ? `<p class="partner-distance">${p.distance}</p>` : ""}
       <p>${p.description || ""}</p>
       <div class="partner-offer-row">
         ${p.offre ? `<span class="partner-offer">${p.offre}</span>` : ""}
-        ${p.siteWeb ? `<a class="btn partner-btn" href="${p.siteWeb}" target="_blank" rel="noopener">Voir l'offre</a>` : `<a class="btn partner-btn" href="#">Voir l'offre</a>`}
+        ${p.siteWeb ? `<a class="btn partner-btn" href="${p.siteWeb}" target="_blank" rel="noopener">${t("partners.viewOffer")}</a>` : `<a class="btn partner-btn" href="#">${t("partners.viewOffer")}</a>`}
       </div>
     </div>
   </article>`;
@@ -129,7 +130,7 @@ async function initSanityContent() {
   if (grid) grid.innerHTML = "";
 
   try {
-    const partenaires = await client.fetch(`*[_type == "partenaire"] | order(order asc)`);
+    const partenaires = await fetchLocalizedCollection("partenaire", { orderBy: "order asc" });
 
     const featured = partenaires.find((p) => p.isFeatured);
     const others = partenaires.filter((p) => !p.isFeatured);

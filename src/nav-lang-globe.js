@@ -1,6 +1,58 @@
+import {
+  LANGUAGE_LABELS,
+  SUPPORTED_LANGUAGES,
+  buildLanguageUrl,
+  getCurrentLanguage,
+  initLanguageDocumentState,
+  setCurrentLanguage,
+} from "./i18n.js";
+import { applyStaticTranslations } from "./static-translations.js";
+
 const BASE_URL = import.meta.env.BASE_URL || "/";
 const GREY_GLOBE_PATH = `${BASE_URL}img/Grey Globe.json`;
 const GREEN_GLOBE_PATH = `${BASE_URL}img/Green Globe.json`;
+
+const injectMobileLangMenu = () => {
+  const mobileMenuInner = document.querySelector(".mobile-menu-inner");
+  const desktopLang = document.querySelector(".site-header .nav-lang");
+  if (!mobileMenuInner || !desktopLang) return;
+  if (mobileMenuInner.querySelector(".mobile-nav-lang")) return;
+
+  const mobileLang = desktopLang.cloneNode(true);
+  mobileLang.classList.add("mobile-nav-lang");
+  mobileLang.classList.remove("is-open");
+
+  const trigger = mobileLang.querySelector(".nav-lang-trigger");
+  if (trigger) {
+    trigger.setAttribute("aria-expanded", "false");
+  }
+
+  const socialBlock = mobileMenuInner.querySelector(".mobile-menu-social");
+  if (socialBlock) {
+    mobileMenuInner.insertBefore(mobileLang, socialBlock);
+    return;
+  }
+
+  mobileMenuInner.appendChild(mobileLang);
+};
+
+const applyLanguageLinks = () => {
+  const currentLanguage = setCurrentLanguage(getCurrentLanguage());
+
+  document.querySelectorAll(".nav-lang").forEach((block) => {
+    const currentEl = block.querySelector(".nav-lang-current");
+    if (currentEl) currentEl.textContent = LANGUAGE_LABELS[currentLanguage] || currentLanguage.toUpperCase();
+
+    const menu = block.querySelector(".nav-lang-menu");
+    if (!menu) return;
+
+    menu.innerHTML = SUPPORTED_LANGUAGES.map((language) => {
+      const isCurrent = language === currentLanguage;
+      const ariaCurrent = isCurrent ? ' aria-current="true"' : "";
+      return `<a href="${buildLanguageUrl(language)}" role="menuitem" lang="${language}"${ariaCurrent}>${LANGUAGE_LABELS[language] || language.toUpperCase()}</a>`;
+    }).join("");
+  });
+};
 
 const loadLottie = () =>
   new Promise((resolve) => {
@@ -81,6 +133,10 @@ const initNavLangGlobe = async () => {
   window.addEventListener("pageshow", updateGlobes);
 };
 
+initLanguageDocumentState();
+applyStaticTranslations();
+injectMobileLangMenu();
+applyLanguageLinks();
 initNavLangGlobe();
 
 const initNavLangMenu = () => {

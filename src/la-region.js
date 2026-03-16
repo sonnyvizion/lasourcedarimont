@@ -4,7 +4,8 @@ import "./home.css";
 import "./la-region.css";
 import "./nav-lang-globe.js";
 import { initBookingRequest } from "./booking-request.js";
-import { client, urlFor } from "./sanity.js";
+import { fetchLocalizedCollection, urlFor } from "./sanity.js";
+import { t } from "./static-translations.js";
 
 const BASE_URL = import.meta.env.BASE_URL || "/";
 const assetUrl = (path) => `${BASE_URL}${path.replace(/^\/+/, "")}`;
@@ -157,14 +158,14 @@ const renderSpotsList = (filter = "outdoor") => {
           <div class="region-activity-overlay">
             <h3 class="region-activity-title">${spot.name}</h3>
             <div class="region-activity-meta">${km} km · ${drive}</div>
-            <button class="region-activity-more" type="button" aria-expanded="false" aria-label="Afficher les détails de ${spot.name}">+</button>
+            <button class="region-activity-more" type="button" aria-expanded="false" aria-label="${t("common.ui.showDetails", { name: spot.name })}">+</button>
             <div class="region-activity-details" hidden>
               <p>${spot.desc}</p>
               <div class="region-activity-links">
-                <a class="region-spot-icon-link" href="${mapsUrl}" target="_blank" rel="noopener noreferrer" aria-label="Ouvrir ${spot.name} dans Google Maps">
+                <a class="region-spot-icon-link" href="${mapsUrl}" target="_blank" rel="noopener noreferrer" aria-label="${t("common.ui.openInGoogleMaps", { name: spot.name })}">
                   <img src="${assetUrl("/img/maps_icon.png")}" alt="" aria-hidden="true" />
                 </a>
-                <a class="region-spot-icon-link" href="${wazeUrl}" target="_blank" rel="noopener noreferrer" aria-label="Ouvrir ${spot.name} dans Waze">
+                <a class="region-spot-icon-link" href="${wazeUrl}" target="_blank" rel="noopener noreferrer" aria-label="${t("common.ui.openInWaze", { name: spot.name })}">
                   <img src="${assetUrl("/img/waze_icon.png")}" alt="" aria-hidden="true" />
                 </a>
               </div>
@@ -179,7 +180,7 @@ const renderSpotsList = (filter = "outdoor") => {
 let activeFilter = "outdoor";
 
 // Fetch des lieux depuis Sanity
-client.fetch(`*[_type == "lieuRegion"] | order(order asc)`).then((data) => {
+fetchLocalizedCollection("lieuRegion", { orderBy: "order asc" }).then((data) => {
   spots = data.map((s) => ({
     name: s.name,
     activityType: s.activityType,

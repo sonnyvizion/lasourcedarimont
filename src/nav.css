@@ -477,7 +477,8 @@
 }
 
 .mobile-menu-inner .menu-link,
-.mobile-menu-inner .mobile-menu-social {
+.mobile-menu-inner .mobile-menu-social,
+.mobile-menu-inner .mobile-nav-lang {
   justify-self: end;
 }
 
@@ -491,6 +492,10 @@
   justify-content: flex-end;
   gap: 16px;
   margin-top: 8px;
+}
+
+.mobile-nav-lang {
+  display: none;
 }
 
 .mobile-menu-cta {
@@ -556,6 +561,54 @@
   .nav-lang,
   .nav-cta {
     display: none;
+  }
+
+  .mobile-menu .mobile-nav-lang {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+    margin-top: 6px;
+    position: relative;
+  }
+
+  .mobile-menu .mobile-nav-lang .nav-lang-trigger {
+    gap: 6px;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--color-beige);
+  }
+
+  .mobile-menu .mobile-nav-lang .nav-lang-current {
+    font-size: 22px;
+  }
+
+  .mobile-menu .mobile-nav-lang .nav-lang-globe {
+    width: 44px;
+    height: 44px;
+    flex: 0 0 44px;
+  }
+
+  .mobile-menu .mobile-nav-lang .nav-lang-caret {
+    font-size: 14px;
+  }
+
+  .mobile-menu .mobile-nav-lang .nav-lang-menu {
+    top: calc(100% + 6px);
+    right: 0;
+    min-width: 96px;
+    padding: 10px 12px;
+    background: rgba(246, 241, 230, 0.12);
+    border-color: rgba(246, 241, 230, 0.28);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+
+  .mobile-menu .mobile-nav-lang .nav-lang-menu a {
+    color: var(--color-beige);
+    font-size: 14px;
+    letter-spacing: 0.08em;
   }
 
   .menu-open .mobile-menu-cta {

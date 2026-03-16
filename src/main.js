@@ -2,11 +2,12 @@ import "./style.css";
 import "./nav.css";
 import "./home.css";
 import "./nav-lang-globe.js";
+import { t } from "./static-translations.js";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import { initBookingRequest } from "./booking-request.js";
-import { client, urlFor } from "./sanity.js";
+import { fetchLocalizedCollection, fetchLocalizedSingleton, urlFor } from "./sanity.js";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -128,11 +129,12 @@ const renderPortableText = (blocks) => {
       if (block._type !== "block") return "";
       return (block.children || [])
         .map((span) => {
-          let text = span.text || "";
+          if (span._type === "break") return "<br />";
+          let text = (span.text || "").replace(/\n/g, "<br />");
           const marks = span.marks || [];
-          if (marks.includes("strong") && marks.includes("em")) return `<strong><em>${text}</em></strong>`;
+          if (marks.includes("strong") && marks.includes("em")) return `<strong><span class="semi-italic">${text}</span></strong>`;
           if (marks.includes("strong")) return `<strong>${text}</strong>`;
-          if (marks.includes("em")) return `<em>${text}</em>`;
+          if (marks.includes("em")) return `<span class="semi-italic">${text}</span>`;
           return text;
         })
         .join("");
@@ -140,21 +142,21 @@ const renderPortableText = (blocks) => {
     .join("<br />");
 };
 
-const renderTemoignage = (t) => {
-  const stars = "★".repeat(t.rating) + "☆".repeat(5 - t.rating);
+const renderTemoignage = (testimonial) => {
+  const stars = "★".repeat(testimonial.rating) + "☆".repeat(5 - testimonial.rating);
   return `<article class="testimonial-card">
-    <div class="testimonial-meta">${t.stayType || ""}</div>
-    <strong>${t.author}</strong>
-    <p>"${t.quote}"</p>
-    <div class="testimonial-stars" aria-label="${t.rating} sur 5">${stars}</div>
+    <div class="testimonial-meta">${testimonial.stayType || ""}</div>
+    <strong>${testimonial.author}</strong>
+    <p>"${testimonial.quote}"</p>
+    <div class="testimonial-stars" aria-label="${t("common.testimonials.rating", { rating: testimonial.rating })}">${stars}</div>
   </article>`;
 };
 
 async function fetchHomeContent() {
   try {
     const [home, temoignages] = await Promise.all([
-      client.fetch(`*[_type == "homePage"][0]`),
-      client.fetch(`*[_type == "temoignage"] | order(order asc)`),
+      fetchLocalizedSingleton("homePage"),
+      fetchLocalizedCollection("temoignage", { orderBy: "order asc" }),
     ]);
 
     if (home?.heroLines?.length) {
@@ -208,6 +210,107 @@ async function fetchHomeContent() {
         if (p && f.description) p.textContent = f.description;
       });
     }
+
+    // Hero CTA & scroll
+    if (home?.heroCta) {
+      const el = document.querySelector("[data-home-hero-cta]");
+      if (el) el.textContent = home.heroCta;
+    }
+    if (home?.scrollLabel) {
+      const el = document.querySelector("[data-home-scroll]");
+      if (el) el.textContent = home.scrollLabel;
+    }
+
+    // Lodgings section
+    if (home?.lodgingsLabel) {
+      const el = document.querySelector("[data-home-lodgings-label]");
+      if (el) el.textContent = home.lodgingsLabel;
+    }
+    if (home?.lodgingsIntro) {
+      const el = document.querySelector("[data-home-lodgings-intro]");
+      if (el) el.innerHTML = renderPortableText(home.lodgingsIntro);
+    }
+    if (home?.lodgingsGitesLabel) {
+      const el = document.querySelector("[data-home-lodgings-gites-label]");
+      if (el) el.textContent = home.lodgingsGitesLabel;
+    }
+    if (home?.lodgingsGitesTitle) {
+      const el = document.querySelector("[data-home-lodgings-gites-title]");
+      if (el) el.innerHTML = renderPortableText(home.lodgingsGitesTitle);
+    }
+    if (home?.lodgingsGitesCta) {
+      const el = document.querySelector("[data-home-lodgings-gites-cta]");
+      if (el) el.textContent = home.lodgingsGitesCta;
+    }
+    if (home?.lodgingsRoomsLabel) {
+      const el = document.querySelector("[data-home-lodgings-rooms-label]");
+      if (el) el.textContent = home.lodgingsRoomsLabel;
+    }
+    if (home?.lodgingsRoomsTitle) {
+      const el = document.querySelector("[data-home-lodgings-rooms-title]");
+      if (el) el.innerHTML = renderPortableText(home.lodgingsRoomsTitle);
+    }
+    if (home?.lodgingsRoomsCta) {
+      const el = document.querySelector("[data-home-lodgings-rooms-cta]");
+      if (el) el.textContent = home.lodgingsRoomsCta;
+    }
+
+    // Groups section
+    if (home?.groupsLabel) {
+      const el = document.querySelector("[data-home-groups-label]");
+      if (el) el.textContent = home.groupsLabel;
+    }
+    if (home?.groupsTitle) {
+      const el = document.querySelector("[data-home-groups-title]");
+      if (el) el.innerHTML = renderPortableText(home.groupsTitle);
+    }
+    if (home?.groupsLead) {
+      const el = document.querySelector("[data-home-groups-lead]");
+      if (el) el.innerHTML = renderPortableText(home.groupsLead);
+    }
+    if (home?.groupsStats) {
+      ["personnes", "hebergements", "nature"].forEach((key) => {
+        const stat = home.groupsStats[key];
+        if (!stat) return;
+        const numEl = document.querySelector(`[data-home-groups-stat-number="${key}"]`);
+        const labelEl = document.querySelector(`[data-home-groups-stat-label="${key}"]`);
+        if (numEl && stat.number) numEl.textContent = stat.number;
+        if (labelEl && stat.label) labelEl.textContent = stat.label;
+      });
+    }
+    if (home?.groupsCta) {
+      const el = document.querySelector("[data-home-groups-cta]");
+      if (el) el.textContent = home.groupsCta;
+    }
+
+    // Banner section
+    if (home?.bannerLabel) {
+      const el = document.querySelector("[data-home-banner-label]");
+      if (el) el.textContent = home.bannerLabel;
+    }
+    if (home?.bannerTitle) {
+      const el = document.querySelector("[data-home-banner-title]");
+      if (el) el.innerHTML = renderPortableText(home.bannerTitle);
+    }
+    if (home?.bannerCta) {
+      const el = document.querySelector("[data-home-banner-cta]");
+      if (el) el.textContent = home.bannerCta;
+    }
+
+    // Reviews section header
+    if (home?.reviewsLabel) {
+      const el = document.querySelector("[data-home-reviews-label]");
+      if (el) el.textContent = home.reviewsLabel;
+    }
+    if (home?.reviewsHeading) {
+      const el = document.querySelector("[data-home-reviews-heading]");
+      if (el) el.innerHTML = renderPortableText(home.reviewsHeading);
+    }
+    if (home?.reviewsCta) {
+      const el = document.querySelector("[data-home-reviews-cta]");
+      if (el) el.textContent = home.reviewsCta;
+    }
+
     if (temoignages?.length) {
       const track = document.querySelector(".testimonials-track");
       if (track) track.innerHTML = temoignages.map(renderTemoignage).join("");
@@ -242,11 +345,11 @@ if (bookingCheckinInput && bookingCheckoutInput && bookingCheckinLabel && bookin
 
   const refreshDateLabels = () => {
     bookingCheckinLabel.textContent = bookingCheckinInput.value
-      ? `Arrivée ${formatDateFr(bookingCheckinInput.value)}`
-      : "Date d’arrivée";
+      ? `${t("common.booking.checkin")} ${formatDateFr(bookingCheckinInput.value)}`
+      : t("common.booking.checkin");
     bookingCheckoutLabel.textContent = bookingCheckoutInput.value
-      ? `Départ ${formatDateFr(bookingCheckoutInput.value)}`
-      : "Date de départ";
+      ? `${t("common.booking.checkout")} ${formatDateFr(bookingCheckoutInput.value)}`
+      : t("common.booking.checkout");
   };
 
   bookingCheckinInput.addEventListener("change", () => {

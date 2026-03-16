@@ -5,7 +5,7 @@ import "./restauration.css";
 import "./nav-lang-globe.js";
 import { initBookingRequest } from "./booking-request.js";
 import { initTestimonialsSlider } from "./testimonials.js";
-import { client, urlFor } from "./sanity.js";
+import { fetchLocalizedCollection, urlFor } from "./sanity.js";
 
 const BASE_URL = import.meta.env.BASE_URL || "/";
 const assetUrl = (path) => `${BASE_URL}${path.replace(/^\/+/, "")}`;
@@ -136,7 +136,7 @@ async function initSanityContent() {
   if (repasGrid) repasGrid.innerHTML = "";
 
   try {
-    const formules = await client.fetch(`*[_type == "formule"] | order(order asc)`);
+    const formules = await fetchLocalizedCollection("formule", { orderBy: "order asc" });
 
     const dejeuners = formules.filter((f) => f.categorie === "petitDejeuner");
     const repas = formules.filter((f) => f.categorie === "repas");

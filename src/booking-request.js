@@ -1,3 +1,5 @@
+import { t } from "./static-translations.js";
+
 const MODAL_SELECTOR = "[data-booking-request-modal]";
 
 const formatDate = (value) => {
@@ -17,44 +19,44 @@ const ensureModal = () => {
     modal.innerHTML = `
       <div class="booking-request-backdrop" data-booking-request-close></div>
       <div class="booking-request-panel">
-        <button class="booking-request-close" type="button" aria-label="Fermer" data-booking-request-close>✕</button>
-        <h3>Demande de réservation</h3>
+        <button class="booking-request-close" type="button" aria-label="${t("common.booking.close")}" data-booking-request-close>✕</button>
+        <h3>${t("common.booking.requestTitle")}</h3>
         <form class="booking-request-form" data-booking-request-form>
           <div class="booking-request-grid">
             <label>
-              <span>Arrivée</span>
+              <span>${t("common.booking.checkin")}</span>
               <input type="date" data-request-booking="checkin" required />
             </label>
             <label>
-              <span>Départ</span>
+              <span>${t("common.booking.checkout")}</span>
               <input type="date" data-request-booking="checkout" required />
             </label>
             <label>
-              <span>Adultes</span>
+              <span>${t("common.booking.adults")}</span>
               <input type="number" min="1" max="12" step="1" data-request-booking="adults" required />
             </label>
             <label>
-              <span>Enfants</span>
+              <span>${t("common.booking.children")}</span>
               <input type="number" min="0" max="12" step="1" data-request-booking="children" required />
             </label>
             <label>
-              <span>Chambres</span>
+              <span>${t("common.booking.rooms")}</span>
               <input type="number" min="1" max="8" step="1" data-request-booking="rooms" required />
             </label>
           </div>
           <label>
-            <span>Nom</span>
+            <span>${t("common.booking.lastName")}</span>
             <input type="text" data-request-input="lastname" required />
           </label>
           <label>
-            <span>Prénom</span>
+            <span>${t("common.booking.firstName")}</span>
             <input type="text" data-request-input="firstname" required />
           </label>
           <label>
-            <span>Message (optionnel)</span>
+            <span>${t("common.booking.messageOptional")}</span>
             <textarea rows="4" data-request-input="message"></textarea>
           </label>
-          <button class="btn" type="submit">Envoyer l'email</button>
+          <button class="btn" type="submit">${t("common.booking.sendEmail")}</button>
         </form>
       </div>
     `;
@@ -149,22 +151,22 @@ export const initBookingRequest = ({
       rooms: refs.bookingInputs.rooms.value || ""
     };
     const lines = [
-      "Bonjour,",
+      t("common.booking.mailHello"),
       "",
-      "Je souhaite demander une réservation :",
-      `- Arrivée : ${formatDate(values.checkin)}`,
-      `- Départ : ${formatDate(values.checkout)}`,
-      `- Adultes : ${values.adults || "-"}`,
-      `- Enfants : ${values.children || "-"}`,
-      `- Chambres : ${values.rooms || "-"}`,
+      t("common.booking.mailIntro"),
+      `- ${t("common.booking.mailCheckin")} : ${formatDate(values.checkin)}`,
+      `- ${t("common.booking.mailCheckout")} : ${formatDate(values.checkout)}`,
+      `- ${t("common.booking.mailAdults")} : ${values.adults || "-"}`,
+      `- ${t("common.booking.mailChildren")} : ${values.children || "-"}`,
+      `- ${t("common.booking.mailRooms")} : ${values.rooms || "-"}`,
       "",
-      `Nom : ${refs.lastNameInput.value.trim()}`,
-      `Prénom : ${refs.firstNameInput.value.trim()}`
+      `${t("common.booking.mailLastName")} : ${refs.lastNameInput.value.trim()}`,
+      `${t("common.booking.mailFirstName")} : ${refs.firstNameInput.value.trim()}`
     ];
     const extraMessage = refs.messageInput?.value.trim();
-    if (extraMessage) lines.push("", "Message :", extraMessage);
+    if (extraMessage) lines.push("", t("common.booking.mailMessage"), extraMessage);
 
-    const subject = "Demande de réservation - Source d’Arimont";
+    const subject = t("common.booking.subject");
     const body = lines.join("\n");
     window.location.href = `mailto:sourcedarimont@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     closeModal();
