@@ -774,10 +774,11 @@ body.is-loading {
 .p-card-illu {
   font-family: var(--font-body);
   font-weight: 400;
-  font-size: clamp(18px, 1.5vw, 16px);
+  font-size: clamp(15px, 1.5vw, 14px);
   color: var(--color-forest);
   text-align: left;
   width: 65%;
+  line-height: 1.2;
 }
 .feature-illustration {
   position: absolute;

@@ -4,7 +4,7 @@ import "./home.css";
 import "./gites-chambres.css";
 import "./nav-lang-globe.js";
 import { initBookingRequest } from "./booking-request.js";
-import { fetchLocalizedCollection, urlFor } from "./sanity.js";
+import { fetchLocalizedCollection, fetchLocalizedSingleton, urlFor } from "./sanity.js";
 import { t } from "./static-translations.js";
 
 const BASE_URL = import.meta.env.BASE_URL || "/";
@@ -249,6 +249,68 @@ async function initSanityContent() {
 }
 
 initSanityContent();
+
+// ─── Grille tarifaire ────────────────────────────────────────────
+const tarifModal   = document.getElementById("tarif-modal");
+const tarifOverlay = document.getElementById("tarif-modal-overlay");
+const tarifClose   = document.getElementById("tarif-modal-close");
+const tarifBtn     = document.getElementById("tarif-btn-sticky");
+
+const openTarifModal  = () => { tarifModal?.classList.add("is-open");    tarifModal?.removeAttribute("aria-hidden"); document.body.style.overflow = "hidden"; };
+const closeTarifModal = () => { tarifModal?.classList.remove("is-open"); tarifModal?.setAttribute("aria-hidden", "true"); document.body.style.overflow = ""; };
+
+tarifBtn?.addEventListener("click", openTarifModal);
+tarifOverlay?.addEventListener("click", closeTarifModal);
+tarifClose?.addEventListener("click", closeTarifModal);
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeTarifModal(); });
+
+// Cacher le bouton quand le footer est visible
+if (tarifBtn) {
+  const footer = document.querySelector(".site-footer");
+  if (footer) {
+    const observer = new IntersectionObserver(
+      ([entry]) => { tarifBtn.style.opacity = entry.isIntersecting ? "0" : "1"; tarifBtn.style.pointerEvents = entry.isIntersecting ? "none" : ""; },
+      { threshold: 0 }
+    );
+    observer.observe(footer);
+  }
+}
+
+async function initGrilleTarifaire() {
+  try {
+    const data = await fetchLocalizedSingleton("grilleTarifaire");
+    if (!data) return;
+
+    const titreEl = document.querySelector("[data-tarif-titre]");
+    const noteEl  = document.querySelector("[data-tarif-note]");
+    const thead   = document.querySelector("[data-tarif-thead]");
+    const tbody   = document.querySelector("[data-tarif-tbody]");
+
+    if (titreEl) titreEl.textContent = data.titre || "";
+    if (noteEl)  { noteEl.textContent = data.note || ""; noteEl.hidden = !data.note; }
+
+    const colonnes = data.colonnes || [];
+    const lignes   = data.lignes   || [];
+
+    if (thead) {
+      thead.innerHTML = `<tr>
+        <th></th>
+        ${colonnes.map((c) => `<th>${c}</th>`).join("")}
+      </tr>`;
+    }
+
+    if (tbody) {
+      tbody.innerHTML = lignes.map((ligne) => `<tr>
+        <td>${ligne.nom || ""}</td>
+        ${(ligne.prix || []).map((p) => `<td>${p}</td>`).join("")}
+      </tr>`).join("");
+    }
+  } catch (err) {
+    console.error("Erreur grille tarifaire:", err);
+  }
+}
+
+initGrilleTarifaire();
 
 const getPanelFromHash = () => {
   const hash = (window.location.hash || "").replace("#", "").toLowerCase();

@@ -255,6 +255,16 @@ async function fetchHomeContent() {
       if (el) el.textContent = home.lodgingsRoomsCta;
     }
 
+    // Groups images
+    if (home?.groupsImageMain) {
+      const el = document.querySelector('[data-home-groups-img="main"]');
+      if (el) el.src = urlFor(home.groupsImageMain).width(900).url();
+    }
+    if (home?.groupsImageSecondary) {
+      const el = document.querySelector('[data-home-groups-img="secondary"]');
+      if (el) el.src = urlFor(home.groupsImageSecondary).width(900).url();
+    }
+
     // Groups section
     if (home?.groupsLabel) {
       const el = document.querySelector("[data-home-groups-label]");

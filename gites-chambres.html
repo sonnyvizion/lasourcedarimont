@@ -460,6 +460,30 @@
       </div>
     </footer>
 
+    <!-- Bouton sticky tarifs -->
+    <button class="tarif-btn-sticky" id="tarif-btn-sticky" aria-haspopup="dialog">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+      <span>Tarifs</span>
+    </button>
+
+    <!-- Modal grille tarifaire -->
+    <div class="tarif-modal" id="tarif-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="tarif-modal-title">
+      <div class="tarif-modal-overlay" id="tarif-modal-overlay"></div>
+      <div class="tarif-modal-inner">
+        <button class="tarif-modal-close" id="tarif-modal-close" aria-label="Fermer">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        <h3 class="tarif-modal-titre" id="tarif-modal-title" data-tarif-titre></h3>
+        <p class="tarif-modal-note" data-tarif-note></p>
+        <div class="tarif-table-wrap">
+          <table class="tarif-table" data-tarif-table>
+            <thead data-tarif-thead></thead>
+            <tbody data-tarif-tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
     <script type="module" src="/src/gites-chambres.js"></script>
   </body>
 </html>
