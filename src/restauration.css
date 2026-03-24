@@ -50,11 +50,11 @@
 }
 
 .restauration-title {
-  margin-top: 10px;
+  margin-top: 12px;
 }
 
 .restauration-lead {
-  margin: 16px auto 48px;
+  margin: 18px auto 48px;
   max-width: 760px;
   font-size: clamp(16px, 2vw, 18px);
 }

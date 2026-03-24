@@ -13,7 +13,8 @@ export default defineConfig({
         restauration: resolve(__dirname, "restauration.html"),
         contact: resolve(__dirname, "contact.html"),
         mentionsLegales: resolve(__dirname, "mentions-legales.html"),
-        confidentialiteCookies: resolve(__dirname, "confidentialite-cookies.html")
+        confidentialiteCookies: resolve(__dirname, "confidentialite-cookies.html"),
+        groupesSeminaires: resolve(__dirname, "groupes-seminaires.html")
       }
     }
   },
