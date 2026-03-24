@@ -613,8 +613,8 @@ body.is-loading {
 }
 
 .section-feature {
-  background: transparent;
-  
+  background: var(--color-forest);
+  padding-bottom: 60px;
 }
 
 .center {
@@ -863,7 +863,7 @@ body.is-loading {
   right: 0;
   top: 0;
   height: var(--bg-start);
-  background: var(--color-beige);
+  background: var(--color-forest);
   z-index: 0;
 }
 
@@ -874,7 +874,7 @@ body.is-loading {
   right: 0;
   bottom: 0;
   height: var(--bg-end);
-  background: var(--color-beige);
+  background: var(--color-forest);
   z-index: 0;
 }
 
@@ -1839,6 +1839,7 @@ body.is-loading {
   background: var(--color-forest);
   color: var(--color-beige);
   overflow: hidden;
+  padding-top: 80px;
   padding-bottom: 0;
 }
 
@@ -1874,9 +1875,10 @@ body.is-loading {
 }
 
 .groups-title {
-  font-size: clamp(2rem, 4vw, 3.5rem);
-  line-height: 1.1;
+  font-size: clamp(2rem, 3.2vw, 2.8rem);
+  line-height: 1.15;
   margin: 16px 0 28px;
+  text-wrap: balance;
   font-family: var(--font-heading);
   text-align: left;
 }
