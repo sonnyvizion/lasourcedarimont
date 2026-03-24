@@ -1889,10 +1889,22 @@ body.is-loading {
   margin-bottom: 48px;
 }
 
+.groups-cta-wrap {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 64px;
+}
+
 .groups-cta {
-  display: block;
+  display: inline-flex;
   width: fit-content;
-  margin: 64px 0 0;
+  margin: 0;
+}
+
+.groups-cta-secondary {
+  color: var(--color-beige);
+  border-color: rgba(246, 241, 230, 0.6);
 }
 
 .groups-lead strong {
@@ -1996,8 +2008,9 @@ body.is-loading {
     align-items: center;
   }
 
-  .groups-cta {
-    margin: 64px auto 0;
+  .groups-cta-wrap {
+    margin-top: 40px;
+    justify-content: center;
   }
 
   .groups-visuals {
