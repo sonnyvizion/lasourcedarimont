@@ -142,6 +142,15 @@ const renderPortableText = (blocks) => {
     .join("<br />");
 };
 
+const forceFeaturesIntroBeige = () => {
+  const introEl = document.querySelector(".content-wrap.essence [data-home-features-intro]");
+  if (!introEl) return;
+  introEl.style.setProperty("color", "var(--color-beige)", "important");
+  introEl.querySelectorAll("*").forEach((node) => {
+    node.style.setProperty("color", "var(--color-beige)", "important");
+  });
+};
+
 const renderTemoignage = (testimonial) => {
   const stars = "★".repeat(testimonial.rating) + "☆".repeat(5 - testimonial.rating);
   return `<article class="testimonial-card">
@@ -197,7 +206,10 @@ async function fetchHomeContent() {
     }
     if (home?.featuresIntro) {
       const el = document.querySelector("[data-home-features-intro]");
-      if (el) el.innerHTML = renderPortableText(home.featuresIntro);
+      if (el) {
+        el.innerHTML = renderPortableText(home.featuresIntro);
+        forceFeaturesIntroBeige();
+      }
     }
     if (home?.featureCards?.length) {
       document.querySelectorAll("[data-home-feature]").forEach((card) => {
@@ -849,6 +861,29 @@ if (navToggle && mobileMenu) {
   });
 }
 
+const featureSectionEl = document.querySelector(".section-feature");
+const featureGridEl = document.querySelector(".section-feature .feature-grid");
+const syncFeatureBackgroundSplit = () => {
+  if (!featureSectionEl || !featureGridEl) return;
+  const sectionRect = featureSectionEl.getBoundingClientRect();
+  const gridRect = featureGridEl.getBoundingClientRect();
+  const splitOffset = Math.max(0, gridRect.top - sectionRect.top + 100);
+  featureSectionEl.style.setProperty("--feature-beige-start", `${Math.round(splitOffset)}px`);
+};
+
+syncFeatureBackgroundSplit();
+window.addEventListener("resize", syncFeatureBackgroundSplit);
+window.addEventListener("load", syncFeatureBackgroundSplit, { once: true });
+homeContentGate.then(() => {
+  requestAnimationFrame(syncFeatureBackgroundSplit);
+});
+if (document.fonts?.ready && typeof document.fonts.ready.then === "function") {
+  document.fonts.ready.then(() => {
+    requestAnimationFrame(syncFeatureBackgroundSplit);
+  });
+}
+ScrollTrigger.addEventListener("refreshInit", syncFeatureBackgroundSplit);
+
 if (!prefersReducedMotion) {
   if (!isIOSDevice) {
     const lenis = new Lenis({
@@ -1230,6 +1265,8 @@ if (!prefersReducedMotion) {
       );
     });
 
+    forceFeaturesIntroBeige();
+
     requestAnimationFrame(() => ScrollTrigger.refresh());
   };
 
@@ -1451,8 +1488,8 @@ if (!prefersReducedMotion) {
     const chambresPhaseEnd = 0.88;
     const chambresStart = gitesPhaseEnd + holdBeforeCross;
     const gitesFullscreenAt = 0.72;
-    const bgStartY = 16;
-    const bgPinStartY = 8;
+    const bgHiddenY = 102;
+    const bgVisibleY = 0;
 
     gsap.set(lodgingsSlideGites, { opacity: 1 });
     gsap.set(lodgingsSlideChambres, { opacity: 0 });
@@ -1462,7 +1499,7 @@ if (!prefersReducedMotion) {
     gsap.set(chambresBody, { opacity: 0 });
     gsap.set(gitesTitle, { opacity: 1 });
     gsap.set(gitesBody, { opacity: 1 });
-    gsap.set(lodgingsBgRise, { yPercent: bgStartY });
+    gsap.set(lodgingsBgRise, { yPercent: bgHiddenY });
     if (lodgingsGitesVideo) {
       gsap.set(lodgingsGitesVideo, {
         scale: 0.72,
@@ -1491,8 +1528,7 @@ if (!prefersReducedMotion) {
       end: "top top",
       scrub: 1,
       onUpdate: (self) => {
-        const y = bgStartY - (bgStartY - bgPinStartY) * self.progress;
-        gsap.set(lodgingsBgRise, { yPercent: y });
+        gsap.set(lodgingsBgRise, { yPercent: bgHiddenY });
       }
     });
 
@@ -1525,7 +1561,14 @@ if (!prefersReducedMotion) {
 
         gsap.set(firstFill, { scaleY: gitesProgress });
         gsap.set(secondFill, { scaleY: chambresProgress });
-        gsap.set(lodgingsBgRise, { yPercent: bgPinStartY * (1 - gitesProgress) });
+        const bgRevealProgress = Math.max(
+          0,
+          Math.min(1, (gitesProgress - gitesFullscreenAt) / (1 - gitesFullscreenAt))
+        );
+        gsap.set(
+          lodgingsBgRise,
+          { yPercent: bgHiddenY - (bgHiddenY - bgVisibleY) * bgRevealProgress }
+        );
 
         if (lodgingsGitesVideo) {
           gsap.set(lodgingsGitesVideo, {
