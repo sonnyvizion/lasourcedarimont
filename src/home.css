@@ -868,6 +868,10 @@ body.is-loading {
   .section-lodgings-feature {
     --bg-end: clamp(460px, 40vh, 660px);
   }
+
+  .section-feature {
+    padding-top: 80px;
+  }
 }
 
 .section-dark {
