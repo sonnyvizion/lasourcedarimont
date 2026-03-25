@@ -737,7 +737,7 @@ body.is-loading {
   position: absolute;
   left: calc(35% - 180px);
   transform: translateX(-50%);
-  margin-top: -80px;
+  margin-top: 0;
 }
 
 .icon-birds img {
