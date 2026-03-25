@@ -1017,6 +1017,22 @@ if (!prefersReducedMotion) {
   heroTl.to(".booking-panel", { y: 0, opacity: 1, duration: 1.1, ease: "power3.out" }, 2);
 
   heroTl.eventCallback("onComplete", () => {
+    const isDesktopViewport = !window.matchMedia("(max-width: 980px)").matches;
+    if (isDesktopViewport && heroEl) {
+      const smoothHeroParallax = gsap.timeline();
+      smoothHeroParallax
+        .fromTo(".hero-media", { y: 0 }, { y: 70, ease: "none" }, 0)
+        .fromTo(".hero-content", { y: 0 }, { y: 34, ease: "none" }, 0);
+
+      ScrollTrigger.create({
+        animation: smoothHeroParallax,
+        trigger: heroEl,
+        start: "top top",
+        end: "bottom top",
+        scrub: 1.25
+      });
+    }
+
     const parallaxTl = gsap.timeline();
     if (!heroVideoDesktop) {
       parallaxTl
@@ -1024,8 +1040,8 @@ if (!prefersReducedMotion) {
         .fromTo(".hero-tree-left", { x: -240 }, { x: 0, ease: "none" }, 0)
         .fromTo(".hero-tree-right", { x: 240 }, { x: 0, ease: "none" }, 0);
     }
-    parallaxTl.fromTo(".hero-headline", { y: 0 }, { y: -60, ease: "none" }, 0);
-    parallaxTl.fromTo(".hero-note", { y: 0 }, { y: -60, ease: "none" }, 0);
+    parallaxTl.fromTo(".hero-headline", { y: 0 }, { y: -24, ease: "none" }, 0);
+    parallaxTl.fromTo(".hero-note", { y: 0 }, { y: -24, ease: "none" }, 0);
     ScrollTrigger.create({
       animation: parallaxTl,
       trigger: ".hero",
