@@ -614,7 +614,7 @@ body.is-loading {
 
 .section-feature {
   background: var(--color-forest);
-  padding-top: 80px;
+  padding-top: 140px;
   padding-bottom: 60px;
 }
 
@@ -737,7 +737,7 @@ body.is-loading {
   position: absolute;
   left: calc(35% - 180px);
   transform: translateX(-50%);
-  margin-top: 0;
+  margin-top: -150px;
 }
 
 .icon-birds img {
