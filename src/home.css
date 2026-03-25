@@ -1826,6 +1826,16 @@ body.is-loading {
     overscroll-behavior-x: contain;
   }
 
+  .section-footer-reviews {
+    --footer-rise: 110px;
+    padding-bottom: 0;
+  }
+
+  .section-footer-reviews .testimonials-slider {
+    margin-bottom: -30px;
+    padding-bottom: 30px;
+  }
+
   .testimonials-track {
     width: max-content;
   }
