@@ -1631,6 +1631,10 @@ body.is-loading {
     display: none;
   }
 
+  .hero-video-mobile {
+    display: block;
+  }
+
   .hero-image img {
     object-position: 58% 8% !important;
     transform: none;
