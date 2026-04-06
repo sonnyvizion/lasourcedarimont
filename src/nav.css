@@ -470,7 +470,7 @@
   place-content: center end;
   gap: 10px;
   font-family: var(--font-body);
-  font-size: 32px;
+  font-size: 28px;
   text-align: right;
   font-weight: 500;
   justify-items: end;
