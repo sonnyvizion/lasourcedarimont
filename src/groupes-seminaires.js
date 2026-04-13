@@ -4,7 +4,7 @@ import "./home.css";
 import "./groupes-seminaires.css";
 import "./nav-lang-globe.js";
 import { initBookingRequest } from "./booking-request.js";
-import { fetchLocalizedSingleton, urlFor } from "./sanity.js";
+import { applyPageSeo, fetchLocalizedSingleton, urlFor } from "./sanity.js";
 
 // ─── Année dans le footer ──────────────────────────────────────────────────────
 const yearEl = document.querySelector("[data-year]");
@@ -111,6 +111,8 @@ async function initSanityContent() {
   try {
     const page = await fetchLocalizedSingleton("groupesSeminaires");
     if (!page) return; // fallback: static HTML content stays as-is
+
+    applyPageSeo(page);
 
     // ── Intro ──────────────────────────────────────────────────────────────────
     if (page.introLabel) {

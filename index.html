@@ -76,10 +76,11 @@
             <span class="logo-mark" role="img" aria-hidden="true"></span>
           </div>
           <nav class="nav-links">
-            <a href="./index.html">Accueil</a>
             <a href="./gites-chambres.html">Gîtes &amp; chambres</a>
-            <a href="./la-region.html">La région</a>
+            <a href="./groupes-seminaires.html">Groupes</a>
+            <a href="#" data-nav="infrastructure">Infrastructures</a>
             <a href="./restauration.html">Restauration</a>
+            <a href="./la-region.html">La région</a>
           </nav>
         </div>
         <div class="nav-right">
@@ -110,11 +111,11 @@
     </header>
     <div class="mobile-menu" aria-hidden="true">
       <div class="mobile-menu-inner">
-        <a class="menu-link" href="./index.html">Accueil</a>
         <a class="menu-link" href="./gites-chambres.html">Gîtes &amp; chambres</a>
-        <a class="menu-link" href="./la-region.html">La région</a>
+        <a class="menu-link" href="./groupes-seminaires.html">Groupes</a>
+        <a class="menu-link" href="#" data-nav="infrastructure">Infrastructures</a>
         <a class="menu-link" href="./restauration.html">Restauration</a>
-        <a class="menu-link" href="./groupes-seminaires.html">Groupes &amp; Séminaires</a>
+        <a class="menu-link" href="./la-region.html">La région</a>
         <div class="mobile-menu-social">
           <a href="#" aria-label="Facebook">
             <img src="/img/illustrations/fb_icon.svg" alt="" />
@@ -239,59 +240,66 @@
             Domaine d’<span class="semi-italic">Arimont</span>
           </h2>
 
-          <div class="lodgings-showcase js-lodgings-showcase">
-            <div class="lodgings-stage">
-              <div class="lodgings-bg-rise" aria-hidden="true"></div>
-              <article class="lodgings-slide lodgings-slide-gites" data-lodging-slide="gites">
-                <video class="lodgings-slide-video" muted playsinline preload="auto" aria-hidden="true">
-                  <source src="/vid/gites_home2_scrub.mp4" type="video/mp4" />
-                </video>
-                <div class="lodgings-slide-overlay">
-                  <div class="lodgings-slide-label" data-home-lodgings-gites-label>Les gîtes</div>
-                  <h3 class="lodgings-slide-title" data-home-lodgings-gites-title>
-                    Petit comité ou <span class="semi-italic">grande</span><br />
-                    tribu ? On a la place !
-                  </h3>
-
-                  <a class="btn btn-outline" href="./gites-chambres.html#gites" data-home-lodgings-gites-cta>Voir les gîtes</a>
-                </div>
-              </article>
-
-              <article class="lodgings-slide lodgings-slide-chambres" data-lodging-slide="chambres">
-                <video class="lodgings-slide-video" muted playsinline preload="auto" aria-hidden="true">
-                  <source src="/vid/chambre_home_scrub.mp4" type="video/mp4" />
-                </video>
-                <div class="lodgings-slide-overlay">
-                  <div class="lodgings-slide-label" data-home-lodgings-rooms-label>Les chambres</div>
-                  <h3 class="lodgings-slide-title" data-home-lodgings-rooms-title>
-                    Des nuits <span class="semi-italic">confortables</span><br />
-                    pour des journées inoubliables
-                  </h3>
-
-                  <a class="btn btn-outline" href="./gites-chambres.html#chambres" data-home-lodgings-rooms-cta>Voir les chambres</a>
-                </div>
-              </article>
-
-              <div class="lodgings-progress" aria-hidden="true">
-                <span class="lodgings-progress-bar"><span class="lodgings-progress-fill"></span></span>
-                <span class="lodgings-progress-bar"><span class="lodgings-progress-fill"></span></span>
+          <div class="lodgings-duo js-lodgings-duo">
+            <article class="lodging-card js-lodging-card" data-lodging-slide="gites">
+              <video class="lodging-card-video" muted playsinline preload="auto" aria-hidden="true">
+                <source src="/vid/gites_home2_scrub.mp4" type="video/mp4" />
+              </video>
+              <div class="lodging-card-body">
+                <div class="lodging-label" data-home-lodgings-gites-label>Les gîtes</div>
+                <h3 class="lodging-title" data-home-lodgings-gites-title>
+                  Petit comité ou <span class="semi-italic">grande</span><br />
+                  tribu ? On a la place !
+                </h3>
+                <a class="btn btn-outline lodging-cta" href="./gites-chambres.html#gites" data-home-lodgings-gites-cta>Voir les gîtes</a>
               </div>
+            </article>
+
+            <article class="lodging-card js-lodging-card" data-lodging-slide="chambres">
+              <video class="lodging-card-video" muted playsinline preload="auto" aria-hidden="true">
+                <source src="/vid/chambre_home_scrub.mp4" type="video/mp4" />
+              </video>
+              <div class="lodging-card-body">
+                <div class="lodging-label" data-home-lodgings-rooms-label>Les chambres</div>
+                <h3 class="lodging-title" data-home-lodgings-rooms-title>
+                  Des nuits <span class="semi-italic">confortables</span><br />
+                  pour des journées inoubliables
+                </h3>
+                <a class="btn btn-outline lodging-cta" href="./gites-chambres.html#chambres" data-home-lodgings-rooms-cta>Voir les chambres</a>
+              </div>
+            </article>
+
+            <div class="lodging-infra">
+              <article class="lodging-card lodging-card-full js-lodging-card" data-lodging-slide="infra">
+                <video
+                  class="lodging-card-video"
+                  data-home-lodgings-infra-image
+                  muted
+                  playsinline
+                  preload="auto"
+                  aria-hidden="true"
+                  poster="/img/hero_v3.webp">
+                  <source src="/vid/infra.mp4" type="video/mp4" />
+                </video>
+                <div class="lodging-card-body">
+                  <div class="lodging-label" data-home-lodgings-infra-label>Le domaine</div>
+                  <h3 class="lodging-title" data-home-lodgings-infra-title>
+                    Piscine, jardins, espaces communs —<br />
+                    tout est là pour <span class="semi-italic">ne manquer de rien</span>
+                  </h3>
+                  <a class="btn btn-outline lodging-cta" href="./gites-chambres.html" data-home-lodgings-infra-cta>Découvrir le domaine</a>
+                </div>
+              </article>
             </div>
           </div>
         </div>
       </section>
 
       <section class="section center section-feature">
-        <div class="content-wrap essence" >
-          <div class="icon-birds" aria-hidden="true">
-            <img src="/img/illustrations/birds_J.png" alt="" />
-          </div>
-          <div class="label" data-home-features-label style="color:var(--color-beige) !important;">L’essence du Domaine d’Arimont</div>
-          <h2 class="intro-text reveal-text" data-home-features-intro>
-            Nature, calme et caractère se rencontrent ici, <br class="br-desktop" />au cœur des <span class="semi-italic">Ardennes</span>, à quelques minutes <br class="br-desktop" />
-            seulement de <span class="semi-italic">Spa</span>.
-          </h2>
-
+        <div class="content-wrap essence">
+          <p class="feature-bridge" data-home-features-intro>
+            Un équilibre pensé entre <span class="semi-italic">nature</span>, confort et proximité de <span class="semi-italic">Spa</span>.
+          </p>
           <div class="feature-grid">
             <article class="feature-card feature-card-plaine" data-home-feature="0">
               <h3>Nature &amp; <br>Silence</h3>
@@ -341,12 +349,12 @@
         <div class="groups-text">
           <div class="label groups-label" data-home-groups-label>Groupes &amp; Séminaires</div>
           <h2 class="groups-title reveal-text" data-home-groups-title>
-            Un cadre d’exception <br class="br-desktop" />pour vos <span class="semi-italic">événements</span>
+            Un cadre d’<span class="semi-italic">exception</span> pour vos événements
           </h2>
           <p class="groups-lead" data-home-groups-lead>
-            Le Domaine de la Source d’Arimont accueille vos séminaires, retraites et événements privés.
+            Séminaires, retraites et événements privés.
             Avec une capacité de <strong>plus de 30 personnes</strong>, profitez d’un cadre naturel préservé,
-            loin de l’agitation, pour des journées de travail ou de cohésion qui laissent une empreinte durable.
+            loin de l’agitation, pour des journées qui laissent une empreinte durable.
           </p>
           <ul class="groups-features">
             <li>
@@ -380,7 +388,7 @@
       </div>
     </section>
 
-    <section class="section center">
+    <section class="section center section-full-width">
       <div class="content-wrap">
         
         

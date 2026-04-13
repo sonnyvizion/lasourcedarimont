@@ -4,7 +4,7 @@ import "./home.css";
 import "./gites-chambres.css";
 import "./nav-lang-globe.js";
 import { initBookingRequest } from "./booking-request.js";
-import { fetchLocalizedCollection, fetchLocalizedSingleton, urlFor } from "./sanity.js";
+import { applyPageSeo, fetchLocalizedCollection, fetchLocalizedSingleton, fetchPageConfig, urlFor } from "./sanity.js";
 import { t } from "./static-translations.js";
 
 const BASE_URL = import.meta.env.BASE_URL || "/";
@@ -95,24 +95,72 @@ if (revealEls.length) {
   revealEls.forEach((el) => observer.observe(el));
 }
 
-const switchButtons = document.querySelectorAll("[data-switch]");
-const switchPanels = document.querySelectorAll("[data-panel]");
+// ── Filtres sidebar ──────────────────────────────────────────────────────────
+const staysFilters = { type: "all", cap: null, equip: null };
 
-const setPanel = (target) => {
-  switchButtons.forEach((btn) => {
-    const isActive = btn.getAttribute("data-switch") === target;
-    btn.classList.toggle("is-active", isActive);
-    btn.setAttribute("aria-selected", String(isActive));
+const renderStays = () => {
+  const listEl = document.getElementById("stays-list");
+  const countEl = document.querySelector(".stays-count");
+  if (!listEl) return;
+
+  let filtered = allLogements.filter((l) => {
+    if (staysFilters.type !== "all" && l.type !== staysFilters.type) return false;
+    if (staysFilters.cap) {
+      const max = l.capaciteMax ?? 0;
+      const min = l.capaciteMin ?? 0;
+      if (staysFilters.cap === "1-2" && max > 2) return false;
+      if (staysFilters.cap === "3-6" && (max < 3 || min > 6)) return false;
+      if (staysFilters.cap === "7+" && max < 7) return false;
+    }
+    if (staysFilters.equip) {
+      if (staysFilters.equip === "cuisine" && !l.equipements?.includes("cuisine")) return false;
+      if (staysFilters.equip === "petitdej" && !l.petitDejeuner) return false;
+      if (staysFilters.equip === "terrasse" && !l.terrasse) return false;
+    }
+    return true;
   });
 
-  switchPanels.forEach((panel) => {
-    panel.hidden = panel.getAttribute("data-panel") !== target;
-  });
+  if (countEl) {
+    countEl.textContent = filtered.length
+      ? `${filtered.length} hébergement${filtered.length > 1 ? "s" : ""} correspondent`
+      : "";
+  }
+
+  if (filtered.length === 0) {
+    listEl.innerHTML = '<p class="stays-empty">Aucun hébergement ne correspond à ces filtres.</p>';
+    return;
+  }
+
+  listEl.innerHTML = filtered.map((l, i) => renderLogement(l, i % 2 !== 0)).join("");
+  listEl.querySelectorAll("[data-carousel]").forEach(setupCardCarousel);
 };
 
-switchButtons.forEach((btn) => {
+document.querySelectorAll("[data-filter-type]").forEach((btn) => {
   btn.addEventListener("click", () => {
-    setPanel(btn.getAttribute("data-switch") || "gites");
+    document.querySelectorAll("[data-filter-type]").forEach((b) => b.classList.remove("is-active"));
+    btn.classList.add("is-active");
+    staysFilters.type = btn.dataset.filterType;
+    renderStays();
+  });
+});
+
+document.querySelectorAll("[data-filter-cap]").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const wasActive = btn.classList.contains("is-active");
+    document.querySelectorAll("[data-filter-cap]").forEach((b) => b.classList.remove("is-active"));
+    staysFilters.cap = wasActive ? null : btn.dataset.filterCap;
+    if (!wasActive) btn.classList.add("is-active");
+    renderStays();
+  });
+});
+
+document.querySelectorAll("[data-filter-equip]").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const wasActive = btn.classList.contains("is-active");
+    document.querySelectorAll("[data-filter-equip]").forEach((b) => b.classList.remove("is-active"));
+    staysFilters.equip = wasActive ? null : btn.dataset.filterEquip;
+    if (!wasActive) btn.classList.add("is-active");
+    renderStays();
   });
 });
 
@@ -141,6 +189,7 @@ const setupCardCarousel = (root) => {
 };
 
 // ─── Sanity content ───────────────────────────────────────────────────────────
+let allLogements = [];
 
 const ICONS = {
   wifi:          { src: assetUrl("/img/WIFI_ICON.png"),    alt: "WiFi" },
@@ -205,27 +254,19 @@ const renderTemoignage = (testimonial) => {
 };
 
 async function initSanityContent() {
-  const gitesPanel = document.querySelector('[data-panel="gites"]');
-  const chambresPanel = document.querySelector('[data-panel="chambres"]');
   const track = document.querySelector(".testimonials-track");
-
-  if (gitesPanel) gitesPanel.innerHTML = "";
-  if (chambresPanel) chambresPanel.innerHTML = "";
   if (track) track.innerHTML = "";
 
   try {
-    const [logements, temoignages] = await Promise.all([
+    const [logements, temoignages, pageConfig] = await Promise.all([
       fetchLocalizedCollection("logement", { orderBy: "order asc" }),
       fetchLocalizedCollection("temoignage", { orderBy: "order asc" }),
+      fetchPageConfig("gites-chambres"),
     ]);
+    applyPageSeo(pageConfig);
 
-    const gites = logements.filter((l) => l.type === "gite");
-    const chambres = logements.filter((l) => l.type === "chambre");
-
-    if (gitesPanel) gitesPanel.innerHTML = gites.map((l, i) => renderLogement(l, i % 2 !== 0)).join("");
-    if (chambresPanel) chambresPanel.innerHTML = chambres.map((l, i) => renderLogement(l, i % 2 !== 0)).join("");
-
-    document.querySelectorAll("[data-carousel]").forEach(setupCardCarousel);
+    allLogements = logements;
+    renderStays();
 
     if (track) track.innerHTML = temoignages.map(renderTemoignage).join("");
 
@@ -312,13 +353,18 @@ async function initGrilleTarifaire() {
 
 initGrilleTarifaire();
 
-const getPanelFromHash = () => {
+// Hash deep-link: #chambres préfiltres le type
+const applyHashFilter = () => {
   const hash = (window.location.hash || "").replace("#", "").toLowerCase();
-  return hash === "chambres" ? "chambres" : "gites";
+  if (hash === "chambres" || hash === "gite" || hash === "gites") {
+    const type = hash === "chambres" ? "chambre" : "gite";
+    staysFilters.type = type;
+    document.querySelectorAll("[data-filter-type]").forEach((b) => {
+      b.classList.toggle("is-active", b.dataset.filterType === type);
+    });
+    renderStays();
+  }
 };
 
-setPanel(getPanelFromHash());
-
-window.addEventListener("hashchange", () => {
-  setPanel(getPanelFromHash());
-});
+applyHashFilter();
+window.addEventListener("hashchange", applyHashFilter);

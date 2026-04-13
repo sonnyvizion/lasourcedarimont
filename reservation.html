@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Réservez votre séjour au Domaine de la Source d'Arimont en Ardennes. Disponibilités en temps réel, paiement sécurisé." />
+    <title>Réservation – La Source d'Arimont</title>
+    <link rel="canonical" href="https://www.lasourcedarimont.be/reservation.html" />
+    <link rel="icon" type="image/svg+xml" href="/img/VectorLogo.svg" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="La Source d'Arimont" />
+    <meta property="og:title" content="Réservation – La Source d'Arimont" />
+    <meta property="og:image" content="https://www.lasourcedarimont.be/img/hero_v3.webp" />
+    <meta name="robots" content="noindex, nofollow" />
+  </head>
+  <body class="reservation-page">
+
+    <header class="site-header">
+      <div class="content-wrap header-inner">
+        <div class="nav-left">
+          <a class="logo" aria-label="La Source d'Arimont" href="./index.html">
+            <span class="logo-mark" role="img" aria-hidden="true"></span>
+          </a>
+          <nav class="nav-links">
+            <a href="./gites-chambres.html">Gîtes &amp; chambres</a>
+            <a href="./groupes-seminaires.html">Groupes</a>
+            <a href="#" data-nav="infrastructure">Infrastructures</a>
+            <a href="./restauration.html">Restauration</a>
+            <a href="./la-region.html">La région</a>
+          </nav>
+        </div>
+        <div class="nav-right">
+          <a class="nav-icon-link" href="#" aria-label="WhatsApp">
+            <span class="nav-icon"></span>
+            WhatsApp
+          </a>
+          <div class="nav-lang" aria-label="Choisir la langue">
+            <button class="nav-lang-trigger" type="button" aria-expanded="false">
+              <span class="nav-lang-globe" aria-hidden="true"></span>
+              <span class="nav-lang-current">FR</span>
+              <span class="nav-lang-caret" aria-hidden="true">▾</span>
+            </button>
+            <div class="nav-lang-menu" role="menu" aria-label="Autres langues">
+              <a href="#" role="menuitem">NL</a>
+              <a href="#" role="menuitem">DE</a>
+              <a href="#" role="menuitem">EN</a>
+            </div>
+          </div>
+          <button class="nav-toggle" type="button" aria-label="Ouvrir le menu" aria-expanded="false">
+            <span class="nav-toggle-bar"></span>
+            <span class="nav-toggle-bar"></span>
+            <span class="nav-toggle-bar"></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="mobile-menu" aria-hidden="true">
+      <div class="mobile-menu-inner">
+        <a class="menu-link" href="./gites-chambres.html">Gîtes &amp; chambres</a>
+        <a class="menu-link" href="./groupes-seminaires.html">Groupes</a>
+        <a class="menu-link" href="#" data-nav="infrastructure">Infrastructures</a>
+        <a class="menu-link" href="./restauration.html">Restauration</a>
+        <a class="menu-link" href="./la-region.html">La région</a>
+      </div>
+    </div>
+
+    <main class="resa-main">
+
+      <!-- En-tête page -->
+      <section class="resa-hero">
+        <div class="content-wrap">
+          <div class="label">Réservation en ligne</div>
+          <h1>Réservez votre <span class="semi-italic">séjour</span></h1>
+          <p class="resa-hero-sub">Disponibilités en temps réel · Paiement sécurisé · Confirmation immédiate</p>
+        </div>
+      </section>
+
+      <!-- Étapes -->
+      <div class="resa-stepper-wrap">
+        <div class="content-wrap">
+          <ol class="resa-steps" aria-label="Étapes de réservation">
+            <li class="resa-step is-active" data-step="1">
+              <span class="resa-step-num">1</span>
+              <span class="resa-step-label">Votre séjour</span>
+            </li>
+            <li class="resa-step" data-step="2">
+              <span class="resa-step-num">2</span>
+              <span class="resa-step-label">Vos coordonnées</span>
+            </li>
+            <li class="resa-step" data-step="3">
+              <span class="resa-step-num">3</span>
+              <span class="resa-step-label">Confirmation</span>
+            </li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- Corps -->
+      <div class="resa-body">
+        <div class="content-wrap resa-layout">
+
+          <!-- Colonne formulaire -->
+          <div class="resa-form-col">
+
+            <!-- Étape 1 : séjour -->
+            <div class="resa-panel is-active" data-panel="1">
+              <h2 class="resa-panel-title">Votre séjour</h2>
+
+              <div class="resa-field-group">
+                <div class="resa-field">
+                  <label for="resa-logement">Hébergement</label>
+                  <div class="resa-select-wrap">
+                    <select id="resa-logement" name="logement" required>
+                      <option value="">Chargement…</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="resa-field-row">
+                <div class="resa-field">
+                  <label for="resa-arrivee">Arrivée</label>
+                  <input type="date" id="resa-arrivee" name="arrivee" required />
+                </div>
+                <div class="resa-field">
+                  <label for="resa-depart">Départ</label>
+                  <input type="date" id="resa-depart" name="depart" required />
+                </div>
+              </div>
+
+              <div class="resa-field-row">
+                <div class="resa-field">
+                  <label for="resa-adultes">Adultes</label>
+                  <div class="resa-counter">
+                    <button type="button" class="resa-counter-btn" data-counter-dec="adultes" aria-label="Moins">−</button>
+                    <input type="number" id="resa-adultes" name="adultes" min="1" max="20" value="2" readonly />
+                    <button type="button" class="resa-counter-btn" data-counter-inc="adultes" aria-label="Plus">+</button>
+                  </div>
+                </div>
+                <div class="resa-field">
+                  <label for="resa-enfants">Enfants</label>
+                  <div class="resa-counter">
+                    <button type="button" class="resa-counter-btn" data-counter-dec="enfants" aria-label="Moins">−</button>
+                    <input type="number" id="resa-enfants" name="enfants" min="0" max="12" value="0" readonly />
+                    <button type="button" class="resa-counter-btn" data-counter-inc="enfants" aria-label="Plus">+</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Résultat disponibilité + prix -->
+              <div class="resa-dispo" data-dispo-result hidden>
+                <div class="resa-dispo-inner">
+                  <div class="resa-dispo-status" data-dispo-status></div>
+                  <div class="resa-dispo-price" data-dispo-price></div>
+                </div>
+              </div>
+
+              <div class="resa-dispo resa-dispo--unavailable" data-dispo-unavailable hidden>
+                <p>Ces dates ne sont pas disponibles pour ce logement. Essayez d'autres dates.</p>
+              </div>
+
+              <button class="btn resa-next-btn" type="button" data-next-step="2" disabled>
+                Continuer
+              </button>
+            </div>
+
+            <!-- Étape 2 : coordonnées -->
+            <div class="resa-panel" data-panel="2" hidden>
+              <h2 class="resa-panel-title">Vos coordonnées</h2>
+
+              <div class="resa-field-row">
+                <div class="resa-field">
+                  <label for="resa-prenom">Prénom</label>
+                  <input type="text" id="resa-prenom" name="prenom" autocomplete="given-name" required />
+                </div>
+                <div class="resa-field">
+                  <label for="resa-nom">Nom</label>
+                  <input type="text" id="resa-nom" name="nom" autocomplete="family-name" required />
+                </div>
+              </div>
+
+              <div class="resa-field">
+                <label for="resa-email">Email</label>
+                <input type="email" id="resa-email" name="email" autocomplete="email" required />
+              </div>
+
+              <div class="resa-field-row">
+                <div class="resa-field">
+                  <label for="resa-telephone">Téléphone</label>
+                  <input type="tel" id="resa-telephone" name="telephone" autocomplete="tel" />
+                </div>
+                <div class="resa-field">
+                  <label for="resa-pays">Pays</label>
+                  <div class="resa-select-wrap">
+                    <select id="resa-pays" name="pays" autocomplete="country-name">
+                      <option value="">— Pays —</option>
+                      <option value="BE" selected>Belgique</option>
+                      <option value="FR">France</option>
+                      <option value="NL">Pays-Bas</option>
+                      <option value="LU">Luxembourg</option>
+                      <option value="DE">Allemagne</option>
+                      <option value="GB">Royaume-Uni</option>
+                      <option value="OTHER">Autre</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="resa-field">
+                <label for="resa-message">Message <span class="resa-optional">(optionnel)</span></label>
+                <textarea id="resa-message" name="message" rows="4" placeholder="Demandes particulières, questions…"></textarea>
+              </div>
+
+              <div class="resa-panel-actions">
+                <button class="btn btn-outline resa-back-btn" type="button" data-prev-step="1">Retour</button>
+                <button class="btn resa-next-btn" type="button" data-next-step="3">Continuer</button>
+              </div>
+            </div>
+
+            <!-- Étape 3 : confirmation + paiement -->
+            <div class="resa-panel" data-panel="3" hidden>
+              <h2 class="resa-panel-title">Confirmation &amp; paiement</h2>
+
+              <div class="resa-recap" data-recap>
+                <!-- rempli dynamiquement par JS -->
+              </div>
+
+              <div class="resa-cgv">
+                <label class="resa-checkbox">
+                  <input type="checkbox" id="resa-cgv" required />
+                  <span>J'accepte les <a href="./mentions-legales.html" target="_blank">conditions générales</a> et la <a href="./confidentialite-cookies.html" target="_blank">politique de confidentialité</a>.</span>
+                </label>
+              </div>
+
+              <!-- Zone Stripe -->
+              <div class="resa-payment-block">
+                <div class="resa-payment-label">Acompte à régler maintenant</div>
+                <div class="resa-payment-amount" data-acompte-display>—</div>
+                <div id="stripe-payment-element">
+                  <!-- Stripe Elements s'insère ici -->
+                  <div class="resa-stripe-placeholder">
+                    <span>💳</span> Paiement sécurisé (intégration Stripe en cours)
+                  </div>
+                </div>
+              </div>
+
+              <div class="resa-panel-actions">
+                <button class="btn btn-outline resa-back-btn" type="button" data-prev-step="2">Retour</button>
+                <button class="btn resa-submit-btn" type="button" data-submit>
+                  <span class="resa-submit-label">Confirmer et payer l'acompte</span>
+                  <span class="resa-submit-loading" hidden>En cours…</span>
+                </button>
+              </div>
+
+              <div class="resa-error" data-submit-error hidden></div>
+            </div>
+
+            <!-- Confirmation finale -->
+            <div class="resa-panel resa-success" data-panel="success" hidden>
+              <div class="resa-success-icon">✓</div>
+              <h2>Réservation confirmée !</h2>
+              <p>Un email de confirmation vous a été envoyé. Nous avons hâte de vous accueillir.</p>
+              <a class="btn" href="./index.html">Retour à l'accueil</a>
+            </div>
+
+          </div>
+
+          <!-- Colonne résumé -->
+          <aside class="resa-summary" data-summary>
+            <div class="resa-summary-inner">
+              <div class="resa-summary-title">Résumé</div>
+
+              <div class="resa-summary-row" data-summary-logement>
+                <span class="resa-summary-key">Hébergement</span>
+                <span class="resa-summary-val" data-val="logement">—</span>
+              </div>
+              <div class="resa-summary-row" data-summary-dates>
+                <span class="resa-summary-key">Arrivée</span>
+                <span class="resa-summary-val" data-val="arrivee">—</span>
+              </div>
+              <div class="resa-summary-row">
+                <span class="resa-summary-key">Départ</span>
+                <span class="resa-summary-val" data-val="depart">—</span>
+              </div>
+              <div class="resa-summary-row">
+                <span class="resa-summary-key">Durée</span>
+                <span class="resa-summary-val" data-val="nuits">—</span>
+              </div>
+              <div class="resa-summary-row">
+                <span class="resa-summary-key">Voyageurs</span>
+                <span class="resa-summary-val" data-val="voyageurs">—</span>
+              </div>
+
+              <div class="resa-summary-divider"></div>
+
+              <div class="resa-summary-row">
+                <span class="resa-summary-key">Nuitées</span>
+                <span class="resa-summary-val" data-val="prix-nuits">—</span>
+              </div>
+              <div class="resa-summary-row" data-summary-menage>
+                <span class="resa-summary-key">Ménage</span>
+                <span class="resa-summary-val" data-val="prix-menage">—</span>
+              </div>
+              <div class="resa-summary-row" data-summary-taxe>
+                <span class="resa-summary-key">Taxe de séjour</span>
+                <span class="resa-summary-val" data-val="prix-taxe">—</span>
+              </div>
+
+              <div class="resa-summary-divider"></div>
+
+              <div class="resa-summary-row resa-summary-total">
+                <span class="resa-summary-key">Total</span>
+                <span class="resa-summary-val" data-val="total">—</span>
+              </div>
+              <div class="resa-summary-row resa-summary-acompte">
+                <span class="resa-summary-key">Acompte (30%)</span>
+                <span class="resa-summary-val" data-val="acompte">—</span>
+              </div>
+              <div class="resa-summary-row">
+                <span class="resa-summary-key">Solde à l'arrivée</span>
+                <span class="resa-summary-val" data-val="solde">—</span>
+              </div>
+            </div>
+          </aside>
+
+        </div>
+      </div>
+
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-main">
+        <div class="content-wrap">
+          <div class="footer-grid">
+            <div class="footer-rabbit-col">
+              <img class="footer-rabbit" src="/img/illustrations/lapin_BEIGE.png" alt="" aria-hidden="true" />
+            </div>
+            <div>
+              <div class="footer-title">LA SOURCE D'ARIMONT</div>
+              <div class="footer-links">
+                <span>Chem. de la Cense 22</span>
+                <span>4960 Malmedy, Belgique</span>
+                <span>+32 000 00 00</span>
+                <span>contact@domaine-arimont.be</span>
+              </div>
+            </div>
+            <div>
+              <div class="footer-title">Navigation</div>
+              <div class="footer-links">
+                <a href="./index.html">Accueil</a>
+                <a href="./gites-chambres.html">Gîtes &amp; chambres</a>
+                <a href="./la-region.html">Découvrir la région</a>
+                <a href="./restauration.html">Restauration</a>
+                <a href="./contact.html">Contact</a>
+              </div>
+            </div>
+            <div>
+              <div class="footer-title">Légales</div>
+              <div class="footer-links">
+                <a href="./mentions-legales.html">Mentions légales</a>
+                <a href="./confidentialite-cookies.html">Confidentialité &amp; Cookies</a>
+              </div>
+            </div>
+          </div>
+          <div class="footer-bottom">© <span data-year></span> le domaine d'arimont - Website par young, wild &amp; pixels agency</div>
+        </div>
+      </div>
+    </footer>
+
+    <script type="module" src="/src/reservation.js"></script>
+  </body>
+</html>

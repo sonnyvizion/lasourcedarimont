@@ -5,7 +5,7 @@
 .restauration-page:not(.menu-open) .site-header {
   color: var(--color-forest);
   background: var(--color-beige);
-  border-bottom: 2px solid var(--color-forest);
+  border-bottom: none;
 }
 
 .restauration-page:not(.menu-open) .logo-mark {
@@ -293,6 +293,147 @@
 
 .restauration-repas {
   margin-top: 64px;
+}
+
+/* ── Bouton + sur les cards ──────────────────────────────────────────────── */
+
+.menu-card {
+  position: relative;
+}
+
+.menu-card-peek {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(42, 88, 67, 0.45);
+  background: rgba(246, 241, 230, 0.85);
+  backdrop-filter: blur(4px);
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 1;
+  color: var(--color-forest);
+  cursor: pointer;
+  transition: background 0.18s, transform 0.18s;
+  z-index: 2;
+}
+
+.menu-card-peek:hover {
+  background: var(--color-forest);
+  color: var(--color-beige);
+  transform: scale(1.08);
+}
+
+/* ── Lightbox ────────────────────────────────────────────────────────────── */
+
+.meal-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+
+.meal-lightbox[hidden] {
+  display: none;
+}
+
+.meal-lightbox.is-open .meal-lightbox-backdrop {
+  opacity: 1;
+}
+
+.meal-lightbox.is-open .meal-lightbox-panel {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.meal-lightbox-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(20, 30, 16, 0.72);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.meal-lightbox-panel {
+  position: relative;
+  background: var(--color-beige);
+  border-radius: 20px;
+  overflow: hidden;
+  width: 100%;
+  max-width: 560px;
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  transform: translateY(16px) scale(0.97);
+  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  border: 2px solid var(--color-forest);
+}
+
+.meal-lightbox-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 2;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(42, 88, 67, 0.4);
+  background: rgba(246, 241, 230, 0.85);
+  backdrop-filter: blur(4px);
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  color: var(--color-forest);
+  cursor: pointer;
+  transition: background 0.18s;
+}
+
+.meal-lightbox-close:hover {
+  background: var(--color-forest);
+  color: var(--color-beige);
+}
+
+.meal-lightbox-img-wrap {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: var(--color-forest);
+  overflow: hidden;
+}
+
+.meal-lightbox-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.meal-lightbox-body {
+  padding: 18px 22px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.meal-lightbox-name {
+  font-family: var(--font-heading);
+  font-size: clamp(20px, 2.5vw, 28px);
+  font-weight: 700;
+  font-style: italic;
+  color: var(--color-ink);
+}
+
+.meal-lightbox-service {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+  opacity: 0.5;
 }
 
 /* ── Responsive ──────────────────────────────────────────────────────────── */

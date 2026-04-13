@@ -168,6 +168,40 @@ export default defineType({
       group: 'lodgings',
       initialValue: 'Voir les chambres',
     }),
+    defineField({
+      name: 'lodgingsInfraLabel',
+      title: 'Carte domaine — label',
+      type: 'string',
+      group: 'lodgings',
+      initialValue: 'Le domaine',
+    }),
+    defineField({
+      name: 'lodgingsInfraTitle',
+      title: 'Carte domaine — titre',
+      ...blockContent,
+      group: 'lodgings',
+    }),
+    defineField({
+      name: 'lodgingsInfraCta',
+      title: 'Carte domaine — CTA',
+      type: 'string',
+      group: 'lodgings',
+      initialValue: 'Découvrir le domaine',
+    }),
+    defineField({
+      name: 'lodgingsInfraImage',
+      title: 'Carte domaine — image',
+      type: 'image',
+      group: 'lodgings',
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: 'lodgingsInfraImageAlt',
+      title: 'Carte domaine — texte alternatif image',
+      type: 'string',
+      group: 'lodgings',
+      initialValue: "Les infrastructures du Domaine d'Arimont",
+    }),
 
     // ── POINTS FORTS ──────────────────────────────────────────────────────
     defineField({

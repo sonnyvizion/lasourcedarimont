@@ -5,7 +5,7 @@ import "./nos-partenaires.css";
 import "./nav-lang-globe.js";
 import { initBookingRequest } from "./booking-request.js";
 import { initTestimonialsSlider } from "./testimonials.js";
-import { fetchLocalizedCollection, urlFor } from "./sanity.js";
+import { applyPageSeo, fetchLocalizedCollection, fetchPageConfig, urlFor } from "./sanity.js";
 import { t } from "./static-translations.js";
 
 const yearEl = document.querySelector("[data-year]");
@@ -130,7 +130,11 @@ async function initSanityContent() {
   if (grid) grid.innerHTML = "";
 
   try {
-    const partenaires = await fetchLocalizedCollection("partenaire", { orderBy: "order asc" });
+    const [partenaires, pageConfig] = await Promise.all([
+      fetchLocalizedCollection("partenaire", { orderBy: "order asc" }),
+      fetchPageConfig("nos-partenaires"),
+    ]);
+    applyPageSeo(pageConfig);
 
     const featured = partenaires.find((p) => p.isFeatured);
     const others = partenaires.filter((p) => !p.isFeatured);

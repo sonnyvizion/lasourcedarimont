@@ -5,7 +5,7 @@
 .partners-page:not(.menu-open) .site-header {
   color: var(--color-forest);
   background: var(--color-beige);
-  border-bottom: 2px solid var(--color-forest);
+  border-bottom: none;
 }
 
 .partners-page:not(.menu-open) .logo-mark {

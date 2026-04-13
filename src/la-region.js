@@ -4,8 +4,7 @@ import "./home.css";
 import "./la-region.css";
 import "./nav-lang-globe.js";
 import { initBookingRequest } from "./booking-request.js";
-import { fetchLocalizedCollection, urlFor } from "./sanity.js";
-import { t } from "./static-translations.js";
+import { applyPageSeo, fetchLocalizedCollection, fetchPageConfig, urlFor } from "./sanity.js";
 
 const BASE_URL = import.meta.env.BASE_URL || "/";
 const assetUrl = (path) => `${BASE_URL}${path.replace(/^\/+/, "")}`;
@@ -142,42 +141,80 @@ const popupHtml = (spot) => {
   `;
 };
 
-const renderSpotsList = (filter = "outdoor") => {
+const activeFilters = {
+  type: "all",
+  maxMinutes: null,
+  kids: false,
+};
+
+const renderSpotsList = () => {
   const listRoot = document.querySelector("#region-spots-list");
   if (!listRoot) return;
 
-  listRoot.innerHTML = spots
-    .filter((spot) => spot.activityType === filter)
+  let filtered = [...spots];
+
+  if (activeFilters.type !== "all") {
+    filtered = filtered.filter((s) => s.activityType === activeFilters.type);
+  }
+  if (activeFilters.maxMinutes) {
+    filtered = filtered.filter((s) => driveMinutesFromGite(s.coords) <= activeFilters.maxMinutes);
+  }
+  if (activeFilters.kids) {
+    filtered = filtered.filter((s) => s.isKidsFriendly);
+  }
+
+  filtered.sort((a, b) => driveMinutesFromGite(a.coords) - driveMinutesFromGite(b.coords));
+
+  if (filtered.length === 0) {
+    listRoot.innerHTML = '<li class="spots-empty">Aucun lieu ne correspond à ces filtres.</li>';
+    return;
+  }
+
+  listRoot.innerHTML = filtered
     .map((spot) => {
-      const km = Math.round(distanceKmBetween(gite.coords, spot.coords));
-      const drive = formatDrive(driveMinutesFromGite(spot.coords));
+      const mins = driveMinutesFromGite(spot.coords);
+      const drive = formatDrive(mins);
       const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${spot.coords[1]},${spot.coords[0]}`;
       const wazeUrl = `https://waze.com/ul?ll=${spot.coords[1]},${spot.coords[0]}&navigate=yes`;
+      const typeLabel = spot.activityType === "outdoor" ? "🌿 Extérieur" : "🏛 Intérieur";
+      const tags = [typeLabel, spot.cat, spot.isKidsFriendly ? "👶 Enfants" : null]
+        .filter(Boolean)
+        .join(" · ");
+      const photoHtml = spot.img
+        ? `<div class="spot-detail-photo"><img src="${spot.img}" alt="${spot.name}" loading="lazy" /></div>`
+        : "";
       return `
-        <article class="region-activity-card" style="background-image:url('${spot.img}');">
-          <div class="region-activity-overlay">
-            <h3 class="region-activity-title">${spot.name}</h3>
-            <div class="region-activity-meta">${km} km · ${drive}</div>
-            <button class="region-activity-more" type="button" aria-expanded="false" aria-label="${t("common.ui.showDetails", { name: spot.name })}">+</button>
-            <div class="region-activity-details" hidden>
-              <p>${spot.desc}</p>
-              <div class="region-activity-links">
-                <a class="region-spot-icon-link" href="${mapsUrl}" target="_blank" rel="noopener noreferrer" aria-label="${t("common.ui.openInGoogleMaps", { name: spot.name })}">
-                  <img src="${assetUrl("/img/maps_icon.png")}" alt="" aria-hidden="true" />
-                </a>
-                <a class="region-spot-icon-link" href="${wazeUrl}" target="_blank" rel="noopener noreferrer" aria-label="${t("common.ui.openInWaze", { name: spot.name })}">
-                  <img src="${assetUrl("/img/waze_icon.png")}" alt="" aria-hidden="true" />
-                </a>
+        <li class="spot-item">
+          <button class="spot-row" type="button" aria-expanded="false">
+            <div>
+              <div class="spot-name">${spot.name}</div>
+              <div class="spot-cat">${tags}</div>
+            </div>
+            <div class="spot-dist">${drive}</div>
+            <div class="spot-toggle" aria-hidden="true">+</div>
+          </button>
+          <div class="spot-detail">
+            <div class="spot-detail-body">
+            <div class="spot-detail-inner">
+              <div class="spot-detail-text">
+                <p>${spot.desc}</p>
+                <div class="spot-detail-links">
+                  <a class="spot-nav-pill" href="${wazeUrl}" target="_blank" rel="noopener noreferrer">🧭 Waze</a>
+                  <a class="spot-nav-pill spot-nav-pill--maps" href="${mapsUrl}" target="_blank" rel="noopener noreferrer">📍 Maps</a>
+                </div>
               </div>
+              ${photoHtml}
+            </div>
             </div>
           </div>
-        </article>
+        </li>
       `;
     })
     .join("");
 };
 
-let activeFilter = "outdoor";
+// SEO
+fetchPageConfig("la-region").then(applyPageSeo);
 
 // Fetch des lieux depuis Sanity
 fetchLocalizedCollection("lieuRegion", { orderBy: "order asc" }).then((data) => {
@@ -191,112 +228,62 @@ fetchLocalizedCollection("lieuRegion", { orderBy: "order asc" }).then((data) => 
     site: s.site || "",
     coords: s.coords ? [s.coords.lng, s.coords.lat] : [0, 0],
     img: s.image ? urlFor(s.image).width(600).url() : "",
+    isKidsFriendly: s.isKidsFriendly || false,
   }));
-  renderSpotsList(activeFilter);
+  renderSpotsList();
   initMap();
 }).catch((err) => {
   console.error("Erreur Sanity lieux:", err);
-  renderSpotsList(activeFilter);
+  renderSpotsList();
 });
 
-const activityFilterButtons = document.querySelectorAll("[data-activity-filter]");
-const activitiesViewport = document.querySelector(".region-activities-viewport");
-const activitiesPrev = document.querySelector(".region-activities-prev");
-const activitiesNext = document.querySelector(".region-activities-next");
-const listRoot = document.querySelector("#region-spots-list");
-
-activityFilterButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    activeFilter = button.getAttribute("data-activity-filter") || "outdoor";
-    activityFilterButtons.forEach((btn) => {
-      const isActive = btn === button;
-      btn.classList.toggle("is-active", isActive);
-      btn.setAttribute("aria-selected", String(isActive));
-    });
-    renderSpotsList(activeFilter);
-    if (activitiesViewport) activitiesViewport.scrollTo({ left: 0, behavior: "smooth" });
+// ── Filtres chips ──
+document.querySelectorAll("[data-filter-type]").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll("[data-filter-type]").forEach((b) => b.classList.remove("is-active"));
+    btn.classList.add("is-active");
+    activeFilters.type = btn.dataset.filterType || "all";
+    renderSpotsList();
   });
 });
 
+const timeFilterBtn = document.querySelector("[data-filter-time]");
+timeFilterBtn?.addEventListener("click", () => {
+  const isActive = timeFilterBtn.classList.toggle("is-active");
+  activeFilters.maxMinutes = isActive ? parseInt(timeFilterBtn.dataset.filterTime, 10) : null;
+  renderSpotsList();
+});
+
+const kidsFilterBtn = document.querySelector("[data-filter-kids]");
+kidsFilterBtn?.addEventListener("click", () => {
+  activeFilters.kids = kidsFilterBtn.classList.toggle("is-active");
+  renderSpotsList();
+});
+
+// ── Accordion ──
+const listRoot = document.querySelector("#region-spots-list");
 if (listRoot) {
   listRoot.addEventListener("click", (event) => {
-    const target = event.target;
-    if (!(target instanceof Element)) return;
-    const toggle = target.closest(".region-activity-more");
-    if (!toggle) return;
-    const card = toggle.closest(".region-activity-card");
-    const details = card?.querySelector(".region-activity-details");
-    if (!card || !details) return;
-    const isOpen = card.classList.toggle("is-open");
-    details.hidden = !isOpen;
-    toggle.setAttribute("aria-expanded", String(isOpen));
-    toggle.textContent = isOpen ? "−" : "+";
-    toggle.classList.remove("is-clicked");
-    void toggle.offsetWidth;
-    toggle.classList.add("is-clicked");
+    if (!(event.target instanceof Element)) return;
+    const btn = event.target.closest(".spot-row");
+    if (!btn) return;
+    const item = btn.closest(".spot-item");
+    const detail = item?.querySelector(".spot-detail");
+    if (!item || !detail) return;
+    // Ferme les autres
+    listRoot.querySelectorAll(".spot-item.is-open").forEach((open) => {
+      if (open === item) return;
+      open.classList.remove("is-open");
+      const b = open.querySelector(".spot-row");
+      const tog = open.querySelector(".spot-toggle");
+      if (b) b.setAttribute("aria-expanded", "false");
+      if (tog) tog.textContent = "+";
+    });
+    const isOpen = item.classList.toggle("is-open");
+    btn.setAttribute("aria-expanded", String(isOpen));
+    const toggle = btn.querySelector(".spot-toggle");
+    if (toggle) toggle.textContent = isOpen ? "−" : "+";
   });
-}
-
-const slideActivities = (direction) => {
-  if (!activitiesViewport) return;
-  const step = activitiesViewport.clientWidth * 0.9;
-  activitiesViewport.scrollBy({ left: step * direction, behavior: "smooth" });
-};
-
-activitiesPrev?.addEventListener("click", () => slideActivities(-1));
-activitiesNext?.addEventListener("click", () => slideActivities(1));
-
-if (activitiesViewport) {
-  const desktopPointer = window.matchMedia("(hover: hover) and (pointer: fine)");
-  if (desktopPointer.matches) {
-    activitiesViewport.classList.add("is-draggable");
-    let isDragging = false;
-    let didDrag = false;
-    let startX = 0;
-    let startScrollLeft = 0;
-
-    const stopDragging = () => {
-      if (!isDragging) return;
-      isDragging = false;
-      activitiesViewport.classList.remove("is-dragging");
-    };
-
-    activitiesViewport.addEventListener("mousedown", (event) => {
-      didDrag = false;
-      if (event.button !== 0) return;
-      const target = event.target;
-      if (
-        target instanceof Element &&
-        target.closest("a, button, input, textarea, select, label, [role='button']")
-      ) {
-        return;
-      }
-      isDragging = true;
-      didDrag = false;
-      startX = event.pageX;
-      startScrollLeft = activitiesViewport.scrollLeft;
-      activitiesViewport.classList.add("is-dragging");
-      event.preventDefault();
-    });
-
-    window.addEventListener("mousemove", (event) => {
-      if (!isDragging) return;
-      const deltaX = event.pageX - startX;
-      if (Math.abs(deltaX) > 4) didDrag = true;
-      activitiesViewport.scrollLeft = startScrollLeft - deltaX;
-    });
-
-    window.addEventListener("mouseup", stopDragging);
-    activitiesViewport.addEventListener(
-      "click",
-      (event) => {
-        if (!didDrag) return;
-        event.preventDefault();
-        event.stopPropagation();
-      },
-      true
-    );
-  }
 }
 
 const initMap = () => {

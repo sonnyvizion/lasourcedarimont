@@ -28,10 +28,11 @@
             <span class="logo-mark" role="img" aria-hidden="true"></span>
           </a>
           <nav class="nav-links">
-            <a href="./index.html">Accueil</a>
             <a href="./gites-chambres.html">Gîtes &amp; chambres</a>
-            <a href="./la-region.html">La région</a>
+            <a href="./groupes-seminaires.html">Groupes</a>
+            <a href="#" data-nav="infrastructure">Infrastructures</a>
             <a href="./restauration.html">Restauration</a>
+            <a href="./la-region.html">La région</a>
           </nav>
         </div>
         <div class="nav-right">
@@ -63,11 +64,11 @@
 
     <div class="mobile-menu" aria-hidden="true">
       <div class="mobile-menu-inner">
-        <a class="menu-link" href="./index.html">Accueil</a>
         <a class="menu-link" href="./gites-chambres.html">Gîtes &amp; chambres</a>
-        <a class="menu-link" href="./la-region.html">La région</a>
+        <a class="menu-link" href="./groupes-seminaires.html">Groupes</a>
+        <a class="menu-link" href="#" data-nav="infrastructure">Infrastructures</a>
         <a class="menu-link" href="./restauration.html">Restauration</a>
-        <a class="menu-link" href="./groupes-seminaires.html">Groupes &amp; Séminaires</a>
+        <a class="menu-link" href="./la-region.html">La région</a>
         <div class="mobile-menu-social">
           <a href="#" aria-label="Facebook">
             <img src="/img/illustrations/fb_icon.svg" alt="" />
@@ -99,27 +100,25 @@
         </div>
       </section>
 
+      <section class="section region-map-section section-full-width">
+        <div id="region-map" class="region-map" aria-label="Carte des activités autour du Domaine"></div>
+        <p class="feature-bridge region-map-note">
+          Pins <strong>verts</strong> : activités extérieures. Pins <strong>oranges</strong> : activités intérieures. Le pin du domaine indique votre point de départ.
+        </p>
+      </section>
+
       <section class="section region-list-section">
         <div class="content-wrap">
           <div class="label" style="text-align: center;">Lieux à visiter</div>
-          <div class="region-activities-switch" role="tablist" aria-label="Filtrer les activités">
-            <button class="region-activities-switch-btn is-active" type="button" role="tab" aria-selected="true" data-activity-filter="outdoor">En extérieures</button>
-            <button class="region-activities-switch-btn" type="button" role="tab" aria-selected="false" data-activity-filter="indoor">À l'intérieures</button>
+          <div class="spots-filter-bar" role="group" aria-label="Filtrer les lieux">
+            <button class="spots-chip is-active" type="button" data-filter-type="all">Tous</button>
+            <button class="spots-chip" type="button" data-filter-type="outdoor">🌿 Extérieur</button>
+            <button class="spots-chip" type="button" data-filter-type="indoor">🏛 Intérieur</button>
+            <span class="spots-filter-sep" aria-hidden="true"></span>
+            <button class="spots-chip" type="button" data-filter-time="30">− 30 min</button>
+            <button class="spots-chip" type="button" data-filter-kids="true">👶 Enfants</button>
           </div>
-          <div class="region-activities-slider">
-            <button class="region-activities-arrow region-activities-prev" type="button" aria-label="Précédent">‹</button>
-            <div class="region-activities-viewport">
-              <div id="region-spots-list" class="region-activities-track" aria-live="polite"></div>
-            </div>
-            <button class="region-activities-arrow region-activities-next" type="button" aria-label="Suivant">›</button>
-          </div>
-
-        </div>
-      </section>
-
-      <section class="section region-map-section">
-        <div class="content-wrap">
-          <div id="region-map" class="region-map" aria-label="Carte des activités autour du Domaine"></div>
+          <ul id="region-spots-list" class="spots-list" aria-live="polite"></ul>
         </div>
       </section>
       <div class="region-video-wrap">

@@ -1,0 +1,24 @@
+[build]
+  command   = "npm run build"
+  publish   = "dist"
+  functions = "netlify/functions"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Redirige /api/* vers les Netlify Functions
+[[redirects]]
+  from   = "/api/reservation"
+  to     = "/.netlify/functions/reservation"
+  status = 200
+
+[[redirects]]
+  from   = "/api/stripe-webhook"
+  to     = "/.netlify/functions/stripe-webhook"
+  status = 200
+
+# SPA fallback (optionnel, site multi-pages donc pas critique)
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 404

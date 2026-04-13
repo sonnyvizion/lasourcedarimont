@@ -7,7 +7,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import { initBookingRequest } from "./booking-request.js";
-import { fetchLocalizedCollection, fetchLocalizedSingleton, urlFor } from "./sanity.js";
+import { applyPageSeo, fetchLocalizedCollection, fetchLocalizedSingleton, urlFor } from "./sanity.js";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -142,15 +142,6 @@ const renderPortableText = (blocks) => {
     .join("<br />");
 };
 
-const forceFeaturesIntroBeige = () => {
-  const introEl = document.querySelector(".content-wrap.essence [data-home-features-intro]");
-  if (!introEl) return;
-  introEl.style.setProperty("color", "var(--color-beige)", "important");
-  introEl.querySelectorAll("*").forEach((node) => {
-    node.style.setProperty("color", "var(--color-beige)", "important");
-  });
-};
-
 const renderTemoignage = (testimonial) => {
   const stars = "★".repeat(testimonial.rating) + "☆".repeat(5 - testimonial.rating);
   return `<article class="testimonial-card">
@@ -167,6 +158,8 @@ async function fetchHomeContent() {
       fetchLocalizedSingleton("homePage"),
       fetchLocalizedCollection("temoignage", { orderBy: "order asc" }),
     ]);
+
+    applyPageSeo(home);
 
     if (home?.heroLines?.length) {
       const split = document.querySelector(".hero-split");
@@ -205,11 +198,9 @@ async function fetchHomeContent() {
       if (el) el.textContent = home.featuresLabel;
     }
     if (home?.featuresIntro) {
-      const el = document.querySelector("[data-home-features-intro]");
-      if (el) {
+      document.querySelectorAll("[data-home-features-intro]").forEach((el) => {
         el.innerHTML = renderPortableText(home.featuresIntro);
-        forceFeaturesIntroBeige();
-      }
+      });
     }
     if (home?.featureCards?.length) {
       document.querySelectorAll("[data-home-feature]").forEach((card) => {
@@ -265,6 +256,34 @@ async function fetchHomeContent() {
     if (home?.lodgingsRoomsCta) {
       const el = document.querySelector("[data-home-lodgings-rooms-cta]");
       if (el) el.textContent = home.lodgingsRoomsCta;
+    }
+    if (home?.lodgingsInfraLabel) {
+      const el = document.querySelector("[data-home-lodgings-infra-label]");
+      if (el) el.textContent = home.lodgingsInfraLabel;
+    }
+    if (home?.lodgingsInfraTitle) {
+      const el = document.querySelector("[data-home-lodgings-infra-title]");
+      if (el) el.innerHTML = renderPortableText(home.lodgingsInfraTitle);
+    }
+    if (home?.lodgingsInfraCta) {
+      const el = document.querySelector("[data-home-lodgings-infra-cta]");
+      if (el) el.textContent = home.lodgingsInfraCta;
+    }
+    if (home?.lodgingsInfraImage) {
+      const el = document.querySelector("[data-home-lodgings-infra-image]");
+      if (el instanceof HTMLVideoElement) {
+        el.poster = urlFor(home.lodgingsInfraImage).width(1800).url();
+      } else if (el) {
+        el.src = urlFor(home.lodgingsInfraImage).width(1800).url();
+      }
+    }
+    if (home?.lodgingsInfraImageAlt) {
+      const el = document.querySelector("[data-home-lodgings-infra-image]");
+      if (el instanceof HTMLVideoElement) {
+        el.setAttribute("title", home.lodgingsInfraImageAlt);
+      } else if (el) {
+        el.alt = home.lodgingsInfraImageAlt;
+      }
     }
 
     // Groups images
@@ -1140,7 +1159,7 @@ if (!prefersReducedMotion) {
 
   if (headerEl && heroEl) {
     let heroHeight = heroEl.getBoundingClientRect().height || 0;
-    const lodgingsShowcaseEl = document.querySelector(".js-lodgings-showcase");
+    const lodgingsShowcaseEl = document.querySelector(".js-lodgings-duo");
     const updateHeroHeight = () => {
       heroHeight = heroEl.getBoundingClientRect().height || 0;
       updateHeaderTheme();
@@ -1297,111 +1316,85 @@ if (!prefersReducedMotion) {
     requestAnimationFrame(initRevealText);
   });
 
-  // Gallery slider: scroll-driven + arrow controls
+  // Gallery slider: boucle infinie + flèches + drag (desktop) / touch (mobile)
   const gallerySlider = document.querySelector(".gallery-slider");
   const galleryTrack = document.querySelector(".gallery-track");
   const galleryPrev = document.querySelector(".gallery-prev");
   const galleryNext = document.querySelector(".gallery-next");
 
-  if (gallerySlider && galleryTrack) {
+  if (gallerySlider && galleryTrack && galleryTrack.children.length) {
+    // Clonage des cartes pour la boucle infinie
+    Array.from(galleryTrack.children).forEach((card) => {
+      galleryTrack.appendChild(card.cloneNode(true));
+    });
+
+    const getHalfWidth = () => galleryTrack.scrollWidth / 2;
     const isMobile = window.matchMedia("(max-width: 980px)").matches;
+
     if (isMobile) {
-      gsap.set(galleryTrack, { x: 0 });
       gallerySlider.style.scrollBehavior = "auto";
-      const getMaxScroll = () => Math.max(0, galleryTrack.scrollWidth - gallerySlider.clientWidth);
-      const getStep = () => gallerySlider.clientWidth * 0.75;
-      let isTouchingSlider = false;
-      gallerySlider.addEventListener("touchstart", () => {
-        isTouchingSlider = true;
+
+      // Rebouclage natif au scroll
+      gallerySlider.addEventListener("scroll", () => {
+        const half = getHalfWidth();
+        if (gallerySlider.scrollLeft >= half) {
+          gallerySlider.scrollLeft -= half;
+        } else if (gallerySlider.scrollLeft <= 0) {
+          gallerySlider.scrollLeft += half;
+        }
       }, { passive: true });
-      const releaseTouch = () => {
-        isTouchingSlider = false;
-      };
-      gallerySlider.addEventListener("touchend", releaseTouch, { passive: true });
-      gallerySlider.addEventListener("touchcancel", releaseTouch, { passive: true });
 
-      ScrollTrigger.create({
-        trigger: gallerySlider,
-        start: "top 80%",
-        end: "top+=220% top",
-        scrub: 1.2,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          if (isTouchingSlider) return;
-          gsap.to(gallerySlider, {
-            scrollLeft: self.progress * getMaxScroll(),
-            duration: 0.2,
-            ease: "power1.out",
-            overwrite: true
-          });
-        }
+      // Positionner au milieu pour pouvoir aller dans les deux sens
+      requestAnimationFrame(() => {
+        gallerySlider.scrollLeft = getHalfWidth();
       });
 
+      const getStep = () => gallerySlider.clientWidth * 0.75;
       const slideByMobile = (direction) => {
-        const max = getMaxScroll();
         const step = getStep();
-        const current = gallerySlider.scrollLeft || 0;
-        let next = current + step * direction;
-        if (direction > 0 && next > max - 1) {
-          next = 0;
-        } else if (direction < 0 && next < 1) {
-          next = max;
-        } else {
-          next = Math.min(max, Math.max(0, next));
-        }
-        gallerySlider.scrollTo({ left: next, behavior: "smooth" });
+        gallerySlider.scrollBy({ left: step * direction, behavior: "smooth" });
       };
+      if (galleryPrev) galleryPrev.addEventListener("click", () => slideByMobile(-1));
+      if (galleryNext) galleryNext.addEventListener("click", () => slideByMobile(1));
 
-      if (galleryPrev) {
-        galleryPrev.addEventListener("click", () => slideByMobile(-1));
-      }
-      if (galleryNext) {
-        galleryNext.addEventListener("click", () => slideByMobile(1));
-      }
-
-      requestAnimationFrame(() => ScrollTrigger.refresh());
     } else {
-      const getMaxX = () => Math.max(0, galleryTrack.scrollWidth - gallerySlider.clientWidth);
-      const getX = () => Math.abs(gsap.getProperty(galleryTrack, "x")) || 0;
+      // Position initiale à 0, les clones sont après les originaux
+      gsap.set(galleryTrack, { x: 0 });
 
-      const scrollTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: gallerySlider,
-          start: "top 80%",
-          end: "top+=100% top",
-          scrub: 1.2,
-          invalidateOnRefresh: true
-        }
-      });
+      const getRawX = () => Number(gsap.getProperty(galleryTrack, "x")) || 0;
 
-      scrollTl.to(galleryTrack, {
-        x: () => -getMaxX(),
-        ease: "none",
-        invalidateOnRefresh: true
-      });
+      // Après chaque animation, se repositionne silencieusement si nécessaire
+      const normalize = () => {
+        const half = getHalfWidth();
+        const x = getRawX();
+        if (x <= -half) gsap.set(galleryTrack, { x: x + half });
+        else if (x > 0) gsap.set(galleryTrack, { x: x - half });
+      };
 
       const slideBy = (direction) => {
         const step = gallerySlider.clientWidth * 0.6;
-        const maxX = getMaxX();
-        const current = getX();
-        let next = current + step * direction;
-        if (direction > 0 && next > maxX) {
-          next = 0;
-        } else if (direction < 0 && next < 0) {
-          next = maxX;
-        } else {
-          next = Math.min(maxX, Math.max(0, next));
+        const half = getHalfWidth();
+        let currentX = getRawX();
+        let targetX = currentX - step * direction;
+
+        // Téléportation invisible pour que l'animation parte du bon côté
+        if (targetX > 0) {
+          currentX -= half;
+          targetX -= half;
+          gsap.set(galleryTrack, { x: currentX });
+        } else if (targetX <= -half) {
+          currentX += half;
+          targetX += half;
+          gsap.set(galleryTrack, { x: currentX });
         }
-        gsap.to(galleryTrack, { x: -next, duration: 0.6, ease: "power3.out" });
+
+        gsap.to(galleryTrack, { x: targetX, duration: 0.6, ease: "power3.out", onComplete: normalize });
       };
 
-      if (galleryPrev) {
-        galleryPrev.addEventListener("click", () => slideBy(-1));
-      }
-      if (galleryNext) {
-        galleryNext.addEventListener("click", () => slideBy(1));
-      }
+      if (galleryPrev) galleryPrev.addEventListener("click", () => slideBy(-1));
+      if (galleryNext) galleryNext.addEventListener("click", () => slideBy(1));
 
+      // Drag souris
       const desktopPointer = window.matchMedia("(hover: hover) and (pointer: fine)");
       if (desktopPointer.matches) {
         gallerySlider.classList.add("is-draggable");
@@ -1414,21 +1407,17 @@ if (!prefersReducedMotion) {
           if (!isDragging) return;
           isDragging = false;
           gallerySlider.classList.remove("is-dragging");
+          normalize();
         };
 
         gallerySlider.addEventListener("mousedown", (event) => {
           didDrag = false;
           if (event.button !== 0) return;
           const target = event.target;
-          if (
-            target instanceof Element &&
-            target.closest("a, button, input, textarea, select, label, [role='button']")
-          ) {
-            return;
-          }
+          if (target instanceof Element && target.closest("a, button, input, textarea, select, label, [role='button']")) return;
           isDragging = true;
           startX = event.pageX;
-          startTrackX = Number(gsap.getProperty(galleryTrack, "x")) || 0;
+          startTrackX = getRawX();
           gallerySlider.classList.add("is-dragging");
           gsap.killTweensOf(galleryTrack);
           event.preventDefault();
@@ -1438,21 +1427,15 @@ if (!prefersReducedMotion) {
           if (!isDragging) return;
           const deltaX = event.pageX - startX;
           if (Math.abs(deltaX) > 4) didDrag = true;
-          const maxX = getMaxX();
-          const nextX = Math.min(0, Math.max(-maxX, startTrackX + deltaX));
-          gsap.set(galleryTrack, { x: nextX });
+          gsap.set(galleryTrack, { x: startTrackX + deltaX });
         });
 
         window.addEventListener("mouseup", stopDragging);
-        gallerySlider.addEventListener(
-          "click",
-          (event) => {
-            if (!didDrag) return;
-            event.preventDefault();
-            event.stopPropagation();
-          },
-          true
-        );
+        gallerySlider.addEventListener("click", (event) => {
+          if (!didDrag) return;
+          event.preventDefault();
+          event.stopPropagation();
+        }, true);
       }
 
       requestAnimationFrame(() => ScrollTrigger.refresh());
@@ -1474,188 +1457,37 @@ if (!prefersReducedMotion) {
     testimonialsNext.addEventListener("click", () => slideTestimonials(1));
   }
 
-  const lodgingsShowcase = document.querySelector(".js-lodgings-showcase");
-  const lodgingsStage = document.querySelector(".lodgings-stage");
-  const lodgingsBgRise = document.querySelector(".lodgings-bg-rise");
-  const lodgingsSlideGites = document.querySelector('[data-lodging-slide="gites"]');
-  const lodgingsSlideChambres = document.querySelector('[data-lodging-slide="chambres"]');
-  const lodgingsProgressFills = document.querySelectorAll(".lodgings-progress-fill");
-  const lodgingsGitesVideo = document.querySelector(".lodgings-slide-gites .lodgings-slide-video");
-  const lodgingsChambresVideo = document.querySelector(".lodgings-slide-chambres .lodgings-slide-video");
-  const lodgingsIsMobile = window.matchMedia("(max-width: 980px)").matches;
+  // Lodgings duo : affiche le 1er frame + hover → lance/arrête la vidéo
+  document.querySelectorAll(".js-lodging-card").forEach((card) => {
+    const video = card.querySelector(".lodging-card-video");
+    if (!video) return;
+    let stopTimer = null;
+    // Force l'affichage du premier frame dès que possible
+    const showFirstFrame = () => { video.currentTime = 0.001; };
+    if (video.readyState >= 1) showFirstFrame();
+    else video.addEventListener("loadedmetadata", showFirstFrame, { once: true });
 
-  if (
-    lodgingsShowcase &&
-    lodgingsStage &&
-    lodgingsBgRise &&
-    lodgingsSlideGites &&
-    lodgingsSlideChambres &&
-    lodgingsProgressFills.length >= 2
-  ) {
-    const gitesTitle = lodgingsSlideGites.querySelector(".lodgings-slide-title");
-    const gitesBody = lodgingsSlideGites.querySelectorAll(".lodgings-slide-label, p, .btn");
-    const chambresTitle = lodgingsSlideChambres.querySelector(".lodgings-slide-title");
-    const chambresBody = lodgingsSlideChambres.querySelectorAll(".lodgings-slide-label, p, .btn");
-    const firstFill = lodgingsProgressFills[0];
-    const secondFill = lodgingsProgressFills[1];
-    const gitesPhaseEnd = 0.5;
-    const holdBeforeCross = 0.06;
-    const crossDuration = 0.08;
-    const chambresPhaseEnd = 0.88;
-    const chambresStart = gitesPhaseEnd + holdBeforeCross;
-    const gitesFullscreenAt = 0.72;
-    const bgHiddenY = 102;
-    const bgVisibleY = 0;
-
-    gsap.set(lodgingsSlideGites, { opacity: 1 });
-    gsap.set(lodgingsSlideChambres, { opacity: 0 });
-    gsap.set(firstFill, { scaleY: 0 });
-    gsap.set(secondFill, { scaleY: 0 });
-    gsap.set(chambresTitle, { opacity: 0 });
-    gsap.set(chambresBody, { opacity: 0 });
-    gsap.set(gitesTitle, { opacity: 1 });
-    gsap.set(gitesBody, { opacity: 1 });
-    gsap.set(lodgingsBgRise, { yPercent: bgHiddenY });
-    if (lodgingsGitesVideo) {
-      gsap.set(lodgingsGitesVideo, {
-        scale: 0.72,
-        y: () => window.innerHeight * 0.18
-      });
-    }
-    const primeScrubVideo = (videoEl) => {
-      if (!videoEl) return;
-      videoEl.pause();
-      videoEl.currentTime = 0;
-      const prime = () => {
-        const playback = videoEl.play();
-        if (playback && typeof playback.catch === "function") playback.catch(() => {});
-        window.setTimeout(() => videoEl.pause(), 120);
-      };
-      if (videoEl.readyState >= 1) prime();
-      else videoEl.addEventListener("loadedmetadata", prime, { once: true });
-    };
-
-    primeScrubVideo(lodgingsGitesVideo);
-    primeScrubVideo(lodgingsChambresVideo);
-
-    ScrollTrigger.create({
-      trigger: lodgingsShowcase,
-      start: "top bottom",
-      end: "top top",
-      scrub: 1,
-      onUpdate: (self) => {
-        gsap.set(lodgingsBgRise, { yPercent: bgHiddenY });
+    card.addEventListener("mouseenter", () => {
+      if (stopTimer) {
+        window.clearTimeout(stopTimer);
+        stopTimer = null;
       }
+      video.playbackRate = 1;
+      video.currentTime = 0;
+      const p = video.play();
+      if (p && typeof p.catch === "function") p.catch(() => {});
     });
-
-    const lodgingsTriggerStart = "top top";
-    const lodgingsTriggerEnd = lodgingsIsMobile
-      ? "bottom bottom"
-      : () => `+=${Math.round(window.innerHeight * 2.2)}`;
-    const lodgingsPinTarget = lodgingsIsMobile ? false : lodgingsStage;
-    const lodgingsAnticipatePin = lodgingsIsMobile ? 0 : 1;
-
-    ScrollTrigger.create({
-      trigger: lodgingsShowcase,
-      start: lodgingsTriggerStart,
-      end: lodgingsTriggerEnd,
-      scrub: 1,
-      pin: lodgingsPinTarget,
-      pinSpacing: true,
-      anticipatePin: lodgingsAnticipatePin,
-      invalidateOnRefresh: true,
-      onUpdate: (self) => {
-        const p = self.progress;
-        const gitesProgress = Math.max(0, Math.min(1, p / gitesPhaseEnd));
-        const gitesScaleProgress = Math.max(0, Math.min(1, gitesProgress / gitesFullscreenAt));
-        const gitesVideoProgress = gitesScaleProgress;
-        const chambresProgress = Math.max(
-          0,
-          Math.min(1, (p - chambresStart) / (chambresPhaseEnd - chambresStart))
-        );
-        const cross = Math.max(0, Math.min(1, (p - chambresStart) / crossDuration));
-
-        gsap.set(firstFill, { scaleY: gitesProgress });
-        gsap.set(secondFill, { scaleY: chambresProgress });
-        const bgRevealProgress = Math.max(
-          0,
-          Math.min(1, (gitesProgress - gitesFullscreenAt) / (1 - gitesFullscreenAt))
-        );
-        gsap.set(
-          lodgingsBgRise,
-          { yPercent: bgHiddenY - (bgHiddenY - bgVisibleY) * bgRevealProgress }
-        );
-
-        if (lodgingsGitesVideo) {
-          gsap.set(lodgingsGitesVideo, {
-            scale: 0.72 + 0.28 * gitesScaleProgress,
-            y: (1 - gitesScaleProgress) * window.innerHeight * 0.18
-          });
-        }
-
-        if (lodgingsGitesVideo && lodgingsGitesVideo.duration && Number.isFinite(lodgingsGitesVideo.duration)) {
-          const targetTime = Math.min(
-            Math.max(0, lodgingsGitesVideo.duration - 0.05),
-            lodgingsGitesVideo.duration * gitesVideoProgress
-          );
-          if (Math.abs(lodgingsGitesVideo.currentTime - targetTime) > 0.033) {
-            lodgingsGitesVideo.currentTime = targetTime;
-          }
-        }
-
-        if (lodgingsChambresVideo && lodgingsChambresVideo.duration && Number.isFinite(lodgingsChambresVideo.duration)) {
-          const targetTime = Math.min(
-            Math.max(0, lodgingsChambresVideo.duration - 0.05),
-            lodgingsChambresVideo.duration * chambresProgress
-          );
-          if (Math.abs(lodgingsChambresVideo.currentTime - targetTime) > 0.033) {
-            lodgingsChambresVideo.currentTime = targetTime;
-          }
-        }
-
-        gsap.set([lodgingsSlideGites, gitesTitle, ...gitesBody], { opacity: 1 - cross });
-        gsap.set(lodgingsSlideChambres, { opacity: cross });
-        gsap.set([chambresTitle, ...chambresBody], { opacity: cross });
-      }
+    card.addEventListener("mouseleave", () => {
+      video.playbackRate = 0.75;
+      stopTimer = window.setTimeout(() => {
+        video.pause();
+        video.playbackRate = 1;
+      }, 180);
     });
+  });
 
-    // Parallax sur la dernière frame après dépingage (desktop uniquement)
-    if (!lodgingsIsMobile && lodgingsChambresVideo) {
-      gsap.fromTo(
-        lodgingsChambresVideo,
-        { y: 0 },
-        {
-          y: () => window.innerHeight * 0.18,
-          ease: "none",
-          scrollTrigger: {
-            trigger: lodgingsShowcase,
-            start: "bottom 70%",
-            end: "bottom top",
-            scrub: true,
-            invalidateOnRefresh: true,
-          },
-        }
-      );
-    }
-  }
-
-  // Group parallax: all cards move together (desktop only)
-  if (!window.matchMedia("(max-width: 980px)").matches) {
-    gsap.fromTo(
-      ".feature-card",
-      { y: 35 },
-      {
-        y: -35,
-        ease: "none",
-        scrollTrigger: {
-          trigger: ".section-feature",
-          start: "top 85%",
-          end: ".section-dark bottom top",
-          scrub: 1
-        }
-      }
-    );
-  } else {
+  // Feature cards: mobile horizontal auto-scroll only
+  if (window.matchMedia("(max-width: 980px)").matches) {
     const featureGrid = document.querySelector(".feature-grid");
     if (featureGrid) {
       const getFeatureMaxScroll = () =>
@@ -1695,6 +1527,94 @@ if (!prefersReducedMotion) {
   }
 
 
+
+  // Parallax sur toutes les photos de la home (desktop uniquement)
+  if (!window.matchMedia("(max-width: 980px)").matches) {
+    // Gallery : parallax via div interne translateY (background-position ne fonctionne pas sur images paysage avec cover)
+    if (gallerySlider) {
+      const allGalleryCards = Array.from(gallerySlider.querySelectorAll(".card-photo"));
+      allGalleryCards.forEach((card) => {
+        const bgImage = card.style.backgroundImage;
+        if (!bgImage) return;
+        // Crée un div interne avec l'image, 60px plus haut que le container
+        const inner = document.createElement("div");
+        inner.style.cssText = `position:absolute;inset:-30px 0;background-image:${bgImage};background-size:cover;background-position:center;`;
+        card.style.backgroundImage = "none";
+        card.style.position = "relative";
+        card.style.overflow = "hidden";
+        card.insertBefore(inner, card.firstChild);
+        gsap.fromTo(inner,
+          { y: -30 },
+          {
+            y: 30,
+            ease: "none",
+            scrollTrigger: {
+              trigger: card,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: true
+            }
+          }
+        );
+      });
+    }
+
+    // Lodging duo
+    gsap.utils.toArray(".js-lodgings-duo .lodging-card-video, .js-lodgings-duo .lodging-card-img").forEach((el) => {
+      gsap.fromTo(el,
+        { y: -30 },
+        {
+          y: 30,
+          ease: "none",
+          scrollTrigger: {
+            trigger: el.closest(".lodging-card"),
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+            invalidateOnRefresh: true
+          }
+        }
+      );
+    });
+
+    // Section groupes
+    gsap.utils.toArray(".groups-img img").forEach((img) => {
+      gsap.fromTo(img,
+        { y: -30 },
+        {
+          y: 30,
+          ease: "none",
+          scrollTrigger: {
+            trigger: img.closest(".groups-img"),
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+            invalidateOnRefresh: true
+          }
+        }
+      );
+    });
+
+    // Banner home
+    gsap.utils.toArray(".banner .banner-video-desktop").forEach((video) => {
+      gsap.fromTo(
+        video,
+        { y: -24, scale: 1.08 },
+        {
+          y: 24,
+          scale: 1.08,
+          ease: "none",
+          scrollTrigger: {
+            trigger: video.closest(".banner"),
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+            invalidateOnRefresh: true
+          }
+        }
+      );
+    });
+  }
 
   // Pas d'animation de fade sur les sections.
 } else if (headerEl) {

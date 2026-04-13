@@ -7,7 +7,6 @@
 .region-page:not(.menu-open) .site-header {
   color: var(--color-forest);
   background: var(--color-beige);
-  border-bottom: 2px solid var(--color-forest);
 }
 
 .region-page:not(.menu-open) .logo-mark {
@@ -54,12 +53,13 @@
 }
 
 .region-map-section {
-  padding-top: 60px;
+  padding-top: 30px;
+  padding-bottom: 48px;
   background: var(--color-beige);
 }
 
 .region-list-section {
-  padding-top: 0;
+  padding-top: 30px;
   padding-bottom: 60px;
   background: var(--color-beige);
 }
@@ -68,254 +68,215 @@
   margin-bottom: 32px;
 }
 
-.region-activities-switch {
-
-  margin-bottom: 74px;
-  margin-top: 14px;
+/* ── Filtres ── */
+.spots-filter-bar {
   display: flex;
-  border: 2px solid var(--color-forest);
-  border-radius: 999px;
-  padding: 4px;
-  background: rgba(42, 88, 67, 0.06);
-  position: static;
-  top: auto;
-  z-index: auto;
-  width: fit-content;
-  margin-inline: auto;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 28px;
+  margin-top: 14px;
 }
 
-.region-activities-switch-btn {
-  min-width: 102px;
-  border: 0;
-  background: transparent;
-  color: var(--color-forest);
+.spots-chip {
+  padding: 8px 16px;
   border-radius: 999px;
   font-family: var(--font-body);
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.02em;
-  padding: 10px 18px;
+  letter-spacing: 0.05em;
   cursor: pointer;
+  border: 1.5px solid rgba(42, 88, 67, 0.35);
+  color: var(--color-forest);
+  background: transparent;
+  transition: background 0.18s, color 0.18s, border-color 0.18s;
 }
 
-.region-activities-switch-btn.is-active {
+.spots-chip.is-active {
+  background: var(--color-forest);
+  color: var(--color-beige);
+  border-color: var(--color-forest);
+}
+
+.spots-filter-sep {
+  width: 1px;
+  height: 20px;
+  background: rgba(42, 88, 67, 0.25);
+  flex-shrink: 0;
+}
+
+/* ── Liste accordion ── */
+.spots-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.spot-item {
+  border-top: 1px solid rgba(42, 58, 32, 0.15);
+}
+
+.spot-item:last-child {
+  border-bottom: 1px solid rgba(42, 58, 32, 0.15);
+}
+
+.spot-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 4px;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--font-body);
+  transition: background 0.15s;
+}
+
+.spot-row:hover {
+  background: rgba(42, 88, 67, 0.04);
+}
+
+.spot-name {
+  font-size: 17px;
+  font-weight: 500;
+  color: var(--color-ink);
+  letter-spacing: -0.01em;
+}
+
+.spot-cat {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #5a7a4a;
+  margin-top: 3px;
+}
+
+.spot-dist {
+  font-size: 13px;
+  color: #5a7a4a;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.spot-toggle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(42, 58, 32, 0.35);
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  color: var(--color-forest);
+  font-weight: 300;
+  line-height: 1;
+  transition: transform 0.22s ease, border-color 0.18s;
+  flex-shrink: 0;
+}
+
+.spot-item.is-open .spot-toggle {
+  transform: rotate(45deg);
+  border-color: var(--color-forest);
+}
+
+/* ── Panneau détail (accordéon) ── */
+.spot-detail {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.spot-item.is-open .spot-detail {
+  grid-template-rows: 1fr;
+}
+
+.spot-detail-body {
+  overflow: hidden;
+  min-height: 0;
+  padding: 0 4px;
+  transition: padding 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.spot-item.is-open .spot-detail-body {
+  padding: 0 4px 20px;
+}
+
+.spot-detail-inner {
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  gap: 20px;
+  align-items: start;
+  padding-top: 4px;
+}
+
+.spot-detail-text {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.spot-detail-text p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.65;
+  color: #3a4f2e;
+}
+
+.spot-detail-links {
+  display: flex;
+  gap: 8px;
+}
+
+.spot-nav-pill {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 1.5px solid var(--color-forest);
+  color: var(--color-forest);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.spot-nav-pill:hover {
+  background: rgba(42, 88, 67, 0.08);
+}
+
+.spot-nav-pill--maps {
   background: var(--color-forest);
   color: var(--color-beige);
 }
 
-.region-activities-slider {
-  position: relative;
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
+.spot-nav-pill--maps:hover {
+  background: #1e4030;
 }
 
-.region-activities-viewport {
-  overflow: hidden;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .region-activities-viewport.is-draggable {
-    cursor: grab;
-    user-select: none;
-  }
-
-  .region-activities-viewport.is-draggable.is-dragging {
-    cursor: grabbing;
-  }
-}
-
-.region-activities-track {
-  display: flex;
-  gap: 14px;
-  padding-left: 5vw;
-  padding-right: 2vw;
-}
-
-.region-activity-card {
-  position: relative;
-  flex: 0 0 clamp(360px, 42vw, 560px);
-  aspect-ratio: 16 / 9;
-  background-size: cover;
-  background-position: center;
-  background-color: #2a5843;
-  border-radius: 16px;
-  overflow: hidden;
-}
-
-.region-activity-card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.18) 0%, rgba(0, 0, 0, 0.66) 100%);
-}
-
-.region-activity-overlay {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  padding: 16px;
-  display: grid;
-  align-content: start;
-  color: var(--color-white);
-}
-
-.region-activity-title {
-  margin: 0;
-  font-size: clamp(20px, 1.6vw, 28px);
-  line-height: 1.1;
-  font-family: var(--font-body);
-  font-weight: 500;
-  color: var(--color-white);
-}
-
-.region-activity-meta {
-  margin-top: 4px;
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.9);
-}
-
-.region-activity-more {
-  position: absolute;
-  right: 12px;
-  bottom: 12px;
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  padding: 0;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.7);
-  background: rgba(0, 0, 0, 0.35);
-  color: var(--color-white);
-  font-family: var(--font-body);
-  font-weight: 500;
-  font-size: 22px;
-  line-height: 1;
-  transform-origin: center;
-  transition: transform 0.2s ease;
-}
-
-.region-activity-more.is-clicked {
-  animation: region-more-pop 220ms cubic-bezier(0.2, 0.9, 0.25, 1.2);
-}
-
-@keyframes region-more-pop {
-  0% {
-    transform: scale(1);
-  }
-  35% {
-    transform: scale(0.84);
-  }
-  100% {
-    transform: scale(1.08);
-  }
-}
-
-.region-activity-details {
-  position: absolute;
-  left: 16px;
-  right: 60px;
-  bottom: 14px;
-  background: rgba(0, 0, 0, 0.58);
-  border: 1px solid rgba(255, 255, 255, 0.22);
+.spot-detail-photo {
   border-radius: 12px;
-  padding: 10px;
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  background: #c8d8b8;
 }
 
-.region-activity-details p {
-  margin: 0;
-  font-size: 13px;
-  line-height: 1.35;
+.spot-detail-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
-.region-activity-links {
-  margin-top: 8px;
-  display: inline-flex;
-  gap: 8px;
-}
-
-.region-activity-card.is-open {
-  background-image: none !important;
-  background-color: #fff;
-}
-
-.region-activity-card.is-open::after {
-  background: #fff;
-}
-
-.region-activity-card.is-open .region-activity-overlay {
-  color: #171717;
-  gap: 8px;
-  padding: 18px 18px 16px;
-  align-content: start;
-}
-
-.region-activity-card.is-open .region-activity-title {
-  color: #111;
-}
-
-.region-activity-card.is-open .region-activity-meta {
-  color: #444;
-  margin-top: 0;
-}
-
-.region-activity-card.is-open .region-activity-more {
-  border: 1px solid #1f1f1f;
-  background: #fff;
-  color: #111;
-}
-
-.region-activity-card.is-open .region-activity-details {
-  position: static;
-  left: auto;
-  right: auto;
-  bottom: auto;
-  margin-top: 8px;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-}
-
-.region-activity-card.is-open .region-activity-details p {
-  color: #1c1c1c;
+.spots-empty {
+  padding: 32px 0;
   font-size: 14px;
-  line-height: 1.45;
-}
-
-.region-activity-card.is-open .region-activity-links {
-  margin-top: 12px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.region-activity-card.is-open .region-spot-icon-link {
-  border-color: #1f1f1f;
-  background: #f4f4f4;
-}
-
-.region-activities-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 55px;
-  height: 55px;
-  border-radius: 999px;
-  border: 2px solid rgba(255, 255, 255, 0.9);
-  background: rgba(0, 0, 0, 0.18);
-  color: var(--color-white);
-  font-size: 29px;
-  z-index: 3;
-}
-
-.region-activities-prev {
-  left: 16px;
-}
-
-.region-activities-next {
-  right: 16px;
+  color: #5a7a4a;
+  text-align: center;
 }
 
 .region-video-wrap {
@@ -398,13 +359,21 @@
 }
 
 .region-map {
-  width: 80%;
+  width: min(calc(100% - (var(--content-padding) * 2)), var(--max-width));
   height: 560px;
   border-radius: 18px;
   overflow: hidden;
   border: 3px solid var(--color-forest);
+  margin: auto;
+}
 
-  margin : auto;
+.region-map-note {
+  width: 25%;
+  margin-top: 14px;
+  margin-right: 0;
+  margin-bottom: 0;
+  margin-left: max(var(--content-padding), calc((100vw - var(--max-width)) / 2));
+  text-align: left;
 }
 
 .mapboxgl-popup-content {
@@ -537,33 +506,21 @@
   .region-map {
     height: 50vh;
     min-height: 420px;
-    width: 90%;
+    width: min(calc(100% - (var(--content-padding) * 2)), var(--max-width));
   }
 
-  .region-activities-switch {
-    top: auto;
+  .region-map-note {
+    width: min(calc(100% - (var(--content-padding) * 2)), var(--max-width));
+    margin-left: auto;
+    margin-right: auto;
   }
 
-  .region-activities-viewport {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+  .spot-detail-inner {
+    grid-template-columns: 1fr;
   }
 
-  .region-activities-track {
-    width: max-content;
-    padding-right: 6vw;
-  }
-
-  .region-activity-card {
-    flex-basis: 86vw;
-  }
-
-  .region-activities-arrow {
-    display: none;
-  }
-
-  .region-activity-title {
-    font-size: 26px;
+  .spot-detail-photo {
+    aspect-ratio: 16 / 9;
   }
 
   .region-video-desktop {

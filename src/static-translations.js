@@ -7,6 +7,8 @@ const STATIC_TRANSLATIONS = {
       nav: {
         home: "Accueil",
         lodgings: "Gîtes & chambres",
+        groups: "Groupes",
+        infrastructure: "Infrastructures",
         region: "La région",
         dining: "Restauration",
         book: "Je réserve",
@@ -103,6 +105,11 @@ const STATIC_TRANSLATIONS = {
       lodgingsRoomsTitle:
         "Des nuits <span class=\"semi-italic\">confortables</span><br />pour des journées inoubliables",
       lodgingsRoomsCta: "Voir les chambres",
+      lodgingsInfraLabel: "Le domaine",
+      lodgingsInfraTitle:
+        "Piscine, jardins, espaces communs —<br />tout est là pour <span class=\"semi-italic\">ne manquer de rien</span>",
+      lodgingsInfraCta: "Découvrir le domaine",
+      lodgingsInfraImageAlt: "Les infrastructures du Domaine d'Arimont",
     },
     contact: {
       metaTitle: "Contact & Réservation – La Source d'Arimont aux Ardennes",
@@ -305,6 +312,8 @@ const STATIC_TRANSLATIONS = {
       nav: {
         home: "Home",
         lodgings: "Lodgings & rooms",
+        groups: "Groups",
+        infrastructure: "Infrastructure",
         region: "The region",
         dining: "Dining",
         book: "Book now",
@@ -401,6 +410,11 @@ const STATIC_TRANSLATIONS = {
       lodgingsRoomsTitle:
         "Comfortable <span class=\"semi-italic\">nights</span><br />for unforgettable days",
       lodgingsRoomsCta: "View rooms",
+      lodgingsInfraLabel: "The estate",
+      lodgingsInfraTitle:
+        "Pool, gardens, shared spaces —<br />everything is there for a <span class=\"semi-italic\">carefree stay</span>",
+      lodgingsInfraCta: "Discover the estate",
+      lodgingsInfraImageAlt: "Infrastructure at Domaine d'Arimont",
     },
     contact: {
       metaTitle: "Contact & Booking – La Source d'Arimont in the Ardennes",
@@ -603,6 +617,8 @@ const STATIC_TRANSLATIONS = {
       nav: {
         home: "Home",
         lodgings: "Gites & kamers",
+        groups: "Groepen",
+        infrastructure: "Infrastructuur",
         region: "De streek",
         dining: "Catering",
         book: "Boeken",
@@ -699,6 +715,11 @@ const STATIC_TRANSLATIONS = {
       lodgingsRoomsTitle:
         "Comfortabele <span class=\"semi-italic\">nachten</span><br />voor onvergetelijke dagen",
       lodgingsRoomsCta: "Bekijk de kamers",
+      lodgingsInfraLabel: "Het domein",
+      lodgingsInfraTitle:
+        "Zwembad, tuinen, gedeelde ruimtes —<br />alles is er voor een <span class=\"semi-italic\">zorgeloos verblijf</span>",
+      lodgingsInfraCta: "Ontdek het domein",
+      lodgingsInfraImageAlt: "De infrastructuur van Domaine d'Arimont",
     },
     contact: {
       metaTitle: "Contact & Reservering – La Source d'Arimont in de Ardennen",
@@ -901,6 +922,8 @@ const STATIC_TRANSLATIONS = {
       nav: {
         home: "Start",
         lodgings: "Ferienhäuser & Zimmer",
+        groups: "Gruppen",
+        infrastructure: "Infrastruktur",
         region: "Die Region",
         dining: "Verpflegung",
         book: "Buchen",
@@ -997,6 +1020,11 @@ const STATIC_TRANSLATIONS = {
       lodgingsRoomsTitle:
         "Komfortable <span class=\"semi-italic\">Nächte</span><br />für unvergessliche Tage",
       lodgingsRoomsCta: "Zimmer ansehen",
+      lodgingsInfraLabel: "Das Anwesen",
+      lodgingsInfraTitle:
+        "Pool, Gärten, Gemeinschaftsbereiche —<br />alles ist da für einen <span class=\"semi-italic\">sorglosen Aufenthalt</span>",
+      lodgingsInfraCta: "Anwesen entdecken",
+      lodgingsInfraImageAlt: "Infrastruktur des Domaine d'Arimont",
     },
     contact: {
       metaTitle: "Kontakt & Buchung – La Source d'Arimont in den Ardennen",
@@ -1253,10 +1281,14 @@ const applySharedTranslations = () => {
 
   setTextAll(".nav-links a[href='./index.html']", t("common.nav.home"));
   setTextAll(".nav-links a[href='./gites-chambres.html']", t("common.nav.lodgings"));
+  setTextAll(".nav-links a[href='./groupes-seminaires.html']", t("common.nav.groups"));
+  setTextAll(".nav-links a[data-nav='infrastructure']", t("common.nav.infrastructure"));
   setTextAll(".nav-links a[href='./la-region.html']", t("common.nav.region"));
   setTextAll(".nav-links a[href='./restauration.html']", t("common.nav.dining"));
   setTextAll(".mobile-menu .menu-link[href='./index.html']", t("common.nav.home"));
   setTextAll(".mobile-menu .menu-link[href='./gites-chambres.html']", t("common.nav.lodgings"));
+  setTextAll(".mobile-menu .menu-link[href='./groupes-seminaires.html']", t("common.nav.groups"));
+  setTextAll(".mobile-menu .menu-link[data-nav='infrastructure']", t("common.nav.infrastructure"));
   setTextAll(".mobile-menu .menu-link[href='./la-region.html']", t("common.nav.region"));
   setTextAll(".mobile-menu .menu-link[href='./restauration.html']", t("common.nav.dining"));
   setTextAll(".nav-cta", t("common.nav.book"));
@@ -1324,6 +1356,10 @@ const applyHomeTranslations = () => {
   const ctas = document.querySelectorAll(".lodgings-slide-overlay .btn");
   if (ctas[0]) ctas[0].textContent = t("home.lodgingsGitesCta");
   if (ctas[1]) ctas[1].textContent = t("home.lodgingsRoomsCta");
+  setText("[data-home-lodgings-infra-label]", t("home.lodgingsInfraLabel"));
+  setHTML("[data-home-lodgings-infra-title]", t("home.lodgingsInfraTitle"));
+  setText("[data-home-lodgings-infra-cta]", t("home.lodgingsInfraCta"));
+  setAttr("[data-home-lodgings-infra-image]", "alt", t("home.lodgingsInfraImageAlt"));
 };
 
 const applyContactTranslations = () => {

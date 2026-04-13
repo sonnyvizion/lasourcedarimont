@@ -14,7 +14,8 @@ export default defineConfig({
         contact: resolve(__dirname, "contact.html"),
         mentionsLegales: resolve(__dirname, "mentions-legales.html"),
         confidentialiteCookies: resolve(__dirname, "confidentialite-cookies.html"),
-        groupesSeminaires: resolve(__dirname, "groupes-seminaires.html")
+        groupesSeminaires: resolve(__dirname, "groupes-seminaires.html"),
+        reservation: resolve(__dirname, "reservation.html")
       }
     }
   },

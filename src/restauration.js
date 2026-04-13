@@ -5,7 +5,7 @@ import "./restauration.css";
 import "./nav-lang-globe.js";
 import { initBookingRequest } from "./booking-request.js";
 import { initTestimonialsSlider } from "./testimonials.js";
-import { fetchLocalizedCollection, urlFor } from "./sanity.js";
+import { applyPageSeo, fetchLocalizedCollection, fetchPageConfig, urlFor } from "./sanity.js";
 
 const BASE_URL = import.meta.env.BASE_URL || "/";
 const assetUrl = (path) => `${BASE_URL}${path.replace(/^\/+/, "")}`;
@@ -115,8 +115,14 @@ const renderMenuFeatured = (f) => {
   </article>`;
 };
 
-const renderFormule = (f) => `
+const renderFormule = (f) => {
+  const imgUrl = f.image ? urlFor(f.image).width(1120).url() : "";
+  const peekBtn = imgUrl
+    ? `<button class="menu-card-peek" type="button" aria-label="Voir la photo de ${f.name}" data-lightbox-img="${imgUrl}" data-lightbox-name="${f.name}" data-lightbox-service="${f.service || ""}">+</button>`
+    : "";
+  return `
   <article class="menu-card">
+    ${peekBtn}
     <div class="menu-card-body">
       ${f.badge ? `<div class="menu-badge">${f.badge}</div>` : ""}
       <h3>${f.name}</h3>
@@ -125,6 +131,7 @@ const renderFormule = (f) => `
       ${f.prix ? `<div class="menu-card-footer"><span class="menu-price">${f.prix}</span></div>` : ""}
     </div>
   </article>`;
+};
 
 async function initSanityContent() {
   const dejeunerFeaturedWrap = document.querySelector(".dejeuners-featured-wrap");
@@ -136,7 +143,11 @@ async function initSanityContent() {
   if (repasGrid) repasGrid.innerHTML = "";
 
   try {
-    const formules = await fetchLocalizedCollection("formule", { orderBy: "order asc" });
+    const [formules, pageConfig] = await Promise.all([
+      fetchLocalizedCollection("formule", { orderBy: "order asc" }),
+      fetchPageConfig("restauration"),
+    ]);
+    applyPageSeo(pageConfig);
 
     const dejeuners = formules.filter((f) => f.categorie === "petitDejeuner");
     const repas = formules.filter((f) => f.categorie === "repas");
@@ -156,3 +167,43 @@ async function initSanityContent() {
 
 initSanityContent();
 initTestimonialsSlider();
+
+// ── Lightbox photo repas ───────────────────────────────────────────────────
+
+const lightbox = document.getElementById("meal-lightbox");
+const lightboxImg = lightbox?.querySelector(".meal-lightbox-img");
+const lightboxName = lightbox?.querySelector(".meal-lightbox-name");
+const lightboxService = lightbox?.querySelector(".meal-lightbox-service");
+
+const openLightbox = (img, name, service) => {
+  if (!lightbox || !lightboxImg) return;
+  lightboxImg.src = img;
+  lightboxImg.alt = name;
+  if (lightboxName) lightboxName.textContent = name;
+  if (lightboxService) lightboxService.textContent = service;
+  lightbox.hidden = false;
+  document.body.style.overflow = "hidden";
+  requestAnimationFrame(() => lightbox.classList.add("is-open"));
+};
+
+const closeLightbox = () => {
+  if (!lightbox) return;
+  lightbox.classList.remove("is-open");
+  document.body.style.overflow = "";
+  lightbox.addEventListener("transitionend", () => { lightbox.hidden = true; }, { once: true });
+};
+
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest(".menu-card-peek");
+  if (btn) {
+    openLightbox(btn.dataset.lightboxImg, btn.dataset.lightboxName, btn.dataset.lightboxService);
+    return;
+  }
+  if (e.target.closest(".meal-lightbox-close") || e.target.classList.contains("meal-lightbox-backdrop")) {
+    closeLightbox();
+  }
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") closeLightbox();
+});

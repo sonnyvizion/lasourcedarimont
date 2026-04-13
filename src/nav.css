@@ -1,7 +1,7 @@
 .site-header {
   position: fixed;
   width: 100%;
-  height: 70px;
+  height: 56px;
   top: 0;
   left: 0;
   z-index: 12;
@@ -14,7 +14,7 @@
 .site-header.is-solid {
   background: rgba(246, 241, 230, 0.95);
   color: var(--color-forest);
-  border-bottom: 1px solid rgba(24, 53, 40, 0.15);
+  border-bottom: none;
 }
 
 .site-header.is-over-lodgings {
@@ -59,10 +59,10 @@
 }
 
 .logo-mark {
-  height: 50px;
-  width: 50px;
+  height: 38px;
+  width: 38px;
   position: relative;
-  top: -5px;
+  top: -3px;
   background-color: var(--color-white);
   -webkit-mask: url("/img/VectorLogo.svg") no-repeat center / contain;
   mask: url("/img/VectorLogo.svg") no-repeat center / contain;
@@ -255,9 +255,9 @@
 }
 
 .nav-lang-globe {
-  width: 70px;
-  height: 70px;
-  flex: 0 0 70px;
+  width: 56px;
+  height: 56px;
+  flex: 0 0 56px;
   display: inline-block;
 }
 
@@ -322,7 +322,7 @@
 .legal-page .site-header {
   background: rgba(246, 241, 230, 0.95);
   color: var(--color-forest);
-  border-bottom: 1px solid rgba(24, 53, 40, 0.15);
+  border-bottom: none;
 }
 
 .contact-page .logo-mark,
