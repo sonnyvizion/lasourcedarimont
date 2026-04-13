@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup – Section groupes</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #1b1f14;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  color: #2a3a20;
+  padding: 32px 20px 60px;
+}
+h1.page-title { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: #6b7a60; margin-bottom: 6px; }
+p.page-sub { font-size: 12px; color: #4a5540; margin-bottom: 36px; }
+
+/* ── Shared section shell ── */
+.mock-section {
+  background: #f0ebe0;
+  border-radius: 16px;
+  padding: 56px 48px;
+  margin-bottom: 20px;
+  position: relative;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: border-color .2s;
+}
+.mock-section.selected { border-color: #4a7a40; }
+.mock-section::after {
+  content: attr(data-label);
+  position: absolute;
+  top: 14px; left: 20px;
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #7a9a6a;
+}
+
+/* Shared text atoms */
+.m-label {
+  font-size: 10px; font-weight: 900; letter-spacing: .14em;
+  text-transform: uppercase; color: #4a7a40; margin-bottom: 12px;
+}
+.m-title {
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 300; line-height: 1.08; letter-spacing: -1px;
+  color: #1e2f18;
+}
+.m-title em { font-family: Georgia, serif; font-style: italic; font-weight: 700; }
+.m-body {
+  font-size: 14px; line-height: 1.7; color: #3a4f2e; opacity: .82;
+  max-width: 480px;
+}
+.m-body strong { font-weight: 700; opacity: 1; color: #1e2f18; }
+.m-stats {
+  display: flex; gap: 36px; padding: 0; list-style: none;
+}
+.m-stat-num {
+  font-size: 36px; font-weight: 300; color: #1e2f18;
+  letter-spacing: -1px; line-height: 1; display: block;
+}
+.m-stat-lbl {
+  font-size: 9px; text-transform: uppercase; letter-spacing: .12em;
+  color: #5a7a4a; display: block; margin-top: 4px;
+}
+.m-btns { display: flex; gap: 10px; flex-wrap: wrap; }
+.m-btn {
+  padding: 12px 22px; font-size: 11px; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; border-radius: 100px; text-decoration: none;
+  display: inline-block;
+}
+.m-btn-filled { background: #2a3a20; color: #f0ebe0; }
+.m-btn-outline { border: 1.5px solid rgba(42,58,32,.5); color: #2a3a20; }
+.m-img {
+  background: #c8d8b8; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: #6a8a5a; letter-spacing: .06em;
+}
+
+/* ─────────────────────────────────────────
+   OPTION A – Centré & symétrique (mobile-first)
+   ───────────────────────────────────────── */
+.opt-a-inner {
+  display: flex; flex-direction: column; align-items: center;
+  text-align: center; gap: 24px;
+}
+.opt-a-inner .m-title { max-width: 600px; }
+.opt-a-inner .m-body { text-align: center; margin: 0 auto; }
+.opt-a-inner .m-stats { justify-content: center; }
+.opt-a-inner .m-btns { justify-content: center; }
+.opt-a-imgs {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 12px; width: 100%; margin-top: 8px;
+}
+.opt-a-imgs .m-img { height: 160px; }
+
+/* ─────────────────────────────────────────
+   OPTION B – 2 colonnes strictement alignées
+   ───────────────────────────────────────── */
+.opt-b-inner {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 64px; align-items: center;
+}
+.opt-b-text { display: flex; flex-direction: column; gap: 20px; }
+.opt-b-imgs { display: grid; grid-template-rows: 1fr 1fr; gap: 12px; }
+.opt-b-imgs .m-img:first-child { height: 200px; }
+.opt-b-imgs .m-img:last-child { height: 120px; }
+
+/* ─────────────────────────────────────────
+   OPTION C – Grand titre pleine largeur + ligne basse
+   ───────────────────────────────────────── */
+.opt-c-top {
+  border-bottom: 1px solid rgba(42,58,32,.15);
+  padding-bottom: 28px; margin-bottom: 28px;
+  text-align: center;
+}
+.opt-c-top .m-title { font-size: clamp(32px, 5vw, 56px); }
+.opt-c-bottom {
+  display: grid; grid-template-columns: 1fr auto 1fr;
+  gap: 40px; align-items: center;
+}
+.opt-c-divider {
+  width: 1px; background: rgba(42,58,32,.15);
+  align-self: stretch;
+}
+.opt-c-right { text-align: right; }
+.opt-c-right .m-btns { justify-content: flex-end; }
+
+/* Selection badge */
+.badge {
+  position: absolute; top: 14px; right: 16px;
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid #4a7a40; display: none;
+  align-items: center; justify-content: center;
+  font-size: 12px; color: #4a7a40; font-weight: 700;
+}
+.mock-section.selected .badge { display: flex; }
+</style>
+</head>
+<body>
+
+<h1 class="page-title">Section Groupes & Séminaires — 3 layouts</h1>
+<p class="page-sub">Clique sur le layout qui te convient le mieux</p>
+
+<!-- ── OPTION A ── -->
+<div class="mock-section" data-label="Option A — Tout centré & symétrique" onclick="select(this,'a')">
+  <div class="badge">✓</div>
+  <div style="height:32px"></div>
+  <div class="opt-a-inner">
+    <div>
+      <div class="m-label">Groupes & Séminaires</div>
+      <h2 class="m-title">Un cadre d'<em>exception</em><br>pour vos événements</h2>
+    </div>
+    <p class="m-body">
+      Séminaires, retraites, événements privés.
+      Avec une capacité de <strong>plus de 30 personnes</strong>, dans un cadre naturel préservé, loin de l'agitation.
+    </p>
+    <ul class="m-stats">
+      <li><span class="m-stat-num">30+</span><span class="m-stat-lbl">Personnes</span></li>
+      <li><span class="m-stat-num">5</span><span class="m-stat-lbl">Hébergements</span></li>
+      <li><span class="m-stat-num">∞</span><span class="m-stat-lbl">Ha de nature</span></li>
+    </ul>
+    <div class="m-btns">
+      <a class="m-btn m-btn-filled">Demander un devis</a>
+      <a class="m-btn m-btn-outline">Découvrir la page</a>
+    </div>
+    <div class="opt-a-imgs">
+      <div class="m-img">Photo principale</div>
+      <div class="m-img">Photo secondaire</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── OPTION B ── -->
+<div class="mock-section" data-label="Option B — 2 colonnes strictement left-aligned" onclick="select(this,'b')">
+  <div class="badge">✓</div>
+  <div style="height:32px"></div>
+  <div class="opt-b-inner">
+    <div class="opt-b-text">
+      <div class="m-label">Groupes & Séminaires</div>
+      <h2 class="m-title">Un cadre d'<em>exception</em><br>pour vos événements</h2>
+      <p class="m-body">
+        Séminaires, retraites, événements privés.
+        Avec une capacité de <strong>plus de 30 personnes</strong>, dans un cadre naturel préservé.
+      </p>
+      <ul class="m-stats">
+        <li><span class="m-stat-num">30+</span><span class="m-stat-lbl">Personnes</span></li>
+        <li><span class="m-stat-num">5</span><span class="m-stat-lbl">Hébergements</span></li>
+        <li><span class="m-stat-num">∞</span><span class="m-stat-lbl">Ha de nature</span></li>
+      </ul>
+      <div class="m-btns">
+        <a class="m-btn m-btn-filled">Demander un devis</a>
+        <a class="m-btn m-btn-outline">Découvrir la page</a>
+      </div>
+    </div>
+    <div class="opt-b-imgs">
+      <div class="m-img">Photo principale</div>
+      <div class="m-img">Photo secondaire</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── OPTION C ── -->
+<div class="mock-section" data-label="Option C — Grand titre centré + ligne de contenu" onclick="select(this,'c')">
+  <div class="badge">✓</div>
+  <div style="height:32px"></div>
+  <div class="opt-c-top">
+    <div class="m-label" style="margin-bottom:14px">Groupes & Séminaires</div>
+    <h2 class="m-title">Un cadre d'<em>exception</em><br>pour vos événements</h2>
+  </div>
+  <div class="opt-c-bottom">
+    <div>
+      <p class="m-body">
+        Séminaires, retraites, événements privés dans un cadre naturel préservé,
+        à quelques minutes de Spa.
+      </p>
+    </div>
+    <div class="opt-c-divider"></div>
+    <div class="opt-c-right">
+      <ul class="m-stats" style="justify-content:flex-end; margin-bottom:20px">
+        <li><span class="m-stat-num">30+</span><span class="m-stat-lbl">Personnes</span></li>
+        <li><span class="m-stat-num">5</span><span class="m-stat-lbl">Hébergements</span></li>
+        <li><span class="m-stat-num">∞</span><span class="m-stat-lbl">Ha</span></li>
+      </ul>
+      <div class="m-btns" style="justify-content:flex-end">
+        <a class="m-btn m-btn-filled">Demander un devis</a>
+        <a class="m-btn m-btn-outline">Découvrir la page</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let current = null;
+function select(el, id) {
+  if (current) current.classList.remove('selected');
+  el.classList.add('selected');
+  current = el;
+  // record for companion
+  if (window.__companion) window.__companion.record(id, el.dataset.label);
+}
+</script>
+</body>
+</html>

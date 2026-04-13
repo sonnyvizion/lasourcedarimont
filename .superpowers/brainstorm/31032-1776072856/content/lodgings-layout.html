@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup – Section hébergements</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #1b1f14; font-family: 'Helvetica Neue', Arial, sans-serif; color: #fff; padding: 40px 24px; }
+  h1 { font-size: 14px; letter-spacing: .12em; text-transform: uppercase; color: #a5b495; margin-bottom: 8px; }
+  p.sub { font-size: 13px; color: #6b7a60; margin-bottom: 40px; }
+
+  /* ── Section wrapper ── */
+  .lodgings-duo {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  /* ── Card ── */
+  .lodging-card {
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    height: 72vh;
+    min-height: 480px;
+    cursor: pointer;
+    background: #2a3024;
+  }
+
+  /* Image de fond */
+  .lodging-card-img {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: brightness(.72);
+    transition: filter .5s ease;
+  }
+
+  /* Vidéo cachée par défaut, visible au hover */
+  .lodging-card-video {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: brightness(.72);
+    opacity: 0;
+    transition: opacity .6s ease;
+  }
+
+  .lodging-card:hover .lodging-card-video {
+    opacity: 1;
+  }
+  .lodging-card:hover .lodging-card-img {
+    filter: brightness(.55);
+  }
+
+  /* Contenu texte */
+  .lodging-card-body {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 44px 32px;
+    text-align: center;
+    gap: 0;
+  }
+
+  .lodging-label {
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,.75);
+    margin-bottom: 14px;
+  }
+
+  .lodging-title {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-weight: 300;
+    font-size: clamp(28px, 2.8vw, 48px);
+    line-height: 1.05;
+    letter-spacing: -1px;
+    color: #fff;
+    margin-bottom: 28px;
+  }
+  .lodging-title em {
+    font-family: Georgia, serif;
+    font-style: italic;
+    font-weight: 700;
+  }
+
+  .btn-cta {
+    display: inline-block;
+    padding: 13px 26px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    color: #fff;
+    background: rgba(20,20,20,.45);
+    border: 1.5px solid rgba(255,255,255,.55);
+    border-radius: 100px;
+    text-decoration: none;
+    transition: background .25s, color .25s, border-color .25s;
+  }
+  .btn-cta:hover {
+    background: #fff;
+    color: #2a3a20;
+    border-color: #fff;
+  }
+
+  /* Badge "hover" pour la démo */
+  .hover-hint {
+    position: absolute;
+    top: 18px; right: 18px;
+    background: rgba(255,255,255,.12);
+    border: 1px solid rgba(255,255,255,.25);
+    border-radius: 100px;
+    padding: 5px 12px;
+    font-size: 11px;
+    color: rgba(255,255,255,.65);
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity .4s;
+  }
+  .lodging-card:hover .hover-hint { opacity: 0; }
+
+  /* Note en bas */
+  .note { margin-top: 28px; text-align: center; font-size: 12px; color: #555; }
+</style>
+</head>
+<body>
+
+<h1>Nouvelle section hébergements — mockup</h1>
+<p class="sub">Deux cartes côte à côte · Image fixe → vidéo au survol · Texte + CTA centré en bas</p>
+
+<div class="lodgings-duo">
+
+  <!-- GÎTES -->
+  <div class="lodging-card">
+    <!-- Image placeholder (couleur verte foncée) -->
+    <div class="lodging-card-img" style="background: linear-gradient(160deg,#3a4f2e 0%,#1d2c17 100%);"></div>
+    <!-- Vidéo (démo : placeholder coloré) -->
+    <div class="lodging-card-video" style="background: linear-gradient(160deg,#556b3a 0%,#2e4020 100%);"></div>
+
+    <div class="lodging-card-body">
+      <div class="lodging-label">Les gîtes</div>
+      <h3 class="lodging-title">
+        Petit comité ou <em>grande</em><br>tribu ? On a la place !
+      </h3>
+      <a class="btn-cta" href="#">Voir les gîtes</a>
+    </div>
+
+    <div class="hover-hint">▶ survol → vidéo</div>
+  </div>
+
+  <!-- CHAMBRES -->
+  <div class="lodging-card">
+    <div class="lodging-card-img" style="background: linear-gradient(160deg,#2e3d28 0%,#1a2514 100%);"></div>
+    <div class="lodging-card-video" style="background: linear-gradient(160deg,#4a6035 0%,#263a1c 100%);"></div>
+
+    <div class="lodging-card-body">
+      <div class="lodging-label">Les chambres</div>
+      <h3 class="lodging-title">
+        Des nuits <em>confortables</em><br>pour des journées inoubliables
+      </h3>
+      <a class="btn-cta" href="#">Voir les chambres</a>
+    </div>
+
+    <div class="hover-hint">▶ survol → vidéo</div>
+  </div>
+
+</div>
+
+<p class="note">Les couleurs de fond simulent les images/vidéos réelles · Survole une carte pour voir l'effet</p>
+
+</body>
+</html>

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Option A — Photo dans l'accordéon</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #1b1f14;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  padding: 32px 20px 80px;
+  color: #2a3a20;
+}
+h1.page-title { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #6b7a60; margin-bottom: 4px; }
+p.page-sub { font-size: 12px; color: #4a5540; margin-bottom: 36px; }
+
+.mock-section {
+  background: #f0ebe0;
+  border-radius: 18px;
+  padding: 40px 40px 48px;
+  margin-bottom: 20px;
+  position: relative;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: border-color .2s;
+}
+.mock-section.selected { border-color: #2a5843; }
+.mock-section::after {
+  content: attr(data-label);
+  position: absolute;
+  top: 14px; left: 24px;
+  font-size: 9px; letter-spacing: .14em;
+  text-transform: uppercase; font-weight: 700; color: #7a9a6a;
+}
+.badge-check {
+  position: absolute; top: 14px; right: 20px;
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid #2a5843; display: none;
+  align-items: center; justify-content: center;
+  font-size: 12px; color: #2a5843; font-weight: 700;
+}
+.mock-section.selected .badge-check { display: flex; }
+.mock-inner { margin-top: 30px; }
+
+/* Filtres */
+.filter-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+.filter-chip {
+  padding: 7px 14px; border-radius: 999px; font-size: 11px;
+  font-weight: 700; letter-spacing: .06em;
+  border: 1.5px solid rgba(42,88,67,.35); color: #2a5843;
+  background: transparent; display: inline-flex; align-items: center; gap: 5px;
+}
+.filter-chip.active { background: #2a5843; color: #f0ebe0; border-color: #2a5843; }
+.filter-sep { width: 1px; background: rgba(42,88,67,.2); margin: 2px 4px; }
+.sort-label {
+  font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+  color: #5a7a4a; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;
+}
+.sort-label::before { content: '↑'; font-size: 12px; color: #2a5843; }
+
+/* Liste */
+.spot-list { list-style: none; }
+
+/* Ligne fermée */
+.spot-item {
+  border-top: 1px solid rgba(42,58,32,.15);
+  padding: 15px 4px;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 12px;
+  align-items: center;
+}
+.spot-item:last-child { border-bottom: 1px solid rgba(42,58,32,.15); }
+.spot-name { font-size: 16px; font-weight: 500; color: #1e2f18; letter-spacing: -.01em; }
+.spot-cat { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: #5a7a4a; margin-top: 3px; }
+.spot-dist { font-size: 13px; color: #5a7a4a; white-space: nowrap; text-align: right; }
+.spot-toggle {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 1.5px solid rgba(42,58,32,.35);
+  display: grid; place-items: center;
+  font-size: 18px; color: #2a5843; font-weight: 300; line-height: 1;
+  transition: transform .2s;
+}
+
+/* ── Panneaux détail — 3 variantes ── */
+
+/* VARIANTE 1 — Photo à droite en colonne */
+.detail-v1 {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  gap: 20px;
+  padding: 12px 0 18px;
+  border-bottom: 1px dashed rgba(42,88,67,.15);
+}
+.detail-v1-text { display: flex; flex-direction: column; gap: 10px; }
+.detail-desc { font-size: 13px; line-height: 1.65; color: #3a4f2e; }
+.detail-links { display: flex; gap: 8px; }
+.nav-pill {
+  padding: 5px 12px; border-radius: 999px; font-size: 10px; font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase; border: 1.5px solid #2a5843;
+  color: #2a5843; display: inline-flex; align-items: center; gap: 4px;
+}
+.nav-pill.maps { background: #2a5843; color: #f0ebe0; }
+.detail-photo {
+  border-radius: 12px; overflow: hidden;
+  background: #b8ccb0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; color: #5a7a4a; letter-spacing: .06em;
+  min-height: 120px;
+}
+.detail-photo img { width: 100%; height: 100%; object-fit: cover; }
+
+/* VARIANTE 2 — Photo pleine largeur en haut */
+.detail-v2 {
+  grid-column: 1 / -1;
+  padding: 12px 0 18px;
+}
+.detail-v2-photo {
+  width: 100%; height: 160px; border-radius: 14px;
+  background: #b8ccb0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; color: #5a7a4a; letter-spacing: .06em;
+  margin-bottom: 12px; overflow: hidden;
+}
+.detail-v2-bottom { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; }
+
+/* VARIANTE 3 — Petite vignette carrée à gauche du texte */
+.detail-v3 {
+  grid-column: 1 / -1;
+  display: flex; gap: 14px; padding: 12px 0 18px; align-items: flex-start;
+}
+.detail-v3-thumb {
+  width: 80px; height: 80px; border-radius: 10px; flex-shrink: 0;
+  background: #b8ccb0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; color: #5a7a4a;
+}
+.detail-v3-body { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+
+/* ───────── Spot open state ───────── */
+.spot-item.is-open {
+  background: rgba(42,88,67,.05);
+  border-radius: 10px;
+  margin: 0 -8px; padding: 15px 12px;
+  border-top-color: transparent;
+}
+.spot-item.is-open .spot-toggle { transform: rotate(45deg); }
+</style>
+</head>
+<body>
+
+<h1 class="page-title">Option A — Photo dans l'accordéon : 3 positions</h1>
+<p class="page-sub">Clique sur la variante qui te plaît le mieux</p>
+
+<!-- ── VARIANTE 1 — Photo à droite en colonne ── -->
+<div class="mock-section" data-label="Variante 1 — Photo à droite (colonne)" onclick="pick(this,'v1')">
+  <div class="badge-check">✓</div>
+  <div class="mock-inner">
+    <div class="filter-bar">
+      <span class="filter-chip active">🌿 Extérieur</span>
+      <span class="filter-chip">🏛 Intérieur</span>
+      <div class="filter-sep"></div>
+      <span class="filter-chip active">− 30 min</span>
+      <span class="filter-chip">👶 Enfants</span>
+    </div>
+    <div class="sort-label">Trié par distance croissante</div>
+
+    <ul class="spot-list">
+      <li class="spot-item">
+        <div><div class="spot-name">Hautes Fagnes</div><div class="spot-cat">🌿 Extérieur · Randonnée</div></div>
+        <div class="spot-dist">8 min · 7 km</div>
+        <div class="spot-toggle">+</div>
+      </li>
+
+      <!-- OUVERT -->
+      <li class="spot-item is-open" style="grid-template-rows: auto auto;">
+        <div><div class="spot-name">Thermes de Spa</div><div class="spot-cat">🌿 Extérieur · Spa · 👶</div></div>
+        <div class="spot-dist">18 min · 15 km</div>
+        <div class="spot-toggle">+</div>
+
+        <div class="detail-v1">
+          <div class="detail-v1-text">
+            <p class="detail-desc">Les thermes les plus anciens d'Europe. Piscines extérieures chauffées, soins et accès direct au parc verdoyant de Spa. Idéal en famille.</p>
+            <div class="detail-links">
+              <span class="nav-pill">🧭 Waze</span>
+              <span class="nav-pill maps">📍 Maps</span>
+            </div>
+          </div>
+          <div class="detail-photo">photo lieu</div>
+        </div>
+      </li>
+
+      <li class="spot-item">
+        <div><div class="spot-name">Lac de Butgenbach</div><div class="spot-cat">🌿 Extérieur · Lac · 👶</div></div>
+        <div class="spot-dist">22 min · 19 km</div>
+        <div class="spot-toggle">+</div>
+      </li>
+      <li class="spot-item">
+        <div><div class="spot-name">Signal de Botrange</div><div class="spot-cat">🌿 Extérieur · Point de vue</div></div>
+        <div class="spot-dist">28 min · 24 km</div>
+        <div class="spot-toggle">+</div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- ── VARIANTE 2 — Photo pleine largeur en haut ── -->
+<div class="mock-section" data-label="Variante 2 — Photo pleine largeur au-dessus du texte" onclick="pick(this,'v2')">
+  <div class="badge-check">✓</div>
+  <div class="mock-inner">
+    <div class="filter-bar">
+      <span class="filter-chip active">🌿 Extérieur</span>
+      <span class="filter-chip">🏛 Intérieur</span>
+      <div class="filter-sep"></div>
+      <span class="filter-chip active">− 30 min</span>
+      <span class="filter-chip">👶 Enfants</span>
+    </div>
+    <div class="sort-label">Trié par distance croissante</div>
+
+    <ul class="spot-list">
+      <li class="spot-item">
+        <div><div class="spot-name">Hautes Fagnes</div><div class="spot-cat">🌿 Extérieur · Randonnée</div></div>
+        <div class="spot-dist">8 min · 7 km</div>
+        <div class="spot-toggle">+</div>
+      </li>
+
+      <!-- OUVERT -->
+      <li class="spot-item is-open" style="grid-template-rows: auto auto;">
+        <div><div class="spot-name">Thermes de Spa</div><div class="spot-cat">🌿 Extérieur · Spa · 👶</div></div>
+        <div class="spot-dist">18 min · 15 km</div>
+        <div class="spot-toggle">+</div>
+
+        <div class="detail-v2">
+          <div class="detail-v2-photo">photo lieu (pleine largeur)</div>
+          <div class="detail-v2-bottom">
+            <p class="detail-desc">Les thermes les plus anciens d'Europe. Piscines extérieures chauffées, soins et parc verdoyant.</p>
+            <div class="detail-links" style="flex-shrink:0">
+              <span class="nav-pill">🧭 Waze</span>
+              <span class="nav-pill maps">📍 Maps</span>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <li class="spot-item">
+        <div><div class="spot-name">Lac de Butgenbach</div><div class="spot-cat">🌿 Extérieur · Lac · 👶</div></div>
+        <div class="spot-dist">22 min · 19 km</div>
+        <div class="spot-toggle">+</div>
+      </li>
+      <li class="spot-item">
+        <div><div class="spot-name">Signal de Botrange</div><div class="spot-cat">🌿 Extérieur · Point de vue</div></div>
+        <div class="spot-dist">28 min · 24 km</div>
+        <div class="spot-toggle">+</div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- ── VARIANTE 3 — Vignette carrée à gauche ── -->
+<div class="mock-section" data-label="Variante 3 — Vignette carrée à gauche du texte" onclick="pick(this,'v3')">
+  <div class="badge-check">✓</div>
+  <div class="mock-inner">
+    <div class="filter-bar">
+      <span class="filter-chip active">🌿 Extérieur</span>
+      <span class="filter-chip">🏛 Intérieur</span>
+      <div class="filter-sep"></div>
+      <span class="filter-chip active">− 30 min</span>
+      <span class="filter-chip">👶 Enfants</span>
+    </div>
+    <div class="sort-label">Trié par distance croissante</div>
+
+    <ul class="spot-list">
+      <li class="spot-item">
+        <div><div class="spot-name">Hautes Fagnes</div><div class="spot-cat">🌿 Extérieur · Randonnée</div></div>
+        <div class="spot-dist">8 min · 7 km</div>
+        <div class="spot-toggle">+</div>
+      </li>
+
+      <!-- OUVERT -->
+      <li class="spot-item is-open" style="grid-template-rows: auto auto;">
+        <div><div class="spot-name">Thermes de Spa</div><div class="spot-cat">🌿 Extérieur · Spa · 👶</div></div>
+        <div class="spot-dist">18 min · 15 km</div>
+        <div class="spot-toggle">+</div>
+
+        <div class="detail-v3">
+          <div class="detail-v3-thumb">photo</div>
+          <div class="detail-v3-body">
+            <p class="detail-desc">Les thermes les plus anciens d'Europe. Piscines extérieures chauffées, soins et accès direct au parc verdoyant de Spa. Idéal en famille.</p>
+            <div class="detail-links">
+              <span class="nav-pill">🧭 Waze</span>
+              <span class="nav-pill maps">📍 Maps</span>
+            </div>
+          </div>
+        </div>
+      </li>
+
+      <li class="spot-item">
+        <div><div class="spot-name">Lac de Butgenbach</div><div class="spot-cat">🌿 Extérieur · Lac · 👶</div></div>
+        <div class="spot-dist">22 min · 19 km</div>
+        <div class="spot-toggle">+</div>
+      </li>
+      <li class="spot-item">
+        <div><div class="spot-name">Signal de Botrange</div><div class="spot-cat">🌿 Extérieur · Point de vue</div></div>
+        <div class="spot-dist">28 min · 24 km</div>
+        <div class="spot-toggle">+</div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<script>
+let current = null;
+function pick(el, id) {
+  if (current) current.classList.remove('selected');
+  el.classList.add('selected');
+  current = el;
+  if (window.__companion) window.__companion.record(id, el.dataset.label);
+}
+</script>
+</body>
+</html>

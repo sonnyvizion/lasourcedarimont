@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Liste des lieux — 3 styles</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #1b1f14;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  padding: 32px 20px 80px;
+  color: #2a3a20;
+}
+h1.page-title { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #6b7a60; margin-bottom: 4px; }
+p.page-sub { font-size: 12px; color: #4a5540; margin-bottom: 36px; }
+
+/* ── Shell commun ── */
+.mock-section {
+  background: #f0ebe0;
+  border-radius: 18px;
+  padding: 40px 40px 48px;
+  margin-bottom: 20px;
+  position: relative;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: border-color .2s;
+}
+.mock-section.selected { border-color: #2a5843; }
+.mock-section::after {
+  content: attr(data-label);
+  position: absolute;
+  top: 14px; left: 24px;
+  font-size: 9px; letter-spacing: .14em;
+  text-transform: uppercase; font-weight: 700; color: #7a9a6a;
+}
+.badge-check {
+  position: absolute; top: 14px; right: 20px;
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid #2a5843; display: none;
+  align-items: center; justify-content: center;
+  font-size: 12px; color: #2a5843; font-weight: 700;
+}
+.mock-section.selected .badge-check { display: flex; }
+
+/* Spacer label area */
+.mock-inner { margin-top: 30px; }
+
+/* ── Filtres partagés ── */
+.filter-bar {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px;
+}
+.filter-chip {
+  padding: 7px 14px; border-radius: 999px; font-size: 11px;
+  font-weight: 700; letter-spacing: .06em; cursor: pointer;
+  border: 1.5px solid rgba(42,88,67,.35); color: #2a5843;
+  background: transparent; user-select: none;
+  display: inline-flex; align-items: center; gap: 5px;
+}
+.filter-chip.active { background: #2a5843; color: #f0ebe0; border-color: #2a5843; }
+.filter-chip .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.filter-sep { width: 1px; background: rgba(42,88,67,.2); margin: 2px 4px; }
+
+/* ── Tri badge ── */
+.sort-label {
+  font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+  color: #5a7a4a; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;
+}
+.sort-label::before {
+  content: '↑'; font-size: 12px; color: #2a5843;
+}
+
+/* ============================================================
+   OPTION A — Liste accordion pleine largeur (lignes épurées)
+   ============================================================ */
+.opt-a-list { list-style: none; }
+.opt-a-item {
+  border-top: 1px solid rgba(42,58,32,.15);
+  padding: 14px 0;
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 12px;
+  align-items: center;
+}
+.opt-a-item:last-child { border-bottom: 1px solid rgba(42,58,32,.15); }
+.opt-a-name {
+  font-size: 16px; font-weight: 500; color: #1e2f18; letter-spacing: -.01em;
+}
+.opt-a-cat {
+  font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+  color: #5a7a4a; margin-top: 3px;
+}
+.opt-a-dist {
+  font-size: 13px; color: #5a7a4a; white-space: nowrap; text-align: right;
+}
+.opt-a-toggle {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 1.5px solid rgba(42,58,32,.4);
+  display: grid; place-items: center;
+  font-size: 18px; color: #2a5843; font-weight: 300; line-height: 1;
+}
+.opt-a-details {
+  grid-column: 1 / -1;
+  padding: 10px 0 4px;
+  font-size: 13px; line-height: 1.6; color: #3a4f2e;
+  display: flex; justify-content: space-between; align-items: flex-end; gap: 16px;
+}
+.opt-a-links { display: flex; gap: 8px; flex-shrink: 0; }
+.nav-pill {
+  padding: 5px 12px; border-radius: 999px; font-size: 10px; font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase; border: 1.5px solid #2a5843;
+  color: #2a5843; display: inline-flex; align-items: center; gap: 4px;
+}
+.nav-pill.waze { background: #f0ebe0; }
+.nav-pill.maps { background: #2a5843; color: #f0ebe0; }
+
+/* ============================================================
+   OPTION B — Cartes compactes 2 colonnes avec photo vignette
+   ============================================================ */
+.opt-b-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+}
+.opt-b-card {
+  background: #fff8ee; border-radius: 14px;
+  padding: 14px 16px; display: flex; gap: 14px; align-items: stretch;
+  border: 1.5px solid rgba(42,88,67,.1);
+}
+.opt-b-thumb {
+  width: 64px; height: 64px; border-radius: 10px;
+  background: #c8d8b8; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; color: #5a7a4a; letter-spacing: .06em;
+}
+.opt-b-body { flex: 1; min-width: 0; }
+.opt-b-name { font-size: 14px; font-weight: 600; color: #1e2f18; margin-bottom: 2px; }
+.opt-b-meta { font-size: 11px; color: #5a7a4a; margin-bottom: 6px; }
+.opt-b-tags { display: flex; gap: 5px; flex-wrap: wrap; }
+.tag {
+  padding: 2px 8px; border-radius: 999px; font-size: 9px;
+  letter-spacing: .08em; text-transform: uppercase; font-weight: 700;
+}
+.tag-outdoor { background: rgba(42,88,67,.12); color: #2a5843; }
+.tag-kids { background: rgba(246,176,95,.22); color: #8a5a00; }
+.opt-b-plus {
+  width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid rgba(42,88,67,.4);
+  display: grid; place-items: center; font-size: 14px; color: #2a5843;
+  align-self: center; flex-shrink: 0;
+}
+.opt-b-detail-row {
+  grid-column: 1 / -1;
+  background: #2a5843; border-radius: 12px; padding: 12px 16px;
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 12px;
+}
+.opt-b-detail-text { font-size: 13px; color: #d0e8d0; line-height: 1.5; }
+.opt-b-detail-links { display: flex; gap: 8px; flex-shrink: 0; }
+.pill-light {
+  padding: 5px 12px; border-radius: 999px; font-size: 10px; font-weight: 700;
+  letter-spacing: .06em; border: 1.5px solid rgba(255,255,255,.4); color: #f0ebe0;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+
+/* ============================================================
+   OPTION C — Liste table stylée avec distance en colonne
+   ============================================================ */
+.opt-c-table { width: 100%; border-collapse: collapse; }
+.opt-c-table thead th {
+  font-size: 9px; letter-spacing: .14em; text-transform: uppercase;
+  color: #5a7a4a; padding: 0 12px 10px; text-align: left; font-weight: 700;
+  border-bottom: 2px solid rgba(42,58,32,.15);
+}
+.opt-c-table thead th:last-child { text-align: center; }
+.opt-c-row td {
+  padding: 13px 12px; border-bottom: 1px solid rgba(42,58,32,.1);
+  vertical-align: middle;
+}
+.opt-c-row:hover td { background: rgba(42,88,67,.04); }
+.opt-c-name { font-size: 15px; font-weight: 500; color: #1e2f18; }
+.opt-c-cat { font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: #7a9a6a; margin-top: 2px; }
+.opt-c-dist-pill {
+  display: inline-block; padding: 4px 10px; border-radius: 999px;
+  font-size: 11px; font-weight: 700; background: rgba(42,88,67,.1); color: #2a5843;
+}
+.opt-c-type {
+  width: 8px; height: 8px; border-radius: 50%; display: inline-block;
+  margin-right: 6px; vertical-align: middle;
+}
+.type-outdoor { background: #2a5843; }
+.type-indoor { background: #f6b05f; }
+.opt-c-plus {
+  display: grid; place-items: center;
+}
+.opt-c-plus-btn {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 1.5px solid rgba(42,58,32,.35);
+  font-size: 18px; color: #2a5843; font-weight: 300;
+  display: grid; place-items: center; margin: auto;
+}
+.opt-c-detail-row td {
+  background: rgba(42,88,67,.06); border-bottom: 1px solid rgba(42,58,32,.1);
+  padding: 8px 12px 14px 36px;
+}
+.opt-c-detail-inner {
+  display: flex; justify-content: space-between; align-items: center; gap: 16px;
+}
+.opt-c-desc { font-size: 13px; line-height: 1.6; color: #3a4f2e; }
+.opt-c-links { display: flex; gap: 8px; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+<h1 class="page-title">Section lieux à visiter — 3 styles de liste</h1>
+<p class="page-sub">Clique sur le style qui te convient</p>
+
+<!-- ── OPTION A — Accordion pleine largeur ── -->
+<div class="mock-section" data-label="Option A — Accordion lignes épurées" onclick="pick(this,'a')">
+  <div class="badge-check">✓</div>
+  <div class="mock-inner">
+
+    <div class="filter-bar">
+      <span class="filter-chip active"><span class="dot"></span>Extérieur</span>
+      <span class="filter-chip">Intérieur</span>
+      <div class="filter-sep"></div>
+      <span class="filter-chip active">− 30 min</span>
+      <span class="filter-chip">👶 Enfants</span>
+    </div>
+
+    <div class="sort-label">Trié par distance croissante</div>
+
+    <ul class="opt-a-list">
+
+      <li class="opt-a-item">
+        <div>
+          <div class="opt-a-name">Hautes Fagnes</div>
+          <div class="opt-a-cat">🌿 Extérieur · Randonnée</div>
+        </div>
+        <div class="opt-a-dist">8 min · 7 km</div>
+        <div class="opt-a-toggle">+</div>
+      </li>
+
+      <li class="opt-a-item">
+        <div>
+          <div class="opt-a-name">Cascade de Coo</div>
+          <div class="opt-a-cat">🌿 Extérieur · Nature</div>
+        </div>
+        <div class="opt-a-dist">12 min · 11 km</div>
+        <div class="opt-a-toggle">+</div>
+      </li>
+
+      <!-- Ligne ouverte -->
+      <li class="opt-a-item" style="background: rgba(42,88,67,.04); border-radius: 10px; margin: 0 -8px; padding: 14px 8px; grid-template-rows: auto auto;">
+        <div>
+          <div class="opt-a-name">Thermes de Spa</div>
+          <div class="opt-a-cat">🏊 Extérieur · Spa & détente · 👶 Enfants</div>
+        </div>
+        <div class="opt-a-dist">18 min · 15 km</div>
+        <div class="opt-a-toggle" style="transform:rotate(45deg);">+</div>
+        <div class="opt-a-details">
+          <p>Les thermes les plus anciens d'Europe, idéaux pour une journée de bien-être. Piscines extérieures chauffées, soins et accès direct au parc.</p>
+          <div class="opt-a-links">
+            <span class="nav-pill waze">🧭 Waze</span>
+            <span class="nav-pill maps">📍 Maps</span>
+          </div>
+        </div>
+      </li>
+
+      <li class="opt-a-item">
+        <div>
+          <div class="opt-a-name">Lac de Butgenbach</div>
+          <div class="opt-a-cat">🌿 Extérieur · Lac · 👶 Enfants</div>
+        </div>
+        <div class="opt-a-dist">22 min · 19 km</div>
+        <div class="opt-a-toggle">+</div>
+      </li>
+
+      <li class="opt-a-item">
+        <div>
+          <div class="opt-a-name">Signal de Botrange</div>
+          <div class="opt-a-cat">🌿 Extérieur · Point de vue</div>
+        </div>
+        <div class="opt-a-dist">28 min · 24 km</div>
+        <div class="opt-a-toggle">+</div>
+      </li>
+
+    </ul>
+  </div>
+</div>
+
+<!-- ── OPTION B — Cartes 2 colonnes avec vignette ── -->
+<div class="mock-section" data-label="Option B — Cartes 2 colonnes + vignette photo" onclick="pick(this,'b')">
+  <div class="badge-check">✓</div>
+  <div class="mock-inner">
+
+    <div class="filter-bar">
+      <span class="filter-chip active"><span class="dot"></span>Extérieur</span>
+      <span class="filter-chip">Intérieur</span>
+      <div class="filter-sep"></div>
+      <span class="filter-chip active">− 30 min</span>
+      <span class="filter-chip">👶 Enfants</span>
+    </div>
+
+    <div class="sort-label">Trié par distance croissante</div>
+
+    <div class="opt-b-grid">
+
+      <div class="opt-b-card">
+        <div class="opt-b-thumb">photo</div>
+        <div class="opt-b-body">
+          <div class="opt-b-name">Hautes Fagnes</div>
+          <div class="opt-b-meta">8 min · 7 km</div>
+          <div class="opt-b-tags">
+            <span class="tag tag-outdoor">extérieur</span>
+          </div>
+        </div>
+        <div class="opt-b-plus">+</div>
+      </div>
+
+      <div class="opt-b-card">
+        <div class="opt-b-thumb">photo</div>
+        <div class="opt-b-body">
+          <div class="opt-b-name">Cascade de Coo</div>
+          <div class="opt-b-meta">12 min · 11 km</div>
+          <div class="opt-b-tags">
+            <span class="tag tag-outdoor">extérieur</span>
+            <span class="tag tag-kids">enfants</span>
+          </div>
+        </div>
+        <div class="opt-b-plus">+</div>
+      </div>
+
+      <!-- Carte ouverte -->
+      <div class="opt-b-card" style="border-color:#2a5843; border-width:2px;">
+        <div class="opt-b-thumb">photo</div>
+        <div class="opt-b-body">
+          <div class="opt-b-name">Thermes de Spa</div>
+          <div class="opt-b-meta">18 min · 15 km</div>
+          <div class="opt-b-tags">
+            <span class="tag tag-outdoor">extérieur</span>
+            <span class="tag tag-kids">enfants</span>
+          </div>
+        </div>
+        <div class="opt-b-plus" style="transform:rotate(45deg);">+</div>
+      </div>
+      <!-- Détail dans la grille -->
+      <div class="opt-b-detail-row">
+        <div class="opt-b-detail-text">Les thermes les plus anciens d'Europe. Piscines chauffées, soins et parc verdoyant.</div>
+        <div class="opt-b-detail-links">
+          <span class="pill-light">🧭 Waze</span>
+          <span class="pill-light">📍 Maps</span>
+        </div>
+      </div>
+
+      <div class="opt-b-card">
+        <div class="opt-b-thumb">photo</div>
+        <div class="opt-b-body">
+          <div class="opt-b-name">Lac de Butgenbach</div>
+          <div class="opt-b-meta">22 min · 19 km</div>
+          <div class="opt-b-tags">
+            <span class="tag tag-outdoor">extérieur</span>
+            <span class="tag tag-kids">enfants</span>
+          </div>
+        </div>
+        <div class="opt-b-plus">+</div>
+      </div>
+
+      <div class="opt-b-card">
+        <div class="opt-b-thumb">photo</div>
+        <div class="opt-b-body">
+          <div class="opt-b-name">Signal de Botrange</div>
+          <div class="opt-b-meta">28 min · 24 km</div>
+          <div class="opt-b-tags">
+            <span class="tag tag-outdoor">extérieur</span>
+          </div>
+        </div>
+        <div class="opt-b-plus">+</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ── OPTION C — Table avec colonnes ── -->
+<div class="mock-section" data-label="Option C — Table épurée avec colonnes" onclick="pick(this,'c')">
+  <div class="badge-check">✓</div>
+  <div class="mock-inner">
+
+    <div class="filter-bar">
+      <span class="filter-chip active"><span class="dot"></span>Extérieur</span>
+      <span class="filter-chip">Intérieur</span>
+      <div class="filter-sep"></div>
+      <span class="filter-chip active">− 30 min</span>
+      <span class="filter-chip">👶 Enfants</span>
+    </div>
+
+    <div class="sort-label">Trié par distance croissante</div>
+
+    <table class="opt-c-table">
+      <thead>
+        <tr>
+          <th>Lieu</th>
+          <th>Distance</th>
+          <th style="text-align:left">Type</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <tr class="opt-c-row">
+          <td><div class="opt-c-name">Hautes Fagnes</div><div class="opt-c-cat">Randonnée & nature</div></td>
+          <td><span class="opt-c-dist-pill">8 min</span></td>
+          <td><span class="opt-c-type type-outdoor"></span>Extérieur</td>
+          <td class="opt-c-plus"><div class="opt-c-plus-btn">+</div></td>
+        </tr>
+
+        <tr class="opt-c-row">
+          <td><div class="opt-c-name">Cascade de Coo</div><div class="opt-c-cat">Nature · 👶</div></td>
+          <td><span class="opt-c-dist-pill">12 min</span></td>
+          <td><span class="opt-c-type type-outdoor"></span>Extérieur</td>
+          <td class="opt-c-plus"><div class="opt-c-plus-btn">+</div></td>
+        </tr>
+
+        <!-- Ligne ouverte -->
+        <tr class="opt-c-row" style="background: rgba(42,88,67,.05);">
+          <td><div class="opt-c-name" style="color:#2a5843">Thermes de Spa ↗</div><div class="opt-c-cat">Spa & bien-être · 👶</div></td>
+          <td><span class="opt-c-dist-pill">18 min</span></td>
+          <td><span class="opt-c-type type-outdoor"></span>Extérieur</td>
+          <td class="opt-c-plus"><div class="opt-c-plus-btn" style="transform:rotate(45deg);">+</div></td>
+        </tr>
+        <tr class="opt-c-detail-row">
+          <td colspan="4">
+            <div class="opt-c-detail-inner">
+              <p class="opt-c-desc">Les thermes les plus anciens d'Europe. Piscines extérieures chauffées, soins et accès direct au parc verdoyant de Spa.</p>
+              <div class="opt-c-links">
+                <span class="nav-pill waze">🧭 Waze</span>
+                <span class="nav-pill maps">📍 Maps</span>
+              </div>
+            </div>
+          </td>
+        </tr>
+
+        <tr class="opt-c-row">
+          <td><div class="opt-c-name">Lac de Butgenbach</div><div class="opt-c-cat">Plage · 👶</div></td>
+          <td><span class="opt-c-dist-pill">22 min</span></td>
+          <td><span class="opt-c-type type-outdoor"></span>Extérieur</td>
+          <td class="opt-c-plus"><div class="opt-c-plus-btn">+</div></td>
+        </tr>
+
+        <tr class="opt-c-row">
+          <td><div class="opt-c-name">Signal de Botrange</div><div class="opt-c-cat">Point de vue</div></td>
+          <td><span class="opt-c-dist-pill">28 min</span></td>
+          <td><span class="opt-c-type type-outdoor"></span>Extérieur</td>
+          <td class="opt-c-plus"><div class="opt-c-plus-btn">+</div></td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+let current = null;
+function pick(el, id) {
+  if (current) current.classList.remove('selected');
+  el.classList.add('selected');
+  current = el;
+  if (window.__companion) window.__companion.record(id, el.dataset.label);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Option C — sidebar compacte v3</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: #1b1f14;
+  font-family: 'Helvetica Neue', Arial, sans-serif;
+  padding: 32px 20px 80px;
+  color: #2a3a20;
+}
+h1.page-title { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #6b7a60; margin-bottom: 4px; }
+p.page-sub { font-size: 12px; color: #4a5540; margin-bottom: 36px; }
+
+.mock-section {
+  background: #f0ebe0; border-radius: 18px; padding: 40px 40px 48px;
+  margin-bottom: 20px; position: relative; cursor: pointer;
+  border: 3px solid transparent; transition: border-color .2s;
+}
+.mock-section.selected { border-color: #2a5843; }
+.mock-section::after {
+  content: attr(data-label); position: absolute; top: 14px; left: 24px;
+  font-size: 9px; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; color: #7a9a6a;
+}
+.badge-check {
+  position: absolute; top: 14px; right: 20px; width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid #2a5843; display: none; align-items: center; justify-content: center;
+  font-size: 12px; color: #2a5843; font-weight: 700;
+}
+.mock-section.selected .badge-check { display: flex; }
+.mock-inner { margin-top: 30px; }
+
+/* atoms */
+.photo-mock { background: #b8ccb0; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #5a7a4a; }
+.stay-title-mock { font-size: 20px; font-weight: 500; color: #1e2f18; font-style: italic; margin-bottom: 3px; }
+.stay-desc-mock { font-size: 12px; line-height: 1.6; color: #3a4f2e; margin-bottom: 10px; }
+.stay-icons-mock { display: flex; gap: 5px; margin-bottom: 12px; }
+.stay-icon { width: 26px; height: 26px; border-radius: 6px; background: rgba(42,88,67,.1); display: grid; place-items: center; font-size: 12px; }
+.stay-cta-mock { display: inline-block; padding: 8px 18px; border-radius: 999px; background: #2a5843; color: #f0ebe0; font-size: 10px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.badge-mock { display: inline-block; padding: 3px 9px; border-radius: 999px; font-size: 9px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; border: 1px solid #2a5843; color: #2a5843; margin-bottom: 8px; }
+.count-label { font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: #5a7a4a; margin-bottom: 14px; }
+.sidebar-title { font-size: 9px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: #5a7a4a; margin-bottom: 7px; }
+.opt-c-divider { border: 0; border-top: 1px solid rgba(42,88,67,.15); }
+
+/* layout */
+.layout { display: grid; grid-template-columns: 170px 1fr; gap: 28px; align-items: start; }
+.sidebar { background: rgba(42,88,67,.06); border-radius: 16px; padding: 18px 16px; display: flex; flex-direction: column; gap: 14px; }
+.cards { display: flex; flex-direction: column; gap: 12px; }
+.card { display: grid; grid-template-columns: 240px 1fr; border-radius: 18px; overflow: hidden; border: 2px solid rgba(42,88,67,.2); background: #f8f3e8; }
+.card-photo { min-height: 180px; }
+.card-body { padding: 20px 22px; display: flex; flex-direction: column; justify-content: center; gap: 5px; }
+
+/* ── V1 pills fit-content ── */
+.v1-group { display: flex; flex-direction: column; align-items: flex-start; gap: 5px; }
+.v1-pill {
+  padding: 5px 12px; border-radius: 999px; font-size: 11px; font-weight: 600;
+  border: 1.5px solid rgba(42,88,67,.3); color: #2a5843; background: transparent;
+  white-space: nowrap;
+}
+.v1-pill.active { background: #2a5843; color: #f0ebe0; border-color: #2a5843; }
+
+/* ── V2 checkboxes ── */
+.v2-group { display: flex; flex-direction: column; align-items: flex-start; gap: 7px; }
+.v2-item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: #2a5843; white-space: nowrap; }
+.v2-box { width: 15px; height: 15px; border-radius: 4px; border: 1.5px solid rgba(42,88,67,.4); display: grid; place-items: center; flex-shrink: 0; font-size: 9px; }
+.v2-box.on { background: #2a5843; border-color: #2a5843; color: #f0ebe0; }
+
+/* ── V3 underline ── */
+.v3-group { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.v3-item { font-size: 12px; color: #2a5843; white-space: nowrap; padding-bottom: 1px; border-bottom: 1.5px solid transparent; }
+.v3-item.active { font-weight: 700; border-bottom-color: #2a5843; }
+</style>
+</head>
+<body>
+
+<h1 class="page-title">Option C sidebar — boutons à la bonne taille</h1>
+<p class="page-sub">Clique sur ta préférence</p>
+
+<!-- V1 pills -->
+<div class="mock-section" data-label="V1 — Pills rondes (fit-content)" onclick="pick(this,'v1')">
+  <div class="badge-check">✓</div>
+  <div class="mock-inner">
+    <div class="layout">
+      <div class="sidebar">
+        <div>
+          <div class="sidebar-title">Type</div>
+          <div class="v1-group">
+            <span class="v1-pill active">Tous</span>
+            <span class="v1-pill">🏡 Gîtes</span>
+            <span class="v1-pill">🛏 Chambres</span>
+          </div>
+        </div>
+        <hr class="opt-c-divider">
+        <div>
+          <div class="sidebar-title">Capacité</div>
+          <div class="v1-group">
+            <span class="v1-pill">1–2 pers.</span>
+            <span class="v1-pill active">3–6 pers.</span>
+            <span class="v1-pill">7+ pers.</span>
+          </div>
+        </div>
+        <hr class="opt-c-divider">
+        <div>
+          <div class="sidebar-title">Équipements</div>
+          <div class="v1-group">
+            <span class="v1-pill">🍳 Cuisine privée</span>
+            <span class="v1-pill">🥐 Petit-déj inclus</span>
+            <span class="v1-pill">🌿 Terrasse</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="count-label">5 hébergements correspondent</div>
+        <div class="cards">
+          <div class="card"><div class="card-photo photo-mock">Photo</div><div class="card-body"><span class="badge-mock">Gîte · 9 pers.</span><div class="stay-title-mock">Le Raidillon</div><div class="stay-desc-mock">Poêle à bois, cuisine équipée, 5 chambres, terrasse et jardin privatif.</div><div class="stay-icons-mock"><div class="stay-icon">📶</div><div class="stay-icon">📺</div><div class="stay-icon">🚿</div><div class="stay-icon">🍳</div></div><span class="stay-cta-mock">Je réserve</span></div></div>
+          <div class="card"><div class="card-photo photo-mock">Photo</div><div class="card-body"><span class="badge-mock">Gîte · 4 pers.</span><div class="stay-title-mock">La Source</div><div class="stay-desc-mock">Cuisine ouverte, terrasse Sud-Est, 2 chambres, salle de bain.</div><div class="stay-icons-mock"><div class="stay-icon">📶</div><div class="stay-icon">📺</div><div class="stay-icon">🚿</div><div class="stay-icon">🍳</div></div><span class="stay-cta-mock">Je réserve</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- V2 checkboxes -->
+<div class="mock-section" data-label="V2 — Checkboxes" onclick="pick(this,'v2')">
+  <div class="badge-check">✓</div>
+  <div class="mock-inner">
+    <div class="layout">
+      <div class="sidebar">
+        <div>
+          <div class="sidebar-title">Type</div>
+          <div class="v2-group">
+            <span class="v2-item"><span class="v2-box on">✓</span>Tous</span>
+            <span class="v2-item"><span class="v2-box"></span>🏡 Gîtes</span>
+            <span class="v2-item"><span class="v2-box"></span>🛏 Chambres</span>
+          </div>
+        </div>
+        <hr class="opt-c-divider">
+        <div>
+          <div class="sidebar-title">Capacité</div>
+          <div class="v2-group">
+            <span class="v2-item"><span class="v2-box"></span>1–2 personnes</span>
+            <span class="v2-item"><span class="v2-box on">✓</span>3–6 personnes</span>
+            <span class="v2-item"><span class="v2-box"></span>7+ personnes</span>
+          </div>
+        </div>
+        <hr class="opt-c-divider">
+        <div>
+          <div class="sidebar-title">Équipements</div>
+          <div class="v2-group">
+            <span class="v2-item"><span class="v2-box"></span>🍳 Cuisine privée</span>
+            <span class="v2-item"><span class="v2-box"></span>🥐 Petit-déj inclus</span>
+            <span class="v2-item"><span class="v2-box"></span>🌿 Terrasse</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="count-label">5 hébergements correspondent</div>
+        <div class="cards">
+          <div class="card"><div class="card-photo photo-mock">Photo</div><div class="card-body"><span class="badge-mock">Gîte · 9 pers.</span><div class="stay-title-mock">Le Raidillon</div><div class="stay-desc-mock">Poêle à bois, cuisine équipée, 5 chambres, terrasse et jardin privatif.</div><div class="stay-icons-mock"><div class="stay-icon">📶</div><div class="stay-icon">📺</div><div class="stay-icon">🚿</div><div class="stay-icon">🍳</div></div><span class="stay-cta-mock">Je réserve</span></div></div>
+          <div class="card"><div class="card-photo photo-mock">Photo</div><div class="card-body"><span class="badge-mock">Gîte · 4 pers.</span><div class="stay-title-mock">La Source</div><div class="stay-desc-mock">Cuisine ouverte, terrasse Sud-Est, 2 chambres, salle de bain.</div><div class="stay-icons-mock"><div class="stay-icon">📶</div><div class="stay-icon">📺</div><div class="stay-icon">🚿</div><div class="stay-icon">🍳</div></div><span class="stay-cta-mock">Je réserve</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- V3 underline -->
+<div class="mock-section" data-label="V3 — Liens underline (ultra-minimaliste)" onclick="pick(this,'v3')">
+  <div class="badge-check">✓</div>
+  <div class="mock-inner">
+    <div class="layout" style="grid-template-columns: 150px 1fr;">
+      <div class="sidebar" style="background: transparent; padding: 0;">
+        <div>
+          <div class="sidebar-title">Type</div>
+          <div class="v3-group">
+            <span class="v3-item active">Tous</span>
+            <span class="v3-item">🏡 Gîtes</span>
+            <span class="v3-item">🛏 Chambres</span>
+          </div>
+        </div>
+        <hr class="opt-c-divider">
+        <div>
+          <div class="sidebar-title">Capacité</div>
+          <div class="v3-group">
+            <span class="v3-item">1–2 pers.</span>
+            <span class="v3-item active">3–6 pers.</span>
+            <span class="v3-item">7+ pers.</span>
+          </div>
+        </div>
+        <hr class="opt-c-divider">
+        <div>
+          <div class="sidebar-title">Équipements</div>
+          <div class="v3-group">
+            <span class="v3-item">🍳 Cuisine privée</span>
+            <span class="v3-item">🥐 Petit-déj inclus</span>
+            <span class="v3-item">🌿 Terrasse</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="count-label">5 hébergements correspondent</div>
+        <div class="cards">
+          <div class="card"><div class="card-photo photo-mock">Photo</div><div class="card-body"><span class="badge-mock">Gîte · 9 pers.</span><div class="stay-title-mock">Le Raidillon</div><div class="stay-desc-mock">Poêle à bois, cuisine équipée, 5 chambres, terrasse et jardin privatif.</div><div class="stay-icons-mock"><div class="stay-icon">📶</div><div class="stay-icon">📺</div><div class="stay-icon">🚿</div><div class="stay-icon">🍳</div></div><span class="stay-cta-mock">Je réserve</span></div></div>
+          <div class="card"><div class="card-photo photo-mock">Photo</div><div class="card-body"><span class="badge-mock">Gîte · 4 pers.</span><div class="stay-title-mock">La Source</div><div class="stay-desc-mock">Cuisine ouverte, terrasse Sud-Est, 2 chambres, salle de bain.</div><div class="stay-icons-mock"><div class="stay-icon">📶</div><div class="stay-icon">📺</div><div class="stay-icon">🚿</div><div class="stay-icon">🍳</div></div><span class="stay-cta-mock">Je réserve</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let current = null;
+function pick(el, id) {
+  if (current) current.classList.remove('selected');
+  el.classList.add('selected');
+  current = el;
+  if (window.__companion) window.__companion.record(id, el.dataset.label);
+}
+</script>
+</body>
+</html>
