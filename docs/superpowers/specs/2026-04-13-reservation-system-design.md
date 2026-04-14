@@ -1,6 +1,6 @@
-# Système de réservation directe — Design en cours
-**Statut : BRAINSTORMING EN COURS — reprendre à la section 4**
-**Date : 2026-04-13**
+# Système de réservation directe — Design complet
+**Statut : DESIGN VALIDÉ — prêt pour implémentation**
+**Date : 2026-04-13 / 2026-04-14**
 
 ---
 
@@ -28,7 +28,7 @@ Le client utilise aussi Booking.com et veut éviter les doublons.
 ## Stack retenue
 
 - **Netlify Functions** — serverless backend (déjà configuré dans netlify.toml)
-- **Sanity** — base de données (schémas déjà esquissés : reservation, blocage, tarifSaison)
+- **Sanity** — base de données (schémas définis en Section 8)
 - **Stripe** — paiement (1.5% + 0.25€/transaction, cartes européennes)
 - **Resend** — emails transactionnels (FR/NL/EN)
 - **iCal** — sync bidirectionnelle avec Booking.com
@@ -77,6 +77,7 @@ Le client utilise aussi Booking.com et veut éviter les doublons.
 │                                                      │
 │  [CRON toutes les 30min]                             │
 │  /api/sync-ical       → sync Booking.com → Sanity   │
+│  /api/sync-expirations → rappels + remboursements    │
 └───────────┬───────────────────────────────┬─────────┘
             │                               │
 ┌───────────▼──────────┐      ┌─────────────▼────────┐
@@ -86,6 +87,7 @@ Le client utilise aussi Booking.com et veut éviter les doublons.
 │  • blocages          │      │  • Resend (emails)    │
 │  • tarifSaisons      │      │  • Booking.com (iCal) │
 │  • logements         │      │                       │
+│  • infosPropriete    │      │                       │
 └──────────────────────┘      └───────────────────────┘
 ```
 
@@ -167,16 +169,475 @@ Puis ajouter (une seule fois) :
 
 ---
 
-## À FAIRE — Sections restantes à designer
+## Section 4 — Emails (validée)
 
-- [ ] **Section 4** — Emails (templates, langues FR/NL/EN, 5 déclencheurs)
-- [ ] **Section 5** — Sync iCal (détail technique : cron, parsing, upsert Sanity)
-- [ ] **Section 6** — Sécurité (tokens confirm/refus, secrets Stripe, RGPD)
-- [ ] **Section 7** — Interface de réservation (UX page reservation.html)
-- [ ] **Section 8** — Schémas Sanity finaux (ajustements par rapport aux fichiers existants)
+### 5 déclencheurs
+
+| # | Clé | Destinataire | Moment | Langue |
+|---|-----|--------------|--------|--------|
+| 1 | `demande-recue` | Client | Stripe webhook reçu | FR/NL/EN (choix client) |
+| 2 | `nouvelle-reservation` | Propriétaire | Stripe webhook reçu | FR (toujours) |
+| 3 | `reservation-confirmee` | Client | Clic [Confirmer] | FR/NL/EN |
+| 4 | `reservation-annulee` | Client | Clic [Refuser] | FR/NL/EN |
+| 5 | `avant-arrivee` | Client | 7 jours avant l'arrivée (cron) | FR/NL/EN |
+
+### Contenu de chaque email
+
+**1 — `demande-recue` (Client)**
+```
+Objet : Votre demande de réservation — [Logement], [dates]
+
+- Récapitulatif : logement, dates, nb personnes
+- Acompte payé : montant + 4 derniers chiffres carte
+- Solde restant à régler
+- Message rassurant : "Confirmation sous 1h"
+- Contact propriétaire (en cas d'urgence)
+```
+
+**2 — `nouvelle-reservation` (Propriétaire, FR)**
+```
+Objet : Nouvelle demande — [Logement] du [date arrivée] au [date départ]
+
+- Nom, email, tél, pays du client
+- Logement + dates + nb personnes
+- Acompte reçu (montant)
+- Bouton [✓ Confirmer] → /api/confirmer/:token
+- Bouton [✗ Refuser]  → /api/refuser/:token
+- Lien vers Sanity Studio (réservation directe)
+```
+
+**3 — `reservation-confirmee` (Client)**
+```
+Objet : Réservation confirmée — [Logement], [dates]
+
+- Confirmation officielle avec récapitulatif complet
+- Acompte payé + solde restant (à régler sur place)
+- Adresse + GPS (infos communes)
+- Instructions spécifiques au logement (code accès, clé)
+- Règlement de la maison (lien ou résumé)
+- Contact propriétaire
+```
+
+**4 — `reservation-annulee` (Client)**
+```
+Objet : Votre demande n'a pas pu être confirmée
+
+- Message d'excuse (ton chaleureux, pas de justification imposée)
+- Confirmation du remboursement intégral (délai 5-10 jours)
+- Invitation à recommencer pour d'autres dates
+- Contact propriétaire
+```
+
+**5 — `avant-arrivee` (Client)**
+```
+Objet : Votre séjour approche — [Logement], dans 7 jours
+
+- Rappel : dates + logement + nb personnes
+- Solde à régler sur place : montant exact
+- Infos d'arrivée spécifiques au logement (code, clé, accès)
+- Infos communes : adresse, GPS, parking
+- Règlement + heures d'arrivée/départ
+- Contact propriétaire (téléphone)
+```
+
+### Architecture des templates
+
+```
+src/emails/
+├── templates/
+│   ├── demande-recue.js
+│   ├── nouvelle-reservation.js
+│   ├── reservation-confirmee.js
+│   ├── reservation-annulee.js
+│   └── avant-arrivee.js
+└── i18n/
+    ├── fr.js
+    ├── nl.js
+    └── en.js
+```
+
+Chaque template est une fonction `(data, t) => htmlString`. La fonction `sendEmail(type, reservationData)` dans les Netlify Functions :
+1. Récupère la langue depuis `reservation.client.langue`
+2. Charge les traductions correspondantes
+3. Appelle le template avec les données + traductions
+4. Envoie via Resend
+
+### Infos pratiques dans Sanity (mixte)
+
+- **Singleton `infosPropriete`** : adresse, GPS, téléphone, règlement, heures arrivée/départ
+- **Champ `instructionsArrivee` sur `logement`** : code de porte, localisation clé, spécificités — en FR/NL/EN
 
 ---
 
-## Pour reprendre cette session
+## Section 5 — Sync iCal (validée)
 
-Dire à Claude : *"Reprends le design du système de réservation, on en était à la section 4 — emails. Le fichier de contexte est dans docs/superpowers/specs/2026-04-13-reservation-system-design.md"*
+### Vue d'ensemble
+
+```
+Booking.com                   Site (Netlify)                 Sanity
+    │                              │                             │
+    │   [cron 30min]               │                             │
+    │◀─────────────────────────────│  GET iCal feed/logement     │
+    │──────────────────────────────▶│  VEVENT[]                   │
+    │                              │  → parse + classify         │
+    │                              │  → upsert blocage/resa      │──▶ Sanity
+    │                              │                             │
+    │   [checkout client]          │                             │
+    │◀─────────────────────────────│  GET iCal feed/logement     │
+    │──────────────────────────────▶│  (sync fraîche)             │
+    │                              │  → vérif dispo temps réel   │
+    │                              │                             │
+    │◀─────────────────────────────│  GET /api/ical/:logementId  │
+    │   flux iCal site             │  ← réservations confirmées  │◀── Sanity
+    │   (configuré dans Booking)   │  ← blocages                 │
+```
+
+### Algorithme de sync inbound (Booking → Sanity)
+
+```
+Pour chaque logement :
+  1. Fetch iCal URL Booking.com du logement
+  2. Parser les VEVENT (lib: node-ical)
+  3. Pour chaque VEVENT :
+
+     a. Extraire : UID, DTSTART, DTEND, SUMMARY
+
+     b. Classifier :
+        - SUMMARY ressemble à un nom (≥2 mots non-bloquants) → reservation
+        - SUMMARY = "Blocked" / vide / mot-clé bloquant → blocage
+
+     c. Upsert dans Sanity via icalUid :
+        - Document existant → patch si dates changées
+        - Nouveau → créer
+
+  4. Supprimer les docs Booking.com dont l'UID
+     n'apparaît plus dans le feed (= annulation)
+```
+
+### Classification SUMMARY
+
+```js
+function classifierEvenement(summary) {
+  if (!summary || summary.trim() === '') return 'blocage'
+  const motsCles = ['blocked', 'closed', 'unavailable', 'not available', 'indisponible']
+  if (motsCles.some(m => summary.toLowerCase().includes(m))) return 'blocage'
+  if (summary.trim().split(/\s+/).length >= 2) return 'reservation'
+  return 'blocage'
+}
+```
+
+### Outbound : `/api/ical/:logementId`
+
+Génère un flux iCal pour Booking.com. Inclut :
+- Toutes les **réservations confirmées** (source: "direct")
+- Tous les **blocages** (source: "manuel" ou "booking.com")
+
+Les événements Booking.com réinclus sont ignorés silencieusement par Booking.com (déduplication par UID). Pas de boucle.
+
+### Sync fraîche au checkout
+
+Dans `/api/reservation`, avant la création du Payment Intent :
+- Sync inbound pour le logement concerné uniquement
+- Bloquant : conflit détecté → erreur 409, pas de paiement
+
+### Gestion des erreurs
+
+| Situation | Comportement |
+|-----------|-------------|
+| iCal Booking.com inaccessible | Log erreur, skip logement, retry au prochain cron |
+| VEVENT avec dates invalides | Skip + log warning |
+| Sanity write fail | Log erreur critique |
+| Conflit au checkout | Erreur 409 → message "dates non disponibles" |
+
+---
+
+## Section 6 — Sécurité (validée)
+
+### Tokens confirm/refus
+
+```js
+import { randomBytes } from 'crypto'
+const token = randomBytes(32).toString('hex') // 64 chars hex
+```
+
+- Deux tokens distincts par résa : `tokenConfirmer` et `tokenRefuser`
+- Stockés en clair dans Sanity (sécurité par entropie)
+- **Usage unique** : à l'utilisation, les deux tokens passent à `null` simultanément au changement de statut
+
+### Expiration des demandes (rappel + auto-remboursement)
+
+Cron `/api/sync-expirations` toutes les 30min :
+
+```
+Pour chaque reservation { statut: "demande" } :
+
+  Si maintenant ≥ creeA + 2h ET rappelEnvoye = false :
+    → Email rappel propriétaire
+    → rappelEnvoye = true dans Sanity
+
+  Si maintenant ≥ creeA + 24h :
+    → Remboursement Stripe (refund du paymentIntentId)
+    → statut → "expiree"
+    → Email client "demande expirée + remboursement"
+    → tokenConfirmer, tokenRefuser → null
+```
+
+### Stripe — Sécurité webhook
+
+```js
+const event = stripe.webhooks.constructEvent(
+  rawBody,    // corps brut, avant JSON.parse
+  req.headers['stripe-signature'],
+  process.env.STRIPE_WEBHOOK_SECRET
+)
+// Signature invalide → exception → 400, aucune action
+```
+
+### Variables d'environnement
+
+| Variable | Utilisation |
+|----------|------------|
+| `STRIPE_SECRET_KEY` | API Stripe (server-side) |
+| `STRIPE_WEBHOOK_SECRET` | Vérification signature webhook |
+| `STRIPE_PUBLISHABLE_KEY` | Front-end (clé publique) |
+| `RESEND_API_KEY` | Envoi d'emails |
+| `SANITY_PROJECT_ID` | Identifiant projet Sanity |
+| `SANITY_DATASET` | Dataset Sanity (`production`) |
+| `SANITY_API_TOKEN` | Token Sanity write (server-side) |
+| `SITE_URL` | Base URL pour liens confirm/refus |
+| `OWNER_EMAIL` | Email destinataire email propriétaire |
+
+### RGPD
+
+- **Données collectées** : nom, email, téléphone, pays, dates, logement, langue, montants
+- **Paiement** : géré par Stripe — site ne voit jamais les numéros de carte
+- **Conservation** : données comptables 7 ans ; données personnelles **anonymisées après 1 an** (cron annuel : remplace nom/email/tél par `"[supprimé]"`)
+- **Mentions** : "Vos données sont utilisées uniquement pour la gestion de votre séjour. [Politique de confidentialité]" au bas du formulaire
+- **Page à créer** : Mentions légales / Confidentialité (déjà prévue dans CLAUDE.md)
+
+---
+
+## Section 7 — Interface de réservation (validée)
+
+### Structure de la page `reservation.html`
+
+```
+reservation.html
+├── Barre de progression (étapes 1→2→3→4)
+├── Conteneur d'étapes (une seule visible à la fois)
+│   ├── Étape 1 — Choisir un logement
+│   ├── Étape 2 — Choisir les dates
+│   ├── Étape 3 — Vos informations
+│   └── Étape 4 — Paiement
+└── Récapitulatif latéral (sticky desktop, bandeau mobile dès étape 2)
+```
+
+Bouton "Réserver" dans la nav → redirige vers `reservation.html` (pas de modale).
+
+### Étape 1 — Choisir un logement
+
+- Grille de 7 cartes : photo, nom, capacité, prix indicatif "à partir de X€/nuit"
+- Filtre rapide par capacité (2, 4+, 6+)
+- Données statiques (pré-chargées au build depuis Sanity ou hardcodées)
+
+### Étape 2 — Choisir les dates
+
+- Sélecteur double arrivée/départ avec dates indisponibles grisées
+- Chargement des indisponibilités via `/api/disponibilite/:logementId`
+- Calcul du prix en temps réel à chaque sélection complète (appel `/api/tarif`)
+- Détail affiché : X nuits × tarif + ménage + taxe = Total + Acompte (30%)
+- Erreur inline si dates deviennent indisponibles en cours de sélection
+
+### Étape 3 — Vos informations
+
+- Prénom + Nom, Email (+ confirmation), Téléphone, Pays, Nb personnes, Langue
+- Case RGPD obligatoire
+- Validation côté client uniquement, pas d'appel API
+
+### Étape 4 — Paiement
+
+- Récapitulatif complet en haut
+- Appel `/api/reservation` → crée Payment Intent + résa statut `en_attente_paiement`
+- Stripe Payment Element chargé avec le client secret
+- Bouton "Payer €XXX" → `stripe.confirmPayment()`
+- Succès → redirection `/confirmation.html?id=XXX`
+- Erreur → message inline, pas de retour aux étapes précédentes
+
+### Récapitulatif latéral
+
+```
+┌─────────────────────────┐
+│  [Photo miniature]      │
+│  Gîte des Sources       │
+│  ─────────────────────  │
+│  15 juin → 19 juin      │
+│  4 nuits · 4 personnes  │
+│  ─────────────────────  │
+│  4 × 95€       = 380€   │
+│  Ménage        =  50€   │
+│  Taxe séjour   =   8€   │
+│  ─────────────────────  │
+│  Total séjour  = 438€   │
+│  Acompte (30%) = 131€   │
+└─────────────────────────┘
+```
+
+Mobile : bandeau collant en bas d'écran (montant + CTA "Continuer").
+
+### Gestion d'état (vanilla JS)
+
+```js
+const state = {
+  logementId: null,
+  dateArrivee: null,
+  dateDepart: null,
+  nbPersonnes: null,
+  langue: 'fr',
+  prixDetail: null,
+  clientInfo: {},
+  etapeCourante: 1
+}
+
+function allerEtape(n) {
+  // masque étape courante, affiche étape n,
+  // met à jour barre de progression, scroll haut
+}
+```
+
+---
+
+## Section 8 — Schémas Sanity finaux (validée)
+
+### 5 types de documents
+
+| Type | Rôle |
+|------|------|
+| `logement` | Les 7 hébergements (gîtes + chambres) |
+| `tarifSaison` | Grilles tarifaires par période |
+| `reservation` | Réservations directes + Booking.com |
+| `blocage` | Dates bloquées (manuel ou Booking.com) |
+| `infosPropriete` | Singleton — infos communes à la propriété |
+
+### `logement`
+
+```
+nom               string, required
+slug              slug (source: nom)
+capacite          number, required
+description       { fr, nl, en }  — texte riche
+photos            array<image>
+actif             boolean, default true
+
+fraisMenage       number — € forfait par séjour
+taxeSejour        number — € par personne par nuit
+acomptePercent    number, default 30
+dureeMinNuits     number, optional
+
+icalUrlBooking    string — URL feed iCal Booking.com
+
+instructionsArrivee  { fr, nl, en }  — code porte, clé, accès
+```
+
+### `tarifSaison`
+
+```
+logement          reference → logement, required
+nom               string — ex: "Été 2025"
+dateDebut         date, required
+dateFin           date, required
+prixNuit          number, required
+prixWeekend       number, optional
+priorite          number, required — 1 = priorité max
+```
+
+### `reservation`
+
+```
+logement          reference → logement, required
+source            'direct' | 'booking.com'
+statut            'en_attente_paiement' | 'demande' |
+                  'confirmee' | 'annulee' | 'expiree'
+
+dateArrivee       date, required
+dateDepart        date, required
+nbPersonnes       number, required
+
+client {
+  nom             string
+  email           string
+  telephone       string
+  pays            string
+  langue          'fr' | 'nl' | 'en'
+}
+
+prixTotal         number
+acompte           number
+solde             number
+
+stripePaymentIntentId  string
+stripeRefundId         string, optional
+
+tokenConfirmer    string, optional
+tokenRefuser      string, optional
+
+rappelEnvoye      boolean, default false
+creeA             datetime
+
+icalUid           string, optional  — si source booking.com
+```
+
+### `blocage`
+
+```
+logement          reference → logement, required
+dateDebut         date, required
+dateFin           date, required
+source            'manuel' | 'booking.com'
+icalUid           string, optional
+note              string, optional
+```
+
+### `infosPropriete` (singleton, `_id: 'infosPropriete'`)
+
+```
+adresse           string
+coordonneesGPS    string — ex: "50.1234, 5.6789"
+telephone         string
+emailContact      string
+heureArrivee      string — ex: "15:00"
+heureDepart       string — ex: "11:00"
+
+reglement {
+  fr              text
+  nl              text
+  en              text
+}
+```
+
+### Index GROQ utiles
+
+**Vérifier la disponibilité :**
+```groq
+*[
+  (_type == "reservation" && logement._ref == $id &&
+   statut in ["demande", "confirmee"] &&
+   dateArrivee < $dateFin && dateDepart > $dateArrivee)
+  ||
+  (_type == "blocage" && logement._ref == $id &&
+   dateDebut < $dateFin && dateFin > $dateArrivee)
+]
+```
+
+**TarifSaisons pour une nuit, triés par priorité :**
+```groq
+*[_type == "tarifSaison" && logement._ref == $id
+  && dateDebut <= $date && dateFin >= $date]
+| order(priorite asc)
+```
+
+**Demandes non traitées depuis +2h (cron rappel) :**
+```groq
+*[_type == "reservation" && statut == "demande"
+  && rappelEnvoye == false
+  && dateTime(creeA) < dateTime(now()) - 60*60*2]
+```
