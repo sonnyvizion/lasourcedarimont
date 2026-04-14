@@ -4,6 +4,9 @@ import "./reservation.css";
 import "./nav-lang-globe.js";
 import { client } from "./sanity.js";
 import { loadStripe } from "@stripe/stripe-js";
+import { initSmoothScroll } from "./smooth-scroll.js";
+
+initSmoothScroll();
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 let stripeElements = null;

@@ -84,8 +84,30 @@
     <main class="region-page-main">
       
 
-      <section class="section center region-intro">
-        <div class="content-wrap" style="margin-top: -50px !important;">
+      <section class="region-intro">
+        <div class="region-video-wrap region-intro-media" aria-hidden="true">
+          <video
+            class="region-video region-video-desktop"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+            aria-label="Vidéo du Domaine d'Arimont">
+            <source src="/vid/arimont_desktop.mp4" type="video/mp4" />
+          </video>
+          <video
+            class="region-video region-video-mobile"
+            autoplay
+            muted
+            loop
+            playsinline
+            preload="metadata"
+            aria-label="Vidéo mobile du Domaine d'Arimont">
+            <source src="/vid/arimont_mobile.mp4" type="video/mp4" />
+          </video>
+        </div>
+        <div class="content-wrap region-intro-content">
           <div class="label">Découvrir la région</div>
           <h1 class="intro-text reveal-text">
             Séjournez au cœur des Ardennes <br class="br-desktop" />
@@ -101,10 +123,21 @@
       </section>
 
       <section class="section region-map-section section-full-width">
-        <div id="region-map" class="region-map" aria-label="Carte des activités autour du Domaine"></div>
-        <p class="feature-bridge region-map-note">
-          Pins <strong>verts</strong> : activités extérieures. Pins <strong>oranges</strong> : activités intérieures. Le pin du domaine indique votre point de départ.
-        </p>
+        <div class="content-wrap region-map-layout">
+          <div class="region-map-copy">
+            <div class="label region-map-label" data-region-map-label>Explorer autour de Spa-Francorchamps</div>
+            <h2 class="region-map-title reveal-text" data-region-map-title>
+              Circuit de Spa-Francorchamps, patrimoine ardennais et expériences nature à moins de 30 minutes
+            </h2>
+            <p class="region-map-lead" data-region-map-lead>
+              Depuis le Domaine, repérez facilement les activités sportives, culturelles et familiales autour de Malmedy, Stavelot et Spa. La carte vous aide à organiser vos journées selon vos envies et votre temps de trajet.
+            </p>
+            <p class="feature-bridge region-map-note" data-region-map-note>
+              Pins <strong>verts</strong> : activités extérieures. Pins <strong>oranges</strong> : activités intérieures. Le pin du domaine indique votre point de départ.
+            </p>
+          </div>
+          <div id="region-map" class="region-map" aria-label="Carte des activités autour du Domaine"></div>
+        </div>
       </section>
 
       <section class="section region-list-section">
@@ -121,28 +154,6 @@
           <ul id="region-spots-list" class="spots-list" aria-live="polite"></ul>
         </div>
       </section>
-      <div class="region-video-wrap">
-            <video
-              class="region-video region-video-desktop"
-              autoplay
-              muted
-              loop
-              playsinline
-              preload="metadata"
-              aria-label="Vidéo du Domaine d'Arimont">
-              <source src="/vid/arimont_desktop.mp4" type="video/mp4" />
-            </video>
-            <video
-              class="region-video region-video-mobile"
-              autoplay
-              muted
-              loop
-              playsinline
-              preload="metadata"
-              aria-label="Vidéo mobile du Domaine d'Arimont">
-              <source src="/vid/arimont_mobile.mp4" type="video/mp4" />
-            </video>
-          </div>
     </main>
 
     <footer class="site-footer">

@@ -6,6 +6,9 @@ import "./nav-lang-globe.js";
 import { initBookingRequest } from "./booking-request.js";
 import { applyPageSeo, fetchLocalizedCollection, fetchLocalizedSingleton, fetchPageConfig, urlFor } from "./sanity.js";
 import { t } from "./static-translations.js";
+import { initSmoothScroll } from "./smooth-scroll.js";
+
+initSmoothScroll();
 
 const BASE_URL = import.meta.env.BASE_URL || "/";
 const assetUrl = (path) => `${BASE_URL}${path.replace(/^\/+/, "")}`;

@@ -3,6 +3,9 @@ import "./nav.css";
 import "./contact.css";
 import "./nav-lang-globe.js";
 import { initBookingRequest } from "./booking-request.js";
+import { initSmoothScroll } from "./smooth-scroll.js";
+
+initSmoothScroll();
 
 initBookingRequest({ triggersSelector: "[data-booking-request-trigger]" });
 

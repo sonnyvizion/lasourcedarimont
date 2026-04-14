@@ -7,6 +7,9 @@ import { initBookingRequest } from "./booking-request.js";
 import { initTestimonialsSlider } from "./testimonials.js";
 import { applyPageSeo, fetchLocalizedCollection, fetchPageConfig, urlFor } from "./sanity.js";
 import { t } from "./static-translations.js";
+import { initSmoothScroll } from "./smooth-scroll.js";
+
+initSmoothScroll();
 
 const yearEl = document.querySelector("[data-year]");
 if (yearEl) yearEl.textContent = new Date().getFullYear();

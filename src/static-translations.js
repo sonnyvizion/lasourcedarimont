@@ -86,7 +86,7 @@ const STATIC_TRANSLATIONS = {
       scroll: "Scroll",
       groupsLabel: "Groupes & séminaires",
       groupsTitle:
-        "Un cadre d’exception <br class=\"br-desktop\" />pour vos <span class=\"semi-italic\">événements</span>",
+        "Un cadre d’exception <br />pour&nbsp;vos&nbsp;<span class=\"semi-italic\">événements</span>",
       groupsLead:
         "Le Domaine de la Source d’Arimont accueille vos séminaires, retraites et événements privés. Avec une capacité de <strong>plus de 30 personnes</strong>, profitez d’un cadre naturel préservé, loin de l’agitation, pour des journées de travail ou de cohésion qui laissent une empreinte durable.",
       groupsPeople: "Personnes",
@@ -269,6 +269,13 @@ const STATIC_TRANSLATIONS = {
       outdoor: "En extérieur",
       indoor: "En intérieur",
       mapAria: "Carte des activités autour du Domaine",
+      mapLabel: "Explorer autour de Spa-Francorchamps",
+      mapTitle:
+        "Circuit de Spa-Francorchamps, patrimoine ardennais et expériences nature à moins de 30 minutes",
+      mapLead:
+        "Depuis le Domaine, repérez facilement les activités sportives, culturelles et familiales autour de Malmedy, Stavelot et Spa. La carte vous aide à organiser vos journées selon vos envies et votre temps de trajet.",
+      mapNote:
+        "Pins <strong>verts</strong> : activités extérieures. Pins <strong>oranges</strong> : activités intérieures. Le pin du domaine indique votre point de départ.",
       videoAria: "Vidéo du Domaine d'Arimont",
       videoMobileAria: "Vidéo mobile du Domaine d'Arimont",
     },
@@ -574,6 +581,13 @@ const STATIC_TRANSLATIONS = {
       outdoor: "Outdoor",
       indoor: "Indoor",
       mapAria: "Map of activities around the estate",
+      mapLabel: "Explore around Spa-Francorchamps",
+      mapTitle:
+        "Spa-Francorchamps Circuit, Ardennes heritage and nature experiences within 30 minutes",
+      mapLead:
+        "From the estate, quickly spot sports, cultural and family activities around Malmedy, Stavelot and Spa. The map helps you plan each day by travel time and interests.",
+      mapNote:
+        "<strong>Green</strong> pins: outdoor activities. <strong>Orange</strong> pins: indoor activities. The estate pin marks your starting point.",
       videoAria: "Video of Domaine d'Arimont",
       videoMobileAria: "Mobile video of Domaine d'Arimont",
     },
@@ -879,6 +893,13 @@ const STATIC_TRANSLATIONS = {
       outdoor: "Buiten",
       indoor: "Binnen",
       mapAria: "Kaart van activiteiten rond het domein",
+      mapLabel: "Ontdek rond Spa-Francorchamps",
+      mapTitle:
+        "Circuit van Spa-Francorchamps, Ardense erfgoedlocaties en natuurervaringen binnen 30 minuten",
+      mapLead:
+        "Vanuit het domein vindt u snel sportieve, culturele en gezinsactiviteiten rond Malmedy, Stavelot en Spa. De kaart helpt u uw dagen te plannen volgens reistijd en interesses.",
+      mapNote:
+        "<strong>Groene</strong> pins: buitenactiviteiten. <strong>Oranje</strong> pins: binnenactiviteiten. De pin van het domein toont uw vertrekpunt.",
       videoAria: "Video van Domaine d'Arimont",
       videoMobileAria: "Mobiele video van Domaine d'Arimont",
     },
@@ -1184,6 +1205,13 @@ const STATIC_TRANSLATIONS = {
       outdoor: "Im Freien",
       indoor: "Drinnen",
       mapAria: "Karte der Aktivitäten rund um das Anwesen",
+      mapLabel: "Rund um Spa-Francorchamps entdecken",
+      mapTitle:
+        "Circuit de Spa-Francorchamps, Ardennen-Kulturerbe und Naturerlebnisse in weniger als 30 Minuten",
+      mapLead:
+        "Vom Anwesen aus finden Sie schnell sportliche, kulturelle und familienfreundliche Aktivitäten rund um Malmedy, Stavelot und Spa. Die Karte hilft Ihnen, Ihre Tage nach Fahrzeit und Interessen zu planen.",
+      mapNote:
+        "<strong>Grüne</strong> Pins: Aktivitäten im Freien. <strong>Orange</strong> Pins: Indoor-Aktivitäten. Der Pin des Anwesens zeigt Ihren Startpunkt.",
       videoAria: "Video des Domaine d'Arimont",
       videoMobileAria: "Mobiles Video des Domaine d'Arimont",
     },
@@ -1447,6 +1475,10 @@ const applyRegionTranslations = () => {
   setAttr(".region-activities-prev", "aria-label", t("common.testimonials.previous"));
   setAttr(".region-activities-next", "aria-label", t("common.testimonials.next"));
   setAttr("#region-map", "aria-label", t("region.mapAria"));
+  setText(".region-map-label", t("region.mapLabel"));
+  setHTML(".region-map-title", t("region.mapTitle"));
+  setHTML(".region-map-lead", t("region.mapLead"));
+  setHTML(".region-map-note", t("region.mapNote"));
   setAttr(".region-video-desktop", "aria-label", t("region.videoAria"));
   setAttr(".region-video-mobile", "aria-label", t("region.videoMobileAria"));
 };

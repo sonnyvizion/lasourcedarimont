@@ -28,7 +28,14 @@ const navToggle = document.querySelector(".nav-toggle");
 const mobileMenu = document.querySelector(".mobile-menu");
 const mobileLinks = document.querySelectorAll(".mobile-menu-inner .menu-link");
 const LOADER_SESSION_KEY = "arimont_loader_seen";
+const HERO_INTRO_SESSION_KEY = "arimont_home_hero_intro_seen";
 const BASE_URL = import.meta.env.BASE_URL || "/";
+let shouldPlayHeroIntro = true;
+try {
+  shouldPlayHeroIntro = sessionStorage.getItem(HERO_INTRO_SESSION_KEY) !== "1";
+} catch {
+  shouldPlayHeroIntro = true;
+}
 let releaseIntroGate = () => {};
 const introGate = new Promise((resolve) => {
   releaseIntroGate = resolve;
@@ -120,7 +127,7 @@ const waitForHeroMediaReady = () =>
     activeHeroVideo.load();
   });
 
-const heroMediaGate = waitForHeroMediaReady();
+const heroMediaGate = shouldPlayHeroIntro ? waitForHeroMediaReady() : Promise.resolve();
 
 const renderPortableText = (blocks) => {
   if (!blocks?.length) return "";
@@ -961,15 +968,36 @@ if (!prefersReducedMotion) {
     noteEl.querySelectorAll(".hero-note-line").forEach((line) => splitToChars(line));
   }
 
-  // Les valeurs "from" sont appliquées directement dans les animations
-  gsap.set(".booking-panel", { y: 32, opacity: 0 });
-  gsap.set(".hero-tree-left", { x: 0, opacity: 1, scale: 1 });
-  gsap.set(".hero-tree-right", { x: 0, opacity: 1, scale: 1 });
-  gsap.set(".site-header", { y: -24, opacity: 0 });
-  gsap.set(".hero-headline", { opacity: 0 });
-  gsap.set(".hero-note", { opacity: 0 });
-  if (heroBookingInline && !window.matchMedia("(max-width: 980px)").matches) {
-    gsap.set(heroBookingInline, { y: 20, opacity: 0 });
+  if (shouldPlayHeroIntro) {
+    try {
+      sessionStorage.setItem(HERO_INTRO_SESSION_KEY, "1");
+    } catch {
+      // noop
+    }
+  }
+
+  if (shouldPlayHeroIntro) {
+    // Les valeurs "from" sont appliquées directement dans les animations
+    gsap.set(".booking-panel", { y: 32, opacity: 0 });
+    gsap.set(".hero-tree-left", { x: 0, opacity: 1, scale: 1 });
+    gsap.set(".hero-tree-right", { x: 0, opacity: 1, scale: 1 });
+    gsap.set(".site-header", { y: -24, opacity: 0 });
+    gsap.set(".hero-headline", { opacity: 0 });
+    gsap.set(".hero-note", { opacity: 0 });
+    if (heroBookingInline && !window.matchMedia("(max-width: 980px)").matches) {
+      gsap.set(heroBookingInline, { y: 20, opacity: 0 });
+    }
+  } else {
+    bodyEl.classList.remove("nav-hidden");
+    gsap.set(".booking-panel", { y: 0, opacity: 1 });
+    gsap.set(".hero-tree-left", { x: 0, opacity: 1, scale: 1 });
+    gsap.set(".hero-tree-right", { x: 0, opacity: 1, scale: 1 });
+    gsap.set(".site-header", { y: 0, opacity: 1 });
+    gsap.set(".hero-headline", { opacity: 1 });
+    gsap.set(".hero-note", { opacity: 1 });
+    if (heroBookingInline && !window.matchMedia("(max-width: 980px)").matches) {
+      gsap.set(heroBookingInline, { y: 0, opacity: 1 });
+    }
   }
 
   const heroTl = gsap.timeline({
@@ -977,6 +1005,45 @@ if (!prefersReducedMotion) {
     paused: true
   });
   const titleLines = gsap.utils.toArray(".hero-title .hero-line");
+  let heroParallaxInitialized = false;
+
+  const initHeroParallax = () => {
+    if (heroParallaxInitialized) return;
+    heroParallaxInitialized = true;
+
+    const isDesktopViewport = !window.matchMedia("(max-width: 980px)").matches;
+    if (isDesktopViewport && heroEl) {
+      const smoothHeroParallax = gsap.timeline();
+      smoothHeroParallax
+        .fromTo(".hero-media", { y: 0 }, { y: 70, ease: "none" }, 0)
+        .fromTo(".hero-content", { y: 0 }, { y: 34, ease: "none" }, 0);
+
+      ScrollTrigger.create({
+        animation: smoothHeroParallax,
+        trigger: heroEl,
+        start: "top top",
+        end: "bottom top",
+        scrub: 1.25
+      });
+    }
+
+    const parallaxTl = gsap.timeline();
+    if (!heroVideoDesktop) {
+      parallaxTl
+        .fromTo(".hero-image", { scale: 1.12 }, { scale: 1.02, ease: "none" }, 0)
+        .fromTo(".hero-tree-left", { x: -240 }, { x: 0, ease: "none" }, 0)
+        .fromTo(".hero-tree-right", { x: 240 }, { x: 0, ease: "none" }, 0);
+    }
+    parallaxTl.fromTo(".hero-headline", { y: 0 }, { y: -24, ease: "none" }, 0);
+    parallaxTl.fromTo(".hero-note", { y: 0 }, { y: -24, ease: "none" }, 0);
+    ScrollTrigger.create({
+      animation: parallaxTl,
+      trigger: ".hero",
+      start: "top top",
+      end: "bottom top",
+      scrub: true
+    });
+  };
 
   heroTl.addLabel("parallaxStart", 0);
   if (!heroVideoDesktop) {
@@ -1035,40 +1102,7 @@ if (!prefersReducedMotion) {
   heroTl.to(".site-header", { y: 0, opacity: 1, duration: 1.1, ease: "power3.out" }, 2);
   heroTl.to(".booking-panel", { y: 0, opacity: 1, duration: 1.1, ease: "power3.out" }, 2);
 
-  heroTl.eventCallback("onComplete", () => {
-    const isDesktopViewport = !window.matchMedia("(max-width: 980px)").matches;
-    if (isDesktopViewport && heroEl) {
-      const smoothHeroParallax = gsap.timeline();
-      smoothHeroParallax
-        .fromTo(".hero-media", { y: 0 }, { y: 70, ease: "none" }, 0)
-        .fromTo(".hero-content", { y: 0 }, { y: 34, ease: "none" }, 0);
-
-      ScrollTrigger.create({
-        animation: smoothHeroParallax,
-        trigger: heroEl,
-        start: "top top",
-        end: "bottom top",
-        scrub: 1.25
-      });
-    }
-
-    const parallaxTl = gsap.timeline();
-    if (!heroVideoDesktop) {
-      parallaxTl
-        .fromTo(".hero-image", { scale: 1.12 }, { scale: 1.02, ease: "none" }, 0)
-        .fromTo(".hero-tree-left", { x: -240 }, { x: 0, ease: "none" }, 0)
-        .fromTo(".hero-tree-right", { x: 240 }, { x: 0, ease: "none" }, 0);
-    }
-    parallaxTl.fromTo(".hero-headline", { y: 0 }, { y: -24, ease: "none" }, 0);
-    parallaxTl.fromTo(".hero-note", { y: 0 }, { y: -24, ease: "none" }, 0);
-    ScrollTrigger.create({
-      animation: parallaxTl,
-      trigger: ".hero",
-      start: "top top",
-      end: "bottom top",
-      scrub: true
-    });
-  });
+  heroTl.eventCallback("onComplete", initHeroParallax);
   introGate.then(() => {
     const isMobileViewport = window.matchMedia("(max-width: 980px)").matches;
     const activeHeroVideo = isMobileViewport ? heroVideoMobile : heroVideoDesktop;
@@ -1077,6 +1111,32 @@ if (!prefersReducedMotion) {
       if (heroTl.isActive() || heroTl.progress() > 0) return;
       heroTl.play(0);
     };
+
+    if (!shouldPlayHeroIntro) {
+      if (activeHeroVideo) {
+        activeHeroVideo.pause();
+        activeHeroVideo.loop = false;
+        activeHeroVideo.autoplay = false;
+        activeHeroVideo.removeAttribute("autoplay");
+        activeHeroVideo.classList.remove("is-fading");
+
+        const freezeFrame = () => {
+          try {
+            activeHeroVideo.currentTime = 0.001;
+          } catch {
+            // noop
+          }
+        };
+        if (activeHeroVideo.readyState >= 1) {
+          freezeFrame();
+        } else {
+          activeHeroVideo.addEventListener("loadedmetadata", freezeFrame, { once: true });
+        }
+      }
+      initHeroParallax();
+      requestAnimationFrame(() => ScrollTrigger.refresh());
+      return;
+    }
 
     if (activeHeroVideo) {
       activeHeroVideo.muted = true;

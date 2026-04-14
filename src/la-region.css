@@ -1,61 +1,166 @@
 .region-page-main {
   margin-top: 0;
-  padding-top: 110px;
+  padding-top: 0;
   padding-bottom: 100px;
 }
 
-.region-page:not(.menu-open) .site-header {
+.region-page:not(.menu-open) .site-header.is-solid {
   color: var(--color-forest);
   background: var(--color-beige);
 }
 
-.region-page:not(.menu-open) .logo-mark {
+.region-page:not(.menu-open) .site-header.is-solid .logo-mark {
   background-color: var(--color-forest);
 }
 
-.region-page:not(.menu-open) .nav-links,
-.region-page:not(.menu-open) .nav-right {
+.region-page:not(.menu-open) .site-header.is-solid .nav-links,
+.region-page:not(.menu-open) .site-header.is-solid .nav-right {
   color: var(--color-forest);
 }
 
-.region-page:not(.menu-open) .nav-icon,
-.region-page:not(.menu-open) .nav-icon::after {
+.region-page:not(.menu-open) .site-header.is-solid .nav-icon,
+.region-page:not(.menu-open) .site-header.is-solid .nav-icon::after {
   border-color: var(--color-forest);
 }
 
-.region-page:not(.menu-open) .nav-toggle-bar {
+.region-page:not(.menu-open) .site-header.is-solid .nav-toggle-bar {
   background: var(--color-forest);
 }
 
+.region-page:not(.menu-open) .site-header:not(.is-solid) .nav-right {
+  transform: translateX(0);
+}
+
+.region-page:not(.menu-open) .site-header:not(.is-solid) .nav-cta {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%) translateX(10px);
+}
+
 .region-intro {
-  padding-top: 60px;
-  padding-bottom: 60px;
-  z-index: 2;
+  position: relative;
+  height: 65vh;
+  min-height: 520px;
+  max-height: 860px;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  z-index: 1;
+}
+
+.region-intro::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.26) 0%, rgba(0, 0, 0, 0.48) 100%);
+  z-index: 1;
 }
 
 .region-intro .intro-text {
-  max-width: 900px;
-  margin-bottom: 40px;
+  max-width: 980px;
+  margin-bottom: 32px;
+  color: var(--color-white);
+  text-shadow: 0 14px 32px rgba(0, 0, 0, 0.35);
 }
 
-.region-intro .content-wrap {
+.region-intro .label {
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 10px;
+}
+
+.region-intro-content {
   position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding-top: clamp(82px, 11vh, 124px);
+  padding-bottom: clamp(30px, 6vh, 62px);
+}
+
+.region-intro-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
 }
 
 .region-intro-frog {
   position: absolute;
   right: 4vw;
-  bottom: -182px;
+  bottom: -162px;
   width: clamp(90px, 12vw, 170px);
   height: auto;
   pointer-events: none;
   z-index: 4;
 }
 
-.region-map-section {
-  padding-top: 30px;
-  padding-bottom: 48px;
+.section.region-map-section {
+  padding-top: 34px;
+  padding-bottom: 54px;
   background: var(--color-beige);
+}
+
+.section.region-map-section.section-full-width {
+  padding-left: clamp(18px, 4vw, 34px) !important;
+  padding-right: clamp(18px, 4vw, 34px) !important;
+}
+
+.region-map-layout {
+  display: grid;
+  grid-template-columns: minmax(300px, 0.95fr) minmax(440px, 1.2fr);
+  gap: clamp(22px, 3.5vw, 52px);
+  align-items: stretch;
+  padding: clamp(28px, 3vw, 44px);
+  border-radius: 24px;
+  background: linear-gradient(
+    140deg,
+    rgba(255, 255, 255, 0.62) 0%,
+    rgba(246, 241, 230, 0.92) 52%,
+    rgba(246, 241, 230, 0.98) 100%
+  );
+  border: 1px solid rgba(42, 88, 67, 0.14);
+  box-shadow: 0 22px 42px rgba(24, 53, 40, 0.1);
+}
+
+.region-map-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 14px;
+  text-align: left;
+  padding: clamp(4px, 0.8vw, 12px) 0;
+}
+
+.region-map-label {
+  color: rgba(42, 88, 67, 0.85);
+}
+
+.region-map-title {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: clamp(1.55rem, 2.35vw, 2.28rem);
+  line-height: 1;
+  text-wrap: balance;
+  text-align: left;
+}
+
+.region-map-title .line,
+.region-map-title .line-inner {
+  text-align: left;
+}
+
+.region-map-lead {
+  font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+  line-height: 1.4;
+  opacity: 0.78;
+  max-width: 480px;
+  margin: 0;
 }
 
 .region-list-section {
@@ -280,26 +385,22 @@
 }
 
 .region-video-wrap {
-  margin-top: 28px;
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
+  margin: 0;
+  width: 100%;
 }
 
 .region-video {
   width: 100%;
-  border-radius: 18px;
-  border: 3px solid var(--color-forest);
+  height: 100%;
+  border-radius: 0;
+  border: 0;
   display: block;
   object-fit: cover;
+  object-position: center top;
 }
 
 .region-video-desktop {
   display: block;
-  width: 100vw;
-  max-width: none;
-  border-radius: 0;
-  border: 0;
   cursor: pointer;
 }
 
@@ -359,21 +460,22 @@
 }
 
 .region-map {
-  width: min(calc(100% - (var(--content-padding) * 2)), var(--max-width));
-  height: 560px;
+  width: 100%;
+  height: clamp(430px, 54vh, 620px);
   border-radius: 18px;
   overflow: hidden;
-  border: 3px solid var(--color-forest);
-  margin: auto;
+  border: 1px solid rgba(24, 53, 40, 0.16);
+  margin: 0;
 }
 
 .region-map-note {
-  width: 25%;
-  margin-top: 14px;
-  margin-right: 0;
-  margin-bottom: 0;
-  margin-left: max(var(--content-padding), calc((100vw - var(--max-width)) / 2));
+  width: auto;
+  margin: 6px 0 0;
   text-align: left;
+  max-width: 48ch;
+  font-size: 13px;
+  color: rgba(24, 53, 40, 0.78);
+  line-height: 1.45;
 }
 
 .mapboxgl-popup-content {
@@ -493,8 +595,24 @@
 }
 
 @media (max-width: 980px) {
+  .section.region-map-section.section-full-width {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .region-intro {
+    height: 47vh;
+    min-height: 360px;
+    max-height: none;
+  }
+
+  .region-intro-content {
+    padding-top: clamp(72px, 10vh, 96px);
+    padding-bottom: clamp(24px, 7vh, 48px);
+  }
+
   .region-intro .intro-text {
-    margin-bottom: 44px;
+    margin-bottom: 26px;
   }
 
   .region-intro-frog {
@@ -504,15 +622,31 @@
   }
 
   .region-map {
-    height: 50vh;
-    min-height: 420px;
-    width: min(calc(100% - (var(--content-padding) * 2)), var(--max-width));
+    width: min(100%, 380px);
+    aspect-ratio: 1 / 1;
+    height: auto;
+    min-height: 0;
+    max-height: none;
+    margin-inline: auto;
   }
 
-  .region-map-note {
-    width: min(calc(100% - (var(--content-padding) * 2)), var(--max-width));
-    margin-left: auto;
-    margin-right: auto;
+  .region-map-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 24px;
+  }
+
+  .region-map-copy {
+    order: 1;
+  }
+
+  .region-map {
+    order: 2;
+  }
+
+  .region-map-note,
+  .region-map-lead {
+    max-width: none;
   }
 
   .spot-detail-inner {

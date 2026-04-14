@@ -3,12 +3,20 @@ import "./nav.css";
 import "./home.css";
 import "./la-region.css";
 import "./nav-lang-globe.js";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { initBookingRequest } from "./booking-request.js";
 import { applyPageSeo, fetchLocalizedCollection, fetchPageConfig, urlFor } from "./sanity.js";
+import { initSmoothScroll } from "./smooth-scroll.js";
 
 const BASE_URL = import.meta.env.BASE_URL || "/";
 const assetUrl = (path) => `${BASE_URL}${path.replace(/^\/+/, "")}`;
 const MAPBOX_TOKEN = import.meta.env.VITE_MAPBOX_TOKEN || window.MAPBOX_TOKEN || "";
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+gsap.registerPlugin(ScrollTrigger);
+const lenis = initSmoothScroll();
+lenis?.on("scroll", ScrollTrigger.update);
 
 const yearEl = document.querySelector("[data-year]");
 if (yearEl) yearEl.textContent = new Date().getFullYear();
@@ -70,6 +78,56 @@ if (desktopRegionVideo instanceof HTMLVideoElement) {
       desktopRegionVideo.pause();
     }
   });
+}
+
+const headerEl = document.querySelector(".site-header");
+const regionHero = document.querySelector(".region-intro");
+const regionHeroMedia = document.querySelector(".region-intro-media");
+const regionHeroContent = document.querySelector(".region-intro-content");
+if (headerEl && regionHero) {
+  const updateRegionHeaderTheme = () => {
+    const scrollY = window.scrollY || window.pageYOffset || 0;
+    const trigger = Math.max(0, regionHero.offsetHeight - headerEl.offsetHeight - 20);
+    headerEl.classList.toggle("is-solid", scrollY >= trigger);
+  };
+
+  updateRegionHeaderTheme();
+  window.addEventListener("scroll", updateRegionHeaderTheme, { passive: true });
+  window.addEventListener("resize", updateRegionHeaderTheme);
+}
+
+if (!prefersReducedMotion && regionHero && regionHeroMedia && regionHeroContent) {
+  const isMobileViewport = window.matchMedia("(max-width: 980px)").matches;
+  const mediaShift = isMobileViewport ? 88 : 180;
+  const contentShift = isMobileViewport ? 64 : 128;
+
+  const heroParallaxTl = gsap.timeline({ defaults: { ease: "none" } });
+  heroParallaxTl
+    .fromTo(regionHeroMedia, { y: 0 }, { y: mediaShift, duration: 1 }, 0)
+    .fromTo(regionHeroContent, { y: 0 }, { y: contentShift, duration: 1 }, 0);
+
+  ScrollTrigger.create({
+    animation: heroParallaxTl,
+    trigger: regionHero,
+    start: "top top",
+    end: "bottom top",
+    scrub: true
+  });
+
+  gsap.fromTo(
+    regionHeroContent,
+    { opacity: 1 },
+    {
+      opacity: 0,
+      ease: "none",
+      scrollTrigger: {
+        trigger: regionHero,
+        start: "top+=12% top",
+        end: "top+=64% top",
+        scrub: 0.55
+      }
+    }
+  );
 }
 
 const splitRevealLines = (el) => {

@@ -5,6 +5,9 @@ import "./groupes-seminaires.css";
 import "./nav-lang-globe.js";
 import { initBookingRequest } from "./booking-request.js";
 import { applyPageSeo, fetchLocalizedSingleton, urlFor } from "./sanity.js";
+import { initSmoothScroll } from "./smooth-scroll.js";
+
+initSmoothScroll();
 
 // ─── Année dans le footer ──────────────────────────────────────────────────────
 const yearEl = document.querySelector("[data-year]");
