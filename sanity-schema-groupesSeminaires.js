@@ -83,6 +83,25 @@ export default defineType({
       group: 'intro',
       initialValue: 'Découvrir le domaine',
     }),
+    defineField({
+      name: 'heroMedia',
+      title: 'Média du hero (vidéo ou photo)',
+      type: 'heroMedia',
+      group: 'intro',
+    }),
+    defineField({
+      name: 'heroLabel',
+      title: 'Label du hero',
+      type: 'string',
+      group: 'intro',
+      initialValue: 'Groupes & Séminaires',
+    }),
+    defineField({
+      name: 'heroLead',
+      title: 'Texte accroche du hero',
+      ...blockContent,
+      group: 'intro',
+    }),
 
     // ── STATISTIQUES ──────────────────────────────────────────────────────────
     defineField({

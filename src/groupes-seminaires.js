@@ -4,7 +4,7 @@ import "./home.css";
 import "./groupes-seminaires.css";
 import "./nav-lang-globe.js";
 import { initBookingRequest } from "./booking-request.js";
-import { applyPageSeo, fetchLocalizedSingleton, urlFor } from "./sanity.js";
+import { applyHeroMedia, applyPageSeo, fetchLocalizedSingleton, urlFor } from "./sanity.js";
 import { initSmoothScroll } from "./smooth-scroll.js";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -322,10 +322,35 @@ const nl2br = (str) => (str || "").replace(/\n/g, "<br>");
 // ─── Sanity content wiring ────────────────────────────────────────────────────
 async function initSanityContent() {
   try {
-    const page = await fetchLocalizedSingleton("groupesSeminaires");
+    const page = await fetchLocalizedSingleton("groupesSeminaires", {
+      projection: `heroMedia { mediaType, videoDesktop { asset->{ url } }, videoMobile { asset->{ url } }, fallbackDesktop, fallbackMobile, photoDesktop, photoMobile }`
+    });
     if (!page) return; // fallback: static HTML content stays as-is
 
     applyPageSeo(page);
+
+    // Hero textes
+    if (page.heroLabel) {
+      const el = document.querySelector("[data-groupes-intro-label]");
+      if (el) el.textContent = page.heroLabel;
+    }
+    if (page.heroLead) {
+      const el = document.querySelector(".hero-banner-lead");
+      if (el) el.innerHTML = renderPortableText(page.heroLead);
+    }
+    // Hero média
+    if (page.heroMedia) {
+      applyHeroMedia(
+        page.heroMedia,
+        {
+          videoDesktop: document.querySelector(".groupes-hero-video-desktop"),
+          videoMobile:  document.querySelector(".groupes-hero-video-mobile"),
+          imgDesktop:   document.querySelector(".groupes-hero-image img"),
+          imgMobile:    document.querySelector(".groupes-hero-image source"),
+        },
+        urlFor
+      );
+    }
 
     // ── Intro ──────────────────────────────────────────────────────────────────
     if (page.introLabel) {
