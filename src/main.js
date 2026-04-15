@@ -7,7 +7,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import { initBookingRequest } from "./booking-request.js";
-import { applyPageSeo, fetchLocalizedCollection, fetchLocalizedSingleton, urlFor } from "./sanity.js";
+import { applyHeroMedia, applyPageSeo, fetchLocalizedCollection, fetchLocalizedSingleton, urlFor } from "./sanity.js";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -162,7 +162,9 @@ const renderTemoignage = (testimonial) => {
 async function fetchHomeContent() {
   try {
     const [home, temoignages] = await Promise.all([
-      fetchLocalizedSingleton("homePage"),
+      fetchLocalizedSingleton("homePage", {
+        projection: `heroMedia { mediaType, videoDesktop { asset->{ url } }, videoMobile { asset->{ url } }, fallbackDesktop, fallbackMobile, photoDesktop, photoMobile }, bannerMedia { mediaType, videoDesktop { asset->{ url } }, videoMobile { asset->{ url } }, fallbackDesktop, fallbackMobile, photoDesktop, photoMobile }, lodgingsGitesVideoFile { asset->{ url } }, lodgingsRoomsVideoFile { asset->{ url } }`
+      }),
       fetchLocalizedCollection("temoignage", { orderBy: "order asc" }),
     ]);
 
@@ -183,6 +185,18 @@ async function fetchHomeContent() {
     if (home?.heroImageMobile) {
       const src = document.querySelector(".hero-image source");
       if (src) src.srcset = urlFor(home.heroImageMobile).width(980).url();
+    }
+    if (home?.heroMedia) {
+      applyHeroMedia(
+        home.heroMedia,
+        {
+          videoDesktop: document.querySelector(".hero-video-desktop"),
+          videoMobile:  document.querySelector(".hero-video-mobile"),
+          imgDesktop:   document.querySelector(".hero-image img"),
+          imgMobile:    document.querySelector(".hero-image source"),
+        },
+        urlFor
+      );
     }
     if (home?.introLabel) {
       const el = document.querySelector("[data-home-intro-label]");
@@ -293,6 +307,31 @@ async function fetchHomeContent() {
       }
     }
 
+    // Carte gîtes
+    if (home?.lodgingsGitesImage) {
+      const img = document.querySelector('[data-lodging-slide="gites"] .lodging-card-img');
+      if (img) img.src = urlFor(home.lodgingsGitesImage).width(900).url();
+    }
+    if (home?.lodgingsGitesVideoFile?.asset?.url) {
+      const video = document.querySelector('[data-lodging-slide="gites"] .lodging-card-video');
+      if (video instanceof HTMLVideoElement) {
+        const src = video.querySelector("source");
+        if (src) { src.src = home.lodgingsGitesVideoFile.asset.url; video.load(); }
+      }
+    }
+    // Carte chambres
+    if (home?.lodgingsRoomsImage) {
+      const img = document.querySelector('[data-lodging-slide="chambres"] .lodging-card-img');
+      if (img) img.src = urlFor(home.lodgingsRoomsImage).width(900).url();
+    }
+    if (home?.lodgingsRoomsVideoFile?.asset?.url) {
+      const video = document.querySelector('[data-lodging-slide="chambres"] .lodging-card-video');
+      if (video instanceof HTMLVideoElement) {
+        const src = video.querySelector("source");
+        if (src) { src.src = home.lodgingsRoomsVideoFile.asset.url; video.load(); }
+      }
+    }
+
     // Groups images
     if (home?.groupsImageMain) {
       const el = document.querySelector('[data-home-groups-img="main"]');
@@ -343,6 +382,18 @@ async function fetchHomeContent() {
     if (home?.bannerCta) {
       const el = document.querySelector("[data-home-banner-cta]");
       if (el) el.textContent = home.bannerCta;
+    }
+    if (home?.bannerMedia) {
+      applyHeroMedia(
+        home.bannerMedia,
+        {
+          videoDesktop: document.querySelector(".banner-video-desktop"),
+          videoMobile:  document.querySelector(".banner-video-mobile"),
+          imgDesktop:   null,
+          imgMobile:    null,
+        },
+        urlFor
+      );
     }
 
     // Reviews section header
