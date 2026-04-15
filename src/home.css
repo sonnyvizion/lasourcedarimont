@@ -1294,13 +1294,14 @@ body.is-loading {
 
   .lodgings-duo {
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 5px;
     margin-top: 24px;
   }
 
   .lodgings-duo > .lodging-card {
     height: clamp(170px, 40vw, 240px);
     min-height: 170px;
+    border-radius: 12px;
   }
 
   .lodging-infra {
@@ -1310,6 +1311,7 @@ body.is-loading {
   .lodging-card-full {
     height: clamp(190px, 32vw, 260px);
     min-height: 190px;
+    border-radius: 12px;
   }
 
   .lodging-card-body {
