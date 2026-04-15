@@ -70,7 +70,7 @@
   text-align: left;
   color: var(--color-white);
   padding-top: clamp(84px, 11vh, 130px);
-  padding-bottom: clamp(40px, 7vh, 66px);
+  padding-bottom: clamp(80px, 11.5vh, 110px);
 }
 
 .region-intro-content .hero-banner-label {
