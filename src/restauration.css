@@ -142,7 +142,7 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: flex-end;
   align-items: flex-start;
   text-align: left;
   color: var(--color-white);
@@ -151,7 +151,7 @@
 }
 
 .restauration-hero-wrap .hero-banner-label {
-  max-width: min(84vw, 16ch);
+  max-width: min(84vw, 28ch);
   margin-top: 0;
 }
 
