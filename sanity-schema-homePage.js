@@ -91,6 +91,13 @@ export default defineType({
       group: 'hero',
       options: { hotspot: true },
     }),
+    defineField({
+      name: 'heroMedia',
+      title: 'Média hero (vidéo ou photo)',
+      type: 'heroMedia',
+      group: 'hero',
+      description: 'Remplace heroImage/heroImageMobile. Laissez vide pour utiliser les vidéos hardcodées.',
+    }),
 
     // ── INTRODUCTION ──────────────────────────────────────────────────────
     defineField({
@@ -203,6 +210,36 @@ export default defineType({
       initialValue: "Les infrastructures du Domaine d'Arimont",
     }),
 
+    // ── Cartes hébergements — médias ─────────────────────────────────────────
+    defineField({
+      name: 'lodgingsGitesImage',
+      title: 'Carte gîtes — image',
+      type: 'image',
+      group: 'lodgings',
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: 'lodgingsGitesVideoFile',
+      title: 'Carte gîtes — vidéo (optionnel)',
+      type: 'file',
+      group: 'lodgings',
+      options: { accept: 'video/mp4' },
+    }),
+    defineField({
+      name: 'lodgingsRoomsImage',
+      title: 'Carte chambres — image',
+      type: 'image',
+      group: 'lodgings',
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: 'lodgingsRoomsVideoFile',
+      title: 'Carte chambres — vidéo (optionnel)',
+      type: 'file',
+      group: 'lodgings',
+      options: { accept: 'video/mp4' },
+    }),
+
     // ── POINTS FORTS ──────────────────────────────────────────────────────
     defineField({
       name: 'featuresLabel',
@@ -297,6 +334,20 @@ export default defineType({
       group: 'groups',
       initialValue: 'Demander un devis',
     }),
+    defineField({
+      name: 'groupsImageMain',
+      title: 'Section groupes — photo principale',
+      type: 'image',
+      group: 'groups',
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: 'groupsImageSecondary',
+      title: 'Section groupes — photo secondaire',
+      type: 'image',
+      group: 'groups',
+      options: { hotspot: true },
+    }),
 
     // ── BANNIÈRE RÉGION ───────────────────────────────────────────────────
     defineField({
@@ -318,6 +369,12 @@ export default defineType({
       type: 'string',
       group: 'banner',
       initialValue: 'Découvrir la région',
+    }),
+    defineField({
+      name: 'bannerMedia',
+      title: 'Bannière région — média (vidéo ou photo)',
+      type: 'heroMedia',
+      group: 'banner',
     }),
 
     // ── AVIS CLIENTS ──────────────────────────────────────────────────────
