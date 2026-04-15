@@ -6,11 +6,28 @@ import "./nav-lang-globe.js";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { initBookingRequest } from "./booking-request.js";
-import { applyPageSeo, fetchLocalizedCollection, fetchLocalizedSingleton, fetchPageConfig, urlFor } from "./sanity.js";
+import { applyPageSeo, fetchLocalizedCollection, fetchLocalizedSingleton, fetchPageConfig, urlFor, applyHeroMedia } from "./sanity.js";
 import { t } from "./static-translations.js";
 import { initSmoothScroll } from "./smooth-scroll.js";
 
 gsap.registerPlugin(ScrollTrigger);
+
+// Convertir PortableText en HTML
+const renderPortableText = (blocks) => {
+  if (!blocks?.length) return "";
+  return blocks.map((block) => {
+    if (block._type !== "block") return "";
+    return (block.children || []).map((span) => {
+      if (span._type === "break") return "<br />";
+      let text = (span.text || "").replace(/\n/g, "<br />");
+      const marks = span.marks || [];
+      if (marks.includes("strong") && marks.includes("em")) return `<strong><span class="semi-italic">${text}</span></strong>`;
+      if (marks.includes("strong")) return `<strong>${text}</strong>`;
+      if (marks.includes("em")) return `<span class="semi-italic">${text}</span>`;
+      return text;
+    }).join("");
+  }).join("<br />");
+};
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const lenis = initSmoothScroll();
 lenis?.on("scroll", ScrollTrigger.update);
@@ -472,12 +489,37 @@ async function initSanityContent() {
   if (track) track.innerHTML = "";
 
   try {
-    const [logements, temoignages, pageConfig] = await Promise.all([
+    const [logements, temoignages, pageConfig, gitesPage] = await Promise.all([
       fetchLocalizedCollection("logement", { orderBy: "order asc" }),
       fetchLocalizedCollection("temoignage", { orderBy: "order asc" }),
       fetchPageConfig("gites-chambres"),
+      fetchLocalizedSingleton("gitesChambresPage", {
+        projection: `heroMedia { mediaType, videoDesktop { asset->{ url } }, videoMobile { asset->{ url } }, fallbackDesktop, fallbackMobile, photoDesktop, photoMobile }`
+      }),
     ]);
     applyPageSeo(pageConfig);
+
+    // Appliquer le contenu du hero depuis Sanity
+    if (gitesPage?.heroLabel) {
+      const el = document.querySelector(".hero-banner-label");
+      if (el) el.textContent = gitesPage.heroLabel;
+    }
+    if (gitesPage?.heroLead) {
+      const el = document.querySelector(".hero-banner-lead");
+      if (el) el.innerHTML = renderPortableText(gitesPage.heroLead);
+    }
+    if (gitesPage?.heroMedia) {
+      applyHeroMedia(
+        gitesPage.heroMedia,
+        {
+          videoDesktop: document.querySelector(".stays-hero-video-desktop"),
+          videoMobile:  document.querySelector(".stays-hero-video-mobile"),
+          imgDesktop:   document.querySelector(".stays-hero-image img"),
+          imgMobile:    document.querySelector(".stays-hero-image source"),
+        },
+        urlFor
+      );
+    }
 
     allLogements = logements;
     renderStays();
