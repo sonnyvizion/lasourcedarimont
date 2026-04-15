@@ -87,19 +87,20 @@ export async function fetchPageConfig(pageId) {
 }
 
 export async function fetchLocalizedSingleton(type, options = {}) {
-  const { extraFilter = "" } = options;
+  const { extraFilter = "", projection = "" } = options;
   const currentLanguage = getCurrentLanguage();
   const params = { type, language: currentLanguage, defaultLanguage: DEFAULT_LANGUAGE };
   const baseQuery = buildFilter(extraFilter);
+  const proj = projection ? `{ ..., ${projection} }` : "";
 
-  const localized = await client.fetch(`${baseQuery} && language == $language][0]`, params);
+  const localized = await client.fetch(`${baseQuery} && language == $language][0]${proj}`, params);
   if (localized) return localized;
 
-  const untranslated = await client.fetch(`${baseQuery} && !defined(language)][0]`, params);
+  const untranslated = await client.fetch(`${baseQuery} && !defined(language)][0]${proj}`, params);
   if (untranslated) return untranslated;
 
   if (currentLanguage !== DEFAULT_LANGUAGE) {
-    return client.fetch(`${baseQuery} && language == $defaultLanguage][0]`, params);
+    return client.fetch(`${baseQuery} && language == $defaultLanguage][0]${proj}`, params);
   }
 
   return null;
@@ -123,4 +124,49 @@ export async function fetchLocalizedCollection(type, options = {}) {
   }
 
   return [];
+}
+
+/**
+ * Applique un objet heroMedia Sanity aux éléments video/image d'un hero/banner.
+ * @param {object} media        Champ heroMedia depuis Sanity
+ * @param {object} selectors    { videoDesktop, videoMobile, imgDesktop, imgMobile }
+ * @param {function} urlForFn   Fonction urlFor du client Sanity
+ */
+export function applyHeroMedia(media, selectors, urlForFn) {
+  if (!media) return;
+
+  const { videoDesktop, videoMobile, imgDesktop, imgMobile } = selectors;
+  const isVideo = media.mediaType === "video";
+
+  if (isVideo) {
+    if (videoDesktop instanceof HTMLVideoElement && media.videoDesktop?.asset?.url) {
+      const src = videoDesktop.querySelector("source");
+      if (src) src.src = media.videoDesktop.asset.url;
+      videoDesktop.load();
+    }
+    if (videoMobile instanceof HTMLVideoElement && media.videoMobile?.asset?.url) {
+      const src = videoMobile.querySelector("source");
+      if (src) src.src = media.videoMobile.asset.url;
+      videoMobile.load();
+    }
+    if (media.fallbackDesktop) {
+      const url = urlForFn(media.fallbackDesktop).width(1920).url();
+      if (videoDesktop instanceof HTMLVideoElement) videoDesktop.poster = url;
+      if (imgDesktop instanceof HTMLImageElement) imgDesktop.src = url;
+    }
+    if (media.fallbackMobile) {
+      const url = urlForFn(media.fallbackMobile).width(980).url();
+      if (videoMobile instanceof HTMLVideoElement) videoMobile.poster = url;
+      if (imgMobile instanceof HTMLSourceElement) imgMobile.srcset = url;
+    }
+  } else {
+    if (videoDesktop instanceof HTMLVideoElement) { videoDesktop.pause(); videoDesktop.style.display = "none"; }
+    if (videoMobile instanceof HTMLVideoElement) { videoMobile.pause(); videoMobile.style.display = "none"; }
+    if (media.photoDesktop && imgDesktop instanceof HTMLImageElement) {
+      imgDesktop.src = urlForFn(media.photoDesktop).width(1920).url();
+    }
+    if (media.photoMobile && imgMobile instanceof HTMLSourceElement) {
+      imgMobile.srcset = urlForFn(media.photoMobile).width(980).url();
+    }
+  }
 }
