@@ -1522,6 +1522,14 @@ body.is-loading {
     touch-action: pan-y;
   }
 
+  .lodging-card-video {
+    display: none;
+  }
+
+  .lodging-card-img {
+    z-index: 0;
+  }
+
   .gallery-track .card-photo {
     scroll-snap-align: none;
   }
