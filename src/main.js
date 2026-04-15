@@ -1394,9 +1394,29 @@ if (!prefersReducedMotion) {
 
     if (isMobile) {
       gallerySlider.style.scrollBehavior = "auto";
+      let isTouching = false;
+      let needsRecenter = false;
 
-      // Rebouclage natif au scroll
+      gallerySlider.addEventListener("touchstart", () => { isTouching = true; }, { passive: true });
+      gallerySlider.addEventListener("touchend", () => {
+        isTouching = false;
+        if (needsRecenter) {
+          needsRecenter = false;
+          const half = getHalfWidth();
+          if (gallerySlider.scrollLeft >= half) {
+            gallerySlider.scrollLeft -= half;
+          } else if (gallerySlider.scrollLeft <= 0) {
+            gallerySlider.scrollLeft += half;
+          }
+        }
+      }, { passive: true });
+
+      // Rebouclage natif au scroll (seulement si pas en train de toucher)
       gallerySlider.addEventListener("scroll", () => {
+        if (isTouching) {
+          needsRecenter = true;
+          return;
+        }
         const half = getHalfWidth();
         if (gallerySlider.scrollLeft >= half) {
           gallerySlider.scrollLeft -= half;
