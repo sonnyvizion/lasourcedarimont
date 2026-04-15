@@ -112,7 +112,7 @@
 }
 
 .infrastructure-hero-wrap .hero-banner-label {
-  max-width: min(84vw, 28ch);
+  max-width: min(84vw, 16ch);
 }
 
 .infrastructure-page-main .content-wrap > .label {

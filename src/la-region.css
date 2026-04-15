@@ -74,7 +74,7 @@
 }
 
 .region-intro-content .hero-banner-label {
-  max-width: min(84vw, 28ch);
+  max-width: min(84vw, 16ch);
 }
 
 .region-intro-media {
