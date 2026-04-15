@@ -1293,22 +1293,40 @@ body.is-loading {
   }
 
   .lodgings-duo {
-    grid-template-columns: 1fr;
-    gap: 12px;
-    margin-top: 36px;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 24px;
   }
 
-  .lodging-card {
-    height: clamp(250px, 78vw, 420px);
-    min-height: 250px;
+  .lodgings-duo > .lodging-card {
+    height: clamp(170px, 40vw, 240px);
+    min-height: 170px;
+  }
+
+  .lodging-infra {
+    grid-column: 1 / -1;
+  }
+
+  .lodging-card-full {
+    height: clamp(190px, 32vw, 260px);
+    min-height: 190px;
   }
 
   .lodging-card-body {
-    padding: 24px 18px;
+    padding: 14px 12px;
   }
 
   .lodging-title {
-    font-size: clamp(22px, 6vw, 36px);
+    font-size: clamp(15px, 3.8vw, 20px);
+  }
+
+  .lodging-label {
+    font-size: 9px;
+  }
+
+  .lodging-cta {
+    padding: 8px 12px;
+    font-size: 10px;
   }
 
   .essence {
