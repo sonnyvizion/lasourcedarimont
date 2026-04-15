@@ -726,6 +726,7 @@
   color: var(--color-white);
   padding-top: clamp(84px, 11vh, 130px);
   padding-bottom: clamp(24px, 4.2vh, 38px);
+  box-sizing: border-box;
 }
 
 .groupes-hero-wrap .hero-banner-label {
