@@ -116,7 +116,7 @@ if (!prefersReducedMotion) {
     gsap.fromTo(
       heroLead,
       { opacity: 0, y: 14 },
-      { opacity: 0.72, y: 0, duration: 0.9, ease: "power3.out", delay: 1.5 }
+      { opacity: 0.72, y: 0, duration: 0.9, ease: "power3.out", delay: 0.8 }
     );
   }
 }
