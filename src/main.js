@@ -1393,56 +1393,67 @@ if (!prefersReducedMotion) {
     const isMobile = window.matchMedia("(max-width: 980px)").matches;
 
     if (isMobile) {
-      gallerySlider.style.scrollBehavior = "auto";
-      let isTouching = false;
-      let needsRecenter = false;
+      gsap.set(galleryTrack, { x: 0 });
 
-      gallerySlider.addEventListener("touchstart", () => { isTouching = true; }, { passive: true });
-      gallerySlider.addEventListener("touchend", () => {
-        isTouching = false;
-        if (needsRecenter) {
-          needsRecenter = false;
-          const half = getHalfWidth();
-          if (gallerySlider.scrollLeft >= half) {
-            gallerySlider.scrollLeft -= half;
-          } else if (gallerySlider.scrollLeft <= 0) {
-            gallerySlider.scrollLeft += half;
-          }
-        }
-      }, { passive: true });
+      const getRawX = () => Number(gsap.getProperty(galleryTrack, "x")) || 0;
 
-      // Rebouclage natif au scroll (seulement si pas en train de toucher)
-      gallerySlider.addEventListener("scroll", () => {
-        if (isTouching) {
-          needsRecenter = true;
-          return;
-        }
+      const normalize = () => {
         const half = getHalfWidth();
-        if (gallerySlider.scrollLeft >= half) {
-          gallerySlider.scrollLeft -= half;
-        } else if (gallerySlider.scrollLeft <= 0) {
-          gallerySlider.scrollLeft += half;
+        const x = getRawX();
+        if (x <= -half) gsap.set(galleryTrack, { x: x + half });
+        else if (x > 0) gsap.set(galleryTrack, { x: x - half });
+      };
+
+      const slideBy = (direction) => {
+        const step = gallerySlider.clientWidth * 0.75;
+        const half = getHalfWidth();
+        let currentX = getRawX();
+        let targetX = currentX - step * direction;
+
+        if (targetX > 0) {
+          currentX -= half;
+          targetX -= half;
+          gsap.set(galleryTrack, { x: currentX });
+        } else if (targetX <= -half) {
+          currentX += half;
+          targetX += half;
+          gsap.set(galleryTrack, { x: currentX });
         }
+
+        gsap.to(galleryTrack, { x: targetX, duration: 0.55, ease: "power3.out", onComplete: normalize });
+      };
+
+      if (galleryPrev) galleryPrev.addEventListener("click", () => slideBy(-1));
+      if (galleryNext) galleryNext.addEventListener("click", () => slideBy(1));
+
+      // Touch drag
+      let isDragging = false;
+      let didDrag = false;
+      let startX = 0;
+      let startTrackX = 0;
+
+      const stopDragging = () => {
+        if (!isDragging) return;
+        isDragging = false;
+        normalize();
+      };
+
+      gallerySlider.addEventListener("touchstart", (event) => {
+        didDrag = false;
+        isDragging = true;
+        startX = event.touches[0].pageX;
+        startTrackX = getRawX();
+        gsap.killTweensOf(galleryTrack);
       }, { passive: true });
 
-      // Positionner au milieu pour pouvoir aller dans les deux sens
-      const centerGallery = () => {
-        gallerySlider.scrollLeft = getHalfWidth();
-      };
-      if (document.readyState === "complete") {
-        centerGallery();
-      } else {
-        window.addEventListener("load", centerGallery, { once: true });
-      }
-      setTimeout(centerGallery, 300);
+      gallerySlider.addEventListener("touchmove", (event) => {
+        if (!isDragging) return;
+        const deltaX = event.touches[0].pageX - startX;
+        if (Math.abs(deltaX) > 4) didDrag = true;
+        gsap.set(galleryTrack, { x: startTrackX + deltaX });
+      }, { passive: true });
 
-      const getStep = () => gallerySlider.clientWidth * 0.75;
-      const slideByMobile = (direction) => {
-        const step = getStep();
-        gallerySlider.scrollBy({ left: step * direction, behavior: "smooth" });
-      };
-      if (galleryPrev) galleryPrev.addEventListener("click", () => slideByMobile(-1));
-      if (galleryNext) galleryNext.addEventListener("click", () => slideByMobile(1));
+      gallerySlider.addEventListener("touchend", stopDragging);
 
     } else {
       // Position initiale à 0, les clones sont après les originaux

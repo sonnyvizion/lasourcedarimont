@@ -1511,19 +1511,15 @@ body.is-loading {
   }
 
   .gallery-track {
-    display: inline-flex;
-    width: max-content;
-    scroll-snap-align: start;
+    display: flex;
+    width: auto;
+    scroll-snap-align: none;
     pointer-events: auto;
   }
 
-  .lodging-card-video {
-    display: none;
-  }
-
-  .lodging-card-img {
-    display: block;
-    filter: brightness(0.72);
+  .gallery-slider {
+    overflow: hidden;
+    touch-action: pan-y;
   }
 
   .gallery-track .card-photo {
