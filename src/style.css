@@ -138,6 +138,15 @@ p {
   .br-desktop {
     display: none;
   }
+
+  h1.intro-text,
+  h1.partners-title,
+  h1.restauration-title,
+  h1.groupes-title,
+  h2.intro-text,
+  .intro-text {
+    font-size: clamp(20px, 5.5vw, 30px);
+  }
 }
 
 small,
