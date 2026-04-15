@@ -139,6 +139,10 @@ p {
     display: none;
   }
 
+  .intro-text.reveal-text {
+    font-size: clamp(18px, 4.8vw, 26px) !important;
+  }
+
   h1.intro-text,
   h1.partners-title,
   h1.restauration-title,
