@@ -1368,6 +1368,24 @@ if (!prefersReducedMotion) {
     };
 
     revealTexts.forEach((el) => {
+      if (isMobileViewport && el.classList.contains("intro-text")) {
+        gsap.fromTo(
+          el,
+          { y: 24, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 1.2,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: el,
+              start: "top 80%"
+            }
+          }
+        );
+        return;
+      }
+
       if (isMobileViewport && el.tagName === "H2") {
         const lines = splitH2ByVisualLines(el);
         const tl = gsap.timeline({

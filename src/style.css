@@ -141,6 +141,9 @@ p {
 
   .intro-text.reveal-text {
     font-size: clamp(18px, 4.8vw, 26px) !important;
+    text-wrap: balance;
+    overflow-wrap: break-word;
+    word-break: keep-all;
   }
 
   h1.intro-text,
