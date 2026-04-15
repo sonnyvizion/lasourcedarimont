@@ -7,8 +7,25 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { initBookingRequest } from "./booking-request.js";
 import { initTestimonialsSlider } from "./testimonials.js";
-import { applyPageSeo, fetchLocalizedCollection, fetchPageConfig, urlFor } from "./sanity.js";
+import { applyHeroMedia, applyPageSeo, fetchLocalizedCollection, fetchLocalizedSingleton, fetchPageConfig, urlFor } from "./sanity.js";
 import { initSmoothScroll } from "./smooth-scroll.js";
+
+// Convertir PortableText en HTML
+const renderPortableText = (blocks) => {
+  if (!blocks?.length) return "";
+  return blocks.map((block) => {
+    if (block._type !== "block") return "";
+    return (block.children || []).map((span) => {
+      if (span._type === "break") return "<br />";
+      let text = (span.text || "").replace(/\n/g, "<br />");
+      const marks = span.marks || [];
+      if (marks.includes("strong") && marks.includes("em")) return `<strong><span class="semi-italic">${text}</span></strong>`;
+      if (marks.includes("strong")) return `<strong>${text}</strong>`;
+      if (marks.includes("em")) return `<span class="semi-italic">${text}</span>`;
+      return text;
+    }).join("");
+  }).join("<br />");
+};
 
 gsap.registerPlugin(ScrollTrigger);
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -356,11 +373,50 @@ async function initSanityContent() {
   if (repasGrid) repasGrid.innerHTML = "";
 
   try {
-    const [formules, pageConfig] = await Promise.all([
+    const [formules, pageConfig, restaurationPage] = await Promise.all([
       fetchLocalizedCollection("formule", { orderBy: "order asc" }),
       fetchPageConfig("restauration"),
+      fetchLocalizedSingleton("restaurationPage", {
+        projection: `heroMedia { mediaType, videoDesktop { asset->{ url } }, videoMobile { asset->{ url } }, fallbackDesktop, fallbackMobile, photoDesktop, photoMobile }`
+      }),
     ]);
     applyPageSeo(pageConfig);
+
+    // Appliquer le contenu du hero depuis Sanity
+    if (restaurationPage?.heroLabel) {
+      const el = document.querySelector(".hero-banner-label");
+      if (el) el.textContent = restaurationPage.heroLabel;
+    }
+    if (restaurationPage?.heroLead) {
+      const el = document.querySelector(".hero-banner-lead");
+      if (el) el.innerHTML = renderPortableText(restaurationPage.heroLead);
+    }
+    if (restaurationPage?.heroMedia) {
+      applyHeroMedia(
+        restaurationPage.heroMedia,
+        {
+          videoDesktop: document.querySelector(".restauration-hero-video-desktop"),
+          videoMobile:  document.querySelector(".restauration-hero-video-mobile"),
+          imgDesktop:   document.querySelector(".restauration-hero-image img"),
+          imgMobile:    document.querySelector(".restauration-hero-image source"),
+        },
+        urlFor
+      );
+    }
+    const sectionBindings = [
+      ["dejeunersLabel", ".restauration-dejeuners .label"],
+      ["dejeunersTitre", ".restauration-dejeuners .intro-text"],
+      ["dejeunersNote",  ".restauration-dejeuners .section-note"],
+      ["repasLabel",     ".restauration-repas .label"],
+      ["repasTitre",     ".restauration-repas .intro-text"],
+      ["repasNote",      ".restauration-repas .section-note"],
+    ];
+    sectionBindings.forEach(([field, selector]) => {
+      if (restaurationPage?.[field]) {
+        const el = document.querySelector(selector);
+        if (el) el.textContent = restaurationPage[field];
+      }
+    });
 
     const dejeuners = formules.filter((f) => f.categorie === "petitDejeuner");
     const repas = formules.filter((f) => f.categorie === "repas");
