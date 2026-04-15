@@ -144,8 +144,20 @@ p {
   h1.restauration-title,
   h1.groupes-title,
   h2.intro-text,
-  .intro-text {
-    font-size: clamp(20px, 5.5vw, 30px);
+  h2,
+  .intro-text,
+  .stays-intro .intro-text,
+  .restauration-section-header .intro-text,
+  .groupes-title,
+  .groupes-page-main h2.reveal-text,
+  .infrastructure-intro-title,
+  .infrastructure-title,
+  .region-intro-title,
+  .region-map-title,
+  .partners-title,
+  .contact-intro .intro-text,
+  .lodging-title {
+    font-size: clamp(20px, 5.5vw, 30px) !important;
   }
 }
 
