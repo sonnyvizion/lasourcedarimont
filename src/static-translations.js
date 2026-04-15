@@ -1453,7 +1453,6 @@ const applyGitesTranslations = () => {
   setMeta('meta[name="description"]', "content", t("gites.metaDescription"));
   setMeta('meta[property="og:title"]', "content", t("gites.metaTitle"));
   setMeta('meta[property="og:description"]', "content", t("gites.metaDescription"));
-  setText(".stays-hero .hero-banner-label", t("gites.introLabel"));
   setHTML(".stays-hero .hero-banner-lead", t("gites.introLead"));
   setAttr(".stays-switch", "aria-label", t("gites.switchAria"));
   const tabs = document.querySelectorAll(".stays-switch-btn");
