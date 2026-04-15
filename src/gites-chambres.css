@@ -662,7 +662,7 @@
   .stay-card,
   .stay-card.is-reverse {
     grid-template-columns: 1fr;
-    padding: 12px;
+    padding: 16px;
   }
 
   .stay-card.is-reverse .stay-content {

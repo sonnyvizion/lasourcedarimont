@@ -9,7 +9,7 @@
   --color-white: #ffffff;
   --font-heading: "Libre Baskerville", serif;
   --font-body: "Manrope", sans-serif;
-  --content-padding: clamp(12px, 1.5vw, 26px);
+  --content-padding: clamp(16px, 2vw, 40px);
   --max-width: 1280px;
   --radius-lg: 28px;
   --radius-md: 18px;
