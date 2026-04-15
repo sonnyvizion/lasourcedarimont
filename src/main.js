@@ -1426,9 +1426,15 @@ if (!prefersReducedMotion) {
       }, { passive: true });
 
       // Positionner au milieu pour pouvoir aller dans les deux sens
-      requestAnimationFrame(() => {
+      const centerGallery = () => {
         gallerySlider.scrollLeft = getHalfWidth();
-      });
+      };
+      if (document.readyState === "complete") {
+        centerGallery();
+      } else {
+        window.addEventListener("load", centerGallery, { once: true });
+      }
+      setTimeout(centerGallery, 300);
 
       const getStep = () => gallerySlider.clientWidth * 0.75;
       const slideByMobile = (direction) => {

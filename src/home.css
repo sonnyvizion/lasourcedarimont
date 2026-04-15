@@ -974,6 +974,18 @@ body.is-loading {
   display: block;
   filter: brightness(0.72);
   transition: filter 0.5s ease;
+  z-index: 1;
+}
+
+.lodging-card-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: brightness(0.72);
+  z-index: 0;
 }
 
 .lodging-card:hover .lodging-card-video {
@@ -1503,6 +1515,15 @@ body.is-loading {
     width: max-content;
     scroll-snap-align: start;
     pointer-events: auto;
+  }
+
+  .lodging-card-video {
+    display: none;
+  }
+
+  .lodging-card-img {
+    display: block;
+    filter: brightness(0.72);
   }
 
   .gallery-track .card-photo {
