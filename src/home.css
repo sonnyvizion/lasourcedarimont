@@ -1955,6 +1955,16 @@ body.is-loading {
 
   .groups-cta-wrap {
     order: 6;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 10px;
+  }
+
+  .groups-cta {
+    flex: 0 1 auto;
+    min-width: 0;
+    padding: 12px 18px;
+    font-size: 12px;
   }
 }
 
