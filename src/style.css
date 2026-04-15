@@ -100,13 +100,27 @@ h3 {
 }
 
 .em-strong {
+  font-family: var(--font-heading);
   font-weight: 900;
   font-style: italic;
 }
 
 .semi-italic {
+  font-family: var(--font-heading);
   font-weight: 600;
   font-style: italic;
+}
+
+em {
+  font-family: var(--font-heading);
+}
+
+/* Evite le clipping des titres reveal avec line-height serré */
+.reveal-text .line {
+  padding-top: 0.08em;
+  margin-top: -0.08em;
+  padding-bottom: 0.04em;
+  margin-bottom: -0.04em;
 }
 
 p {

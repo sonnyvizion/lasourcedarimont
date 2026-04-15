@@ -35,6 +35,14 @@
   </url>
 
   <url>
+    <loc>https://www.lasourcedarimont.be/infrastructure.html</loc>
+    <lastmod>2025-03-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.lasourcedarimont.be/infrastructure.html"/>
+  </url>
+
+  <url>
     <loc>https://www.lasourcedarimont.be/nos-partenaires.html</loc>
     <lastmod>2025-03-10</lastmod>
     <changefreq>monthly</changefreq>

@@ -6,8 +6,13 @@ import "./nav-lang-globe.js";
 import { initBookingRequest } from "./booking-request.js";
 import { applyPageSeo, fetchLocalizedSingleton, urlFor } from "./sanity.js";
 import { initSmoothScroll } from "./smooth-scroll.js";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-initSmoothScroll();
+gsap.registerPlugin(ScrollTrigger);
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const lenis = initSmoothScroll();
+lenis?.on("scroll", ScrollTrigger.update);
 
 // ─── Année dans le footer ──────────────────────────────────────────────────────
 const yearEl = document.querySelector("[data-year]");
@@ -57,6 +62,153 @@ if (navToggle && mobileMenu) {
 }
 
 initBookingRequest({ triggersSelector: "[data-booking-request-trigger]" });
+
+const headerEl = document.querySelector(".site-header");
+const groupesHero = document.querySelector(".groupes-hero");
+const groupesHeroMedia = document.querySelector(".groupes-hero-media");
+const groupesHeroContent = document.querySelector(".groupes-hero .content-wrap");
+const groupesVideoDesktop = document.querySelector(".groupes-hero-video-desktop");
+const groupesVideoMobile = document.querySelector(".groupes-hero-video-mobile");
+
+if (headerEl && groupesHero) {
+  const updateHeaderTheme = () => {
+    const scrollY = window.scrollY || window.pageYOffset || 0;
+    const trigger = Math.max(0, groupesHero.offsetHeight - headerEl.offsetHeight - 20);
+    headerEl.classList.toggle("is-solid", scrollY >= trigger);
+  };
+
+  updateHeaderTheme();
+  window.addEventListener("scroll", updateHeaderTheme, { passive: true });
+  window.addEventListener("resize", updateHeaderTheme);
+}
+
+if (groupesHero) {
+  const mobileQuery = window.matchMedia("(max-width: 980px)");
+  const videos = [groupesVideoDesktop, groupesVideoMobile].filter(
+    (video) => video instanceof HTMLVideoElement
+  );
+  let videoHasFinished = false;
+
+  const freezeOnLastFrame = (video) => {
+    if (!(video instanceof HTMLVideoElement)) return;
+    const applyFreeze = () => {
+      if (Number.isFinite(video.duration) && video.duration > 0) {
+        try {
+          video.currentTime = Math.max(0, video.duration - 0.03);
+        } catch {
+          // noop
+        }
+      }
+      video.pause();
+    };
+
+    if (video.readyState >= 1) {
+      applyFreeze();
+    } else {
+      video.addEventListener("loadedmetadata", applyFreeze, { once: true });
+      video.load();
+    }
+  };
+
+  const showHeroImageFallback = () => {
+    if (groupesHero.classList.contains("is-video-fallback")) return;
+    groupesHero.classList.add("is-video-fallback");
+    videos.forEach((video) => {
+      video.pause();
+    });
+  };
+
+  videos.forEach((video) => {
+    video.muted = true;
+    video.defaultMuted = true;
+    video.volume = 0;
+    video.loop = false;
+    video.autoplay = true;
+    video.playsInline = true;
+    video.setAttribute("muted", "");
+    video.setAttribute("autoplay", "");
+    video.setAttribute("playsinline", "");
+    video.setAttribute("webkit-playsinline", "");
+    video.addEventListener("ended", () => {
+      videoHasFinished = true;
+      freezeOnLastFrame(video);
+    });
+    video.addEventListener("error", showHeroImageFallback, { once: true });
+  });
+
+  const getActiveVideo = () => (mobileQuery.matches ? groupesVideoMobile : groupesVideoDesktop);
+
+  const playActiveVideo = () => {
+    if (groupesHero.classList.contains("is-video-fallback")) return;
+    const activeVideo = getActiveVideo();
+    if (!(activeVideo instanceof HTMLVideoElement)) {
+      showHeroImageFallback();
+      return;
+    }
+
+    videos.forEach((video) => {
+      if (video !== activeVideo) {
+        video.pause();
+      }
+    });
+
+    if (videoHasFinished) {
+      freezeOnLastFrame(activeVideo);
+      return;
+    }
+
+    const tryPlay = () => {
+      activeVideo.play().catch(() => {
+        // noop: retry on first interaction if autoplay is blocked.
+      });
+    };
+
+    if (activeVideo.readyState >= 2) {
+      tryPlay();
+    } else {
+      activeVideo.addEventListener("loadeddata", tryPlay, { once: true });
+      activeVideo.load();
+    }
+  };
+
+  playActiveVideo();
+  mobileQuery.addEventListener("change", playActiveVideo);
+  document.addEventListener("pointerdown", playActiveVideo, { once: true, passive: true });
+}
+
+if (!prefersReducedMotion && groupesHero && groupesHeroMedia && groupesHeroContent) {
+  const isMobileViewport = window.matchMedia("(max-width: 980px)").matches;
+  const mediaShift = isMobileViewport ? 84 : 170;
+  const contentShift = isMobileViewport ? 58 : 118;
+
+  const heroParallaxTl = gsap.timeline({ defaults: { ease: "none" } });
+  heroParallaxTl
+    .fromTo(groupesHeroMedia, { y: 0 }, { y: mediaShift, duration: 1 }, 0)
+    .fromTo(groupesHeroContent, { y: 0 }, { y: contentShift, duration: 1 }, 0);
+
+  ScrollTrigger.create({
+    animation: heroParallaxTl,
+    trigger: groupesHero,
+    start: "top top",
+    end: "bottom top",
+    scrub: true
+  });
+
+  gsap.fromTo(
+    groupesHeroContent,
+    { opacity: 1 },
+    {
+      opacity: 0,
+      ease: "none",
+      scrollTrigger: {
+        trigger: groupesHero,
+        start: "top+=12% top",
+        end: "top+=64% top",
+        scrub: 0.55
+      }
+    }
+  );
+}
 
 // ─── Reveal animations ────────────────────────────────────────────────────────
 const splitRevealLines = (el) => {

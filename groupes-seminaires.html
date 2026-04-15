@@ -28,7 +28,7 @@
           <nav class="nav-links">
             <a href="./gites-chambres.html">Gîtes &amp; chambres</a>
             <a href="./groupes-seminaires.html">Groupes</a>
-            <a href="#" data-nav="infrastructure">Infrastructures</a>
+            <a href="./infrastructure.html" data-nav="infrastructure">Infrastructures</a>
             <a href="./restauration.html">Restauration</a>
             <a href="./la-region.html">La région</a>
           </nav>
@@ -64,7 +64,7 @@
       <div class="mobile-menu-inner">
         <a class="menu-link" href="./gites-chambres.html">Gîtes &amp; chambres</a>
         <a class="menu-link" href="./groupes-seminaires.html">Groupes</a>
-        <a class="menu-link" href="#" data-nav="infrastructure">Infrastructures</a>
+        <a class="menu-link" href="./infrastructure.html" data-nav="infrastructure">Infrastructures</a>
         <a class="menu-link" href="./restauration.html">Restauration</a>
         <a class="menu-link" href="./la-region.html">La région</a>
         <div class="mobile-menu-social">
@@ -82,7 +82,29 @@
     <main class="groupes-page-main">
 
       <!-- ─── INTRO ────────────────────────────────────────────────────────────── -->
-      <section class="section center groupes-intro">
+      <section class="section center groupes-intro groupes-hero">
+        <div class="groupes-hero-media" aria-hidden="true">
+          <video
+            class="groupes-hero-video groupes-hero-video-desktop"
+            muted
+            playsinline
+            preload="auto"
+            poster="/img/hero_v3.webp">
+            <source src="/vid/infra.mp4" type="video/mp4" />
+          </video>
+          <video
+            class="groupes-hero-video groupes-hero-video-mobile"
+            muted
+            playsinline
+            preload="auto"
+            poster="/img/hero_mobile.webp">
+            <source src="/vid/infra.mp4" type="video/mp4" />
+          </video>
+          <picture class="groupes-hero-image">
+            <source srcset="/img/hero_mobile.webp" media="(max-width: 980px)" />
+            <img src="/img/hero_v3.webp" alt="" />
+          </picture>
+        </div>
         <div class="content-wrap">
           <div class="label" data-groupes-intro-label>Groupes &amp; Séminaires</div>
           <h1 class="groupes-title reveal-text" data-groupes-intro-title>

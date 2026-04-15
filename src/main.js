@@ -1016,7 +1016,8 @@ if (!prefersReducedMotion) {
       const smoothHeroParallax = gsap.timeline();
       smoothHeroParallax
         .fromTo(".hero-media", { y: 0 }, { y: 70, ease: "none" }, 0)
-        .fromTo(".hero-content", { y: 0 }, { y: 34, ease: "none" }, 0);
+        .fromTo(".hero-content", { y: 0 }, { y: 34, ease: "none", duration: 1 }, 0)
+        .fromTo(".hero-content", { opacity: 1 }, { opacity: 0, ease: "none", duration: 0.35 }, 0);
 
       ScrollTrigger.create({
         animation: smoothHeroParallax,
