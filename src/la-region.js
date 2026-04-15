@@ -6,8 +6,25 @@ import "./nav-lang-globe.js";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { initBookingRequest } from "./booking-request.js";
-import { applyPageSeo, fetchLocalizedCollection, fetchPageConfig, urlFor } from "./sanity.js";
+import { applyHeroMedia, applyPageSeo, fetchLocalizedCollection, fetchLocalizedSingleton, fetchPageConfig, urlFor } from "./sanity.js";
 import { initSmoothScroll } from "./smooth-scroll.js";
+
+// Convertir PortableText en HTML
+const renderPortableText = (blocks) => {
+  if (!blocks?.length) return "";
+  return blocks.map((block) => {
+    if (block._type !== "block") return "";
+    return (block.children || []).map((span) => {
+      if (span._type === "break") return "<br />";
+      let text = (span.text || "").replace(/\n/g, "<br />");
+      const marks = span.marks || [];
+      if (marks.includes("strong") && marks.includes("em")) return `<strong><span class="semi-italic">${text}</span></strong>`;
+      if (marks.includes("strong")) return `<strong>${text}</strong>`;
+      if (marks.includes("em")) return `<span class="semi-italic">${text}</span>`;
+      return text;
+    }).join("");
+  }).join("<br />");
+};
 
 const BASE_URL = import.meta.env.BASE_URL || "/";
 const assetUrl = (path) => `${BASE_URL}${path.replace(/^\/+/, "")}`;
@@ -329,8 +346,52 @@ const renderSpotsList = () => {
     .join("");
 };
 
-// SEO
-fetchPageConfig("la-region").then(applyPageSeo);
+// SEO + Contenu de page depuis Sanity
+Promise.all([
+  fetchPageConfig("la-region"),
+  fetchLocalizedSingleton("regionPage", {
+    projection: `heroMedia { mediaType, videoDesktop { asset->{ url } }, videoMobile { asset->{ url } }, fallbackDesktop, fallbackMobile, photoDesktop, photoMobile }`
+  }),
+]).then(([pageConfig, regionPage]) => {
+  applyPageSeo(pageConfig);
+
+  if (regionPage?.heroLabel) {
+    const el = document.querySelector(".hero-banner-label");
+    if (el) el.textContent = regionPage.heroLabel;
+  }
+  if (regionPage?.heroLead) {
+    const el = document.querySelector(".hero-banner-lead");
+    if (el) el.innerHTML = renderPortableText(regionPage.heroLead);
+  }
+  if (regionPage?.heroMedia) {
+    applyHeroMedia(
+      regionPage.heroMedia,
+      {
+        videoDesktop: document.querySelector(".region-video-desktop"),
+        videoMobile:  document.querySelector(".region-video-mobile"),
+        imgDesktop:   null,
+        imgMobile:    null,
+      },
+      urlFor
+    );
+  }
+  if (regionPage?.carteLabel) {
+    const el = document.querySelector("[data-region-map-label]");
+    if (el) el.textContent = regionPage.carteLabel;
+  }
+  if (regionPage?.carteTitre) {
+    const el = document.querySelector("[data-region-map-title]");
+    if (el) el.innerHTML = renderPortableText(regionPage.carteTitre);
+  }
+  if (regionPage?.carteLead) {
+    const el = document.querySelector("[data-region-map-lead]");
+    if (el) el.innerHTML = renderPortableText(regionPage.carteLead);
+  }
+  if (regionPage?.carteNote) {
+    const el = document.querySelector("[data-region-map-note]");
+    if (el) el.innerHTML = renderPortableText(regionPage.carteNote);
+  }
+}).catch((err) => console.error("Erreur Sanity region page:", err));
 
 // Fetch des lieux depuis Sanity
 fetchLocalizedCollection("lieuRegion", { orderBy: "order asc" }).then((data) => {
