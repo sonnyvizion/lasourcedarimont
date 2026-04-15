@@ -139,6 +139,13 @@ p {
     display: none;
   }
 
+  .btn,
+  [class*="-cta"],
+  .tarif-btn-sticky,
+  .groupes-btn-outline {
+    font-size: 12px !important;
+  }
+
   .intro-text.reveal-text {
     font-size: clamp(18px, 4.8vw, 26px) !important;
     text-wrap: balance;
