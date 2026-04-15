@@ -1556,26 +1556,47 @@ if (!prefersReducedMotion) {
   }
 
   // Lodgings duo : affiche le 1er frame + hover → lance/arrête la vidéo
+  const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
   document.querySelectorAll(".js-lodging-card").forEach((card) => {
     const video = card.querySelector(".lodging-card-video");
+    const img = card.querySelector(".lodging-card-img");
     if (!video) return;
     let stopTimer = null;
-    // Force l'affichage du premier frame dès que possible
-    const showFirstFrame = () => { video.currentTime = 0.001; };
-    if (video.readyState >= 1) showFirstFrame();
-    else video.addEventListener("loadedmetadata", showFirstFrame, { once: true });
+
+    if (!isTouchDevice) {
+      // Sur desktop : force l'affichage du premier frame dès que possible
+      const showFirstFrame = () => { video.currentTime = 0.001; };
+      if (video.readyState >= 1) showFirstFrame();
+      else video.addEventListener("loadedmetadata", showFirstFrame, { once: true });
+    } else if (img) {
+      // Sur mobile : si la vidéo ne peut pas afficher le poster rapidement,
+      // on montre l'image fallback au cas où
+      const ensureVisible = () => {
+        if (video.videoWidth === 0 && img) {
+          video.style.display = "none";
+          img.style.display = "block";
+        }
+      };
+      video.addEventListener("error", () => {
+        video.style.display = "none";
+        img.style.display = "block";
+      }, { once: true });
+      window.setTimeout(ensureVisible, 1200);
+    }
 
     card.addEventListener("mouseenter", () => {
       if (stopTimer) {
         window.clearTimeout(stopTimer);
         stopTimer = null;
       }
+      if (isTouchDevice) return;
       video.playbackRate = 1;
       video.currentTime = 0;
       const p = video.play();
       if (p && typeof p.catch === "function") p.catch(() => {});
     });
     card.addEventListener("mouseleave", () => {
+      if (isTouchDevice) return;
       video.playbackRate = 0.75;
       stopTimer = window.setTimeout(() => {
         video.pause();
