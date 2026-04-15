@@ -1898,6 +1898,10 @@ body.is-loading {
 }
 
 @media (max-width: 900px) {
+  .section-groups {
+    padding-top: 40px;
+  }
+
   .groups-inner {
     grid-template-columns: 1fr;
     gap: 22px;
