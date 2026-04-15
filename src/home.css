@@ -362,6 +362,8 @@ body.is-loading {
   display: block;
   overflow: hidden;
   text-align: center;
+  text-wrap: balance;
+  hyphens: none;
   /* Anti-crop for tall ascenders with tight line-height titles */
   padding-top: 0.08em;
   margin-top: -0.08em;

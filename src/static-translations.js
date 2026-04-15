@@ -250,6 +250,8 @@ const STATIC_TRANSLATIONS = {
       introLabel: "Domaine de la Source d'Arimont",
       introTitle:
         "Des <span class=\"semi-italic\">gîtes</span> et <span class=\"semi-italic\">chambres</span> paisibles, dans un<br class=\"br-desktop\" />environnement naturel propice à la<br class=\"br-desktop\" />déconnexion",
+      introLead:
+        "Des gîtes et chambres paisibles, dans un environnement naturel propice à la déconnexion.",
       switchAria: "Choisir la catégorie de logements",
       tabGites: "Gîtes",
       tabRooms: "Chambres",
@@ -562,6 +564,8 @@ const STATIC_TRANSLATIONS = {
       introLabel: "Domaine de la Source d'Arimont",
       introTitle:
         "Peaceful <span class=\"semi-italic\">cottages</span> and <span class=\"semi-italic\">rooms</span> in a<br class=\"br-desktop\" />natural setting designed for true<br class=\"br-desktop\" />disconnection",
+      introLead:
+        "Peaceful cottages and rooms in a natural setting designed for true disconnection.",
       switchAria: "Choose accommodation category",
       tabGites: "Cottages",
       tabRooms: "Rooms",
@@ -874,6 +878,8 @@ const STATIC_TRANSLATIONS = {
       introLabel: "Domaine de la Source d'Arimont",
       introTitle:
         "Rustige <span class=\"semi-italic\">gîtes</span> en <span class=\"semi-italic\">kamers</span> in een<br class=\"br-desktop\" />natuurlijke omgeving die uitnodigt tot<br class=\"br-desktop\" />ontkoppeling",
+      introLead:
+        "Rustige gîtes en kamers in een natuurlijke omgeving die uitnodigt tot ontkoppeling.",
       switchAria: "Kies type accommodatie",
       tabGites: "Gîtes",
       tabRooms: "Kamers",
@@ -1186,6 +1192,8 @@ const STATIC_TRANSLATIONS = {
       introLabel: "Domaine de la Source d'Arimont",
       introTitle:
         "Ruhige <span class=\"semi-italic\">Ferienhäuser</span> und <span class=\"semi-italic\">Zimmer</span> in einer<br class=\"br-desktop\" />natürlichen Umgebung für echte<br class=\"br-desktop\" />Entschleunigung",
+      introLead:
+        "Ruhige Ferienhäuser und Zimmer in einer natürlichen Umgebung für echte Entschleunigung.",
       switchAria: "Unterkunftskategorie wählen",
       tabGites: "Ferienhäuser",
       tabRooms: "Zimmer",
@@ -1445,8 +1453,8 @@ const applyGitesTranslations = () => {
   setMeta('meta[name="description"]', "content", t("gites.metaDescription"));
   setMeta('meta[property="og:title"]', "content", t("gites.metaTitle"));
   setMeta('meta[property="og:description"]', "content", t("gites.metaDescription"));
-  setText(".stays-intro .label", t("gites.introLabel"));
-  setHTML(".stays-intro .intro-text", t("gites.introTitle"));
+  setText(".stays-hero .hero-banner-label", t("gites.introLabel"));
+  setHTML(".stays-hero .hero-banner-lead", t("gites.introLead"));
   setAttr(".stays-switch", "aria-label", t("gites.switchAria"));
   const tabs = document.querySelectorAll(".stays-switch-btn");
   if (tabs[0]) tabs[0].textContent = t("gites.tabGites");
@@ -1491,7 +1499,7 @@ const applyRestaurationTranslations = () => {
   setMeta('meta[property="og:description"]', "content", t("restauration.metaDescription"));
   setText(".restauration-intro .label", t("restauration.introLabel"));
   setHTML(".restauration-title", t("restauration.introTitle"));
-  setText(".restauration-lead", t("restauration.introLead"));
+  setText(".hero-banner-lead", t("restauration.introLead"));
   const sectionLabels = document.querySelectorAll(".restauration-section-header .label");
   if (sectionLabels[0]) sectionLabels[0].textContent = t("restauration.takeawayLabel");
   if (sectionLabels[1]) sectionLabels[1].textContent = t("restauration.groupLabel");

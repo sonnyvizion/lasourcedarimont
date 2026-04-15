@@ -149,6 +149,35 @@ small,
   font-weight: 900;
 }
 
+.hero-banner-label {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: clamp(30px, min(4.4vw, 7vh), 72px);
+  font-weight: 500;
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+  text-transform: none;
+  color: var(--color-white);
+  text-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+.hero-banner-label .char {
+  display: inline-block;
+  will-change: transform, opacity;
+  transform-origin: 50% 100%;
+}
+
+.hero-banner-lead {
+  color: #fff;
+  text-align: left;
+  margin: 16px 0 0 !important;
+  max-width: 520px;
+  width: 80%;
+  line-height: 1.2;
+  font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+  opacity: 0;
+}
+
 .content-wrap {
   padding-inline: var(--content-padding);
   max-width: var(--max-width);

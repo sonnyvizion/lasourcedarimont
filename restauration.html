@@ -110,18 +110,32 @@
     </div>
 
     <main class="restauration-page-main">
-      <section class="section center restauration-intro">
-        <div class="content-wrap">
-          <img class="restauration-intro-illu" src="/img/illustrations/sun.png" alt="" aria-hidden="true" />
-          <div class="label">Restauration sur place</div>
-          <h1 class="restauration-title reveal-text">
-            Petits déjeuners<br class="br-desktop" />
-            &amp; repas conviviaux
-          </h1>
-          <p class="restauration-lead">
-            Commandez à l’avance et savourez dans votre gîte ou à la terrasse.
-            Tous nos repas sont préparés avec soin, à emporter ou à déguster sur place.
-          </p>
+      <section class="section restauration-hero">
+        <div class="restauration-hero-media" aria-hidden="true">
+          <video
+            class="restauration-hero-video restauration-hero-video-desktop"
+            muted
+            playsinline
+            preload="auto"
+            poster="/img/hero_v3.webp">
+            <source src="/vid/infra.mp4" type="video/mp4" />
+          </video>
+          <video
+            class="restauration-hero-video restauration-hero-video-mobile"
+            muted
+            playsinline
+            preload="auto"
+            poster="/img/hero_mobile.webp">
+            <source src="/vid/infra.mp4" type="video/mp4" />
+          </video>
+          <picture class="restauration-hero-image">
+            <source srcset="/img/hero_mobile.webp" media="(max-width: 980px)" />
+            <img src="/img/hero_v3.webp" alt="" />
+          </picture>
+        </div>
+        <div class="content-wrap restauration-hero-wrap">
+          <h1 class="label hero-banner-label hero-split">Restauration sur place</h1>
+          <p class="hero-banner-lead">Commandez à l'avance et savourez dans votre gîte ou à la terrasse.<br>Tous nos repas sont préparés avec soin, à emporter ou à déguster sur place.</p>
         </div>
       </section>
 

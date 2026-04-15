@@ -106,15 +106,32 @@
     </div>
 
     <main class="stays-page">
-      <section class="section center stays-intro">
-        <div class="content-wrap">
-          <img class="stays-intro-illu" src="/img/illustrations/oiseaux_illustration.png" alt="" aria-hidden="true" />
-          <div class="label">Domaine de la Source d'Arimont</div>
-          <h1 class="intro-text reveal-text">
-            Des <span class="semi-italic">gîtes</span> et <span class="semi-italic">chambres</span> paisibles, dans un<br class="br-desktop" />
-            environnement naturel propice à la<br class="br-desktop" />
-            déconnexion
-          </h1>
+      <section class="section stays-hero">
+        <div class="stays-hero-media" aria-hidden="true">
+          <video
+            class="stays-hero-video stays-hero-video-desktop"
+            muted
+            playsinline
+            preload="auto"
+            poster="/img/hero_v3.webp">
+            <source src="/vid/gites_home2_scrub.mp4" type="video/mp4" />
+          </video>
+          <video
+            class="stays-hero-video stays-hero-video-mobile"
+            muted
+            playsinline
+            preload="auto"
+            poster="/img/hero_mobile.webp">
+            <source src="/vid/gites_home2_scrub.mp4" type="video/mp4" />
+          </video>
+          <picture class="stays-hero-image">
+            <source srcset="/img/hero_mobile.webp" media="(max-width: 980px)" />
+            <img src="/img/hero_v3.webp" alt="" />
+          </picture>
+        </div>
+        <div class="content-wrap stays-hero-wrap">
+          <div class="label hero-banner-label hero-split">Gîtes &amp; Chambres</div>
+          <p class="hero-banner-lead">Des gîtes et chambres paisibles, dans un environnement naturel propice à la déconnexion.</p>
         </div>
       </section>
 

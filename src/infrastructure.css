@@ -30,9 +30,9 @@
 .infrastructure-hero {
   position: relative;
   padding: 0;
-  height: 65vh;
-  min-height: 520px;
-  max-height: 860px;
+  height: 40vh;
+  min-height: 0;
+  max-height: 40vh;
   overflow: hidden;
   display: flex;
   align-items: flex-end;
@@ -43,7 +43,9 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.26), rgba(0, 0, 0, 0.52));
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.16) 0%, rgba(0, 0, 0, 0.62) 100%),
+    linear-gradient(98deg, rgba(0, 0, 0, 0.58) 0%, rgba(0, 0, 0, 0.2) 52%, rgba(0, 0, 0, 0) 78%);
   z-index: 1;
 }
 
@@ -101,20 +103,24 @@
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
+  justify-content: flex-end;
+  align-items: flex-start;
+  text-align: left;
   color: var(--color-white);
-  padding-top: clamp(82px, 11vh, 124px);
-  padding-bottom: clamp(30px, 6vh, 62px);
+  padding-top: clamp(84px, 11vh, 130px);
+  padding-bottom: clamp(40px, 7vh, 66px);
 }
 
-.infrastructure-hero-wrap .label {
-  color: rgba(255, 255, 255, 0.9);
+.infrastructure-hero-wrap .hero-banner-label {
+  max-width: min(84vw, 16ch);
 }
 
 .infrastructure-page-main .content-wrap > .label {
   text-align: center;
+}
+
+.infrastructure-page-main .infrastructure-hero-wrap > .hero-banner-label {
+  text-align: left;
 }
 
 .infrastructure-page-main p {
@@ -125,16 +131,21 @@
   margin: 0;
 }
 
-.infrastructure-hero .intro-text {
+.infrastructure-intro {
+  padding-top: 56px;
+  padding-bottom: 12px;
+}
+
+.infrastructure-intro-title {
   max-width: 980px;
-  color: var(--color-white);
-  margin-top: 14px;
+  color: var(--color-forest);
+  margin-top: 0;
   margin-bottom: 0;
-  text-shadow: 0 14px 32px rgba(0, 0, 0, 0.35);
+  text-shadow: none;
 }
 
 .infrastructure-highlights {
-  padding-top: 60px;
+  padding-top: 80px;
 }
 
 .infrastructure-title {
@@ -372,22 +383,25 @@
   }
 
   .infrastructure-hero {
-    height: 47vh;
-    min-height: 360px;
-    max-height: none;
+    height: 40vh;
+    min-height: 0;
+    max-height: 30vh;
   }
 
   .infrastructure-hero-wrap {
     padding-top: clamp(72px, 10vh, 96px);
     padding-bottom: clamp(24px, 7vh, 48px);
+    padding-left: 18px;
+    padding-right: 18px;
   }
 
-  .infrastructure-hero .intro-text {
-    margin-bottom: 0;
+  .infrastructure-intro {
+    padding-top: 42px;
+    padding-bottom: 4px;
   }
 
   .infrastructure-highlights {
-    padding-top: 34px;
+    padding-top: 60px;
   }
 
   .infrastructure-title {

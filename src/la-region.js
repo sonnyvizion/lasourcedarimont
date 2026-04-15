@@ -63,6 +63,64 @@ if (navToggle && mobileMenu) {
   });
 }
 
+const animateHeroBannerLabel = (force = false) => {
+  const labels = Array.from(document.querySelectorAll(".hero-banner-label"));
+  if (!labels.length) return;
+
+  labels.forEach((label) => {
+    const text = (label.textContent || "").replace(/\u00a0/g, " ").trim();
+    if (!text.length) return;
+    const alreadySplit = label.querySelector(".char");
+    if (alreadySplit && label.dataset.splitText === text && !force) return;
+
+    label.setAttribute("aria-label", text);
+    label.setAttribute("role", "text");
+    label.innerHTML = text
+      .split(/(\s+)/)
+      .map((token) => {
+        if (token.trim() === "") return token;
+        const chars = token
+          .split("")
+          .map((char) => `<span class="char" aria-hidden="true">${char}</span>`)
+          .join("");
+        return `<span style="display:inline-block;white-space:nowrap">${chars}</span>`;
+      })
+      .join("");
+    label.dataset.splitText = text;
+  });
+
+  if (prefersReducedMotion) return;
+
+  labels.forEach((label) => {
+    const chars = label.querySelectorAll(".char");
+    if (!chars.length) return;
+    gsap.fromTo(
+      chars,
+      { y: 28, opacity: 0 },
+      {
+        y: 0,
+        opacity: 1,
+        duration: 1.2,
+        ease: "power3.out",
+        stagger: { each: 0.02, from: "start" }
+      }
+    );
+  });
+};
+
+animateHeroBannerLabel();
+
+if (!prefersReducedMotion) {
+  const heroLead = document.querySelector(".hero-banner-lead");
+  if (heroLead) {
+    gsap.fromTo(
+      heroLead,
+      { opacity: 0, y: 14 },
+      { opacity: 0.72, y: 0, duration: 0.9, ease: "power3.out", delay: 0.8 }
+    );
+  }
+}
+
 initBookingRequest({
   triggersSelector: "[data-booking-request-trigger]"
 });
