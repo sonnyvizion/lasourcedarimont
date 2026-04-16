@@ -209,6 +209,13 @@ export default defineType({
       group: 'lodgings',
       initialValue: "Les infrastructures du Domaine d'Arimont",
     }),
+    defineField({
+      name: 'lodgingsInfraVideoFile',
+      title: 'Carte domaine — vidéo (optionnel)',
+      type: 'file',
+      group: 'lodgings',
+      options: { accept: 'video/mp4' },
+    }),
 
     // ── Cartes hébergements — médias ─────────────────────────────────────────
     defineField({

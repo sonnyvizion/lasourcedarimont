@@ -163,7 +163,7 @@ async function fetchHomeContent() {
   try {
     const [home, temoignages] = await Promise.all([
       fetchLocalizedSingleton("homePage", {
-        projection: `heroMedia { mediaType, videoDesktop { asset->{ url } }, videoMobile { asset->{ url } }, fallbackDesktop, fallbackMobile, photoDesktop, photoMobile }, bannerMedia { mediaType, videoDesktop { asset->{ url } }, videoMobile { asset->{ url } }, fallbackDesktop, fallbackMobile, photoDesktop, photoMobile }, lodgingsGitesVideoFile { asset->{ url } }, lodgingsRoomsVideoFile { asset->{ url } }`
+        projection: `heroMedia { mediaType, videoDesktop { asset->{ url } }, videoMobile { asset->{ url } }, fallbackDesktop, fallbackMobile, photoDesktop, photoMobile }, bannerMedia { mediaType, videoDesktop { asset->{ url } }, videoMobile { asset->{ url } }, fallbackDesktop, fallbackMobile, photoDesktop, photoMobile }, lodgingsGitesVideoFile { asset->{ url } }, lodgingsRoomsVideoFile { asset->{ url } }, lodgingsInfraVideoFile { asset->{ url } }`
       }),
       fetchLocalizedCollection("temoignage", { orderBy: "order asc" }),
     ]);
@@ -304,6 +304,15 @@ async function fetchHomeContent() {
         el.setAttribute("title", home.lodgingsInfraImageAlt);
       } else if (el) {
         el.alt = home.lodgingsInfraImageAlt;
+      }
+    }
+
+    // Carte domaine — vidéo
+    if (home?.lodgingsInfraVideoFile?.asset?.url) {
+      const video = document.querySelector('[data-home-lodgings-infra-image]');
+      if (video instanceof HTMLVideoElement) {
+        const src = video.querySelector("source");
+        if (src) { src.src = home.lodgingsInfraVideoFile.asset.url; video.load(); }
       }
     }
 
