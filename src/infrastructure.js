@@ -512,13 +512,46 @@ function renderInfraSlides(slides) {
   });
 }
 
+function renderFarmPhotos(photos) {
+  const farmTrack   = document.querySelector("[data-farm-track]");
+  const farmCaption = document.querySelector("[data-farm-caption]");
+  const farmPrev    = document.querySelector("[data-farm-prev]");
+  const farmNext    = document.querySelector("[data-farm-next]");
+
+  if (!farmTrack || !farmCaption) return;
+
+  farmTrack.innerHTML = photos.map((photo) =>
+    `<img class="farm-photo" src="${photo.image ? urlFor(photo.image).width(800).url() : ""}" alt="${photo.alt || ""}" loading="lazy" />`
+  ).join("");
+
+  let farmIndex = 0;
+
+  const updateFarm = (nextIndex) => {
+    farmIndex = ((nextIndex % photos.length) + photos.length) % photos.length;
+    farmTrack.style.transform = `translateX(-${farmIndex * 100}%)`;
+    farmCaption.textContent = photos[farmIndex].caption || "";
+  };
+
+  farmPrev?.addEventListener("click", () => updateFarm(farmIndex - 1));
+  farmNext?.addEventListener("click", () => updateFarm(farmIndex + 1));
+
+  const farmGallery = document.querySelector("[data-farm-gallery]");
+  farmGallery?.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") updateFarm(farmIndex - 1);
+    if (event.key === "ArrowRight") updateFarm(farmIndex + 1);
+  });
+
+  updateFarm(0);
+}
+
 async function initSanityPageContent() {
   try {
-    const [page, slides] = await Promise.all([
+    const [page, slides, farmPhotos] = await Promise.all([
       fetchLocalizedSingleton("infrastructurePage", {
         projection: `heroMedia { mediaType, videoDesktop { asset->{ url } }, videoMobile { asset->{ url } }, fallbackDesktop, fallbackMobile, photoDesktop, photoMobile }`
       }),
       fetchLocalizedCollection("infraSlide", { orderBy: "order asc" }),
+      fetchLocalizedCollection("farmPhoto",  { orderBy: "order asc" }),
     ]);
     if (!page) return;
 
@@ -570,6 +603,7 @@ async function initSanityPageContent() {
     }
 
     if (slides?.length) renderInfraSlides(slides);
+    if (farmPhotos?.length) renderFarmPhotos(farmPhotos);
   } catch (err) {
     console.error("Erreur Sanity infrastructure page:", err);
   }
