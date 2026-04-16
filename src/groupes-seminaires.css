@@ -316,7 +316,8 @@
 /* ─── COMBO (meilleur des deux mondes) ───────────────────────────────────────── */
 
 .groupes-combo {
-  padding: 100px 0;
+  padding: 50px 0;
+  margin-top: 50px !important;
 }
 
 .groupes-combo .label,
