@@ -1222,7 +1222,7 @@ if (!prefersReducedMotion) {
 
       const fadeAt = () => {
         if (!activeHeroVideo.duration || Number.isNaN(activeHeroVideo.duration)) return;
-        if (activeHeroVideo.currentTime >= activeHeroVideo.duration - 0.6) {
+        if (!isMobileViewport && activeHeroVideo.currentTime >= activeHeroVideo.duration - 0.6) {
           activeHeroVideo.classList.add("is-fading");
         }
       };
