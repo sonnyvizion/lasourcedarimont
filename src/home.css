@@ -628,6 +628,7 @@ body.is-loading {
 @media (min-width: 981px) {
   .section {
     padding-inline: 5% !important;
+    margin-top: 30px;
   }
 
   .section.section-full-width {

@@ -120,6 +120,7 @@
 .section.region-map-section.section-full-width {
   padding-left: clamp(18px, 4vw, 34px) !important;
   padding-right: clamp(18px, 4vw, 34px) !important;
+  padding-bottom: 54px;
 }
 
 .region-map-layout {
