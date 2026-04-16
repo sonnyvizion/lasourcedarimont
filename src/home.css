@@ -665,7 +665,13 @@ body.is-loading {
 .intro-text {
   max-width: 1700px;
   margin: 18px auto 200px;
-  
+}
+
+.intro-text.reveal-text .line {
+  padding-top: 0.15em;
+  margin-top: -0.15em;
+  padding-bottom: 0.15em;
+  margin-bottom: -0.15em;
 }
 
 .intro-illu {
@@ -903,7 +909,7 @@ body.is-loading {
 
   .section-lodgings-feature .section-feature {
     padding-top: 24px;
-    padding-bottom: 104px;
+    padding-bottom: 60px;
   }
 
 }
@@ -1284,6 +1290,10 @@ body.is-loading {
 }
 
 @media (max-width: 980px) {
+  .section-feature {
+    margin-top: 60px;
+  }
+
   .section-lodgings-feature .section-dark {
     padding-bottom: 0;
   }
@@ -1316,10 +1326,11 @@ body.is-loading {
 
   .lodging-card-body {
     padding: 14px 12px;
+    justify-content: center;
   }
 
   .lodging-title {
-    font-size: clamp(13px, 3.2vw, 16px);
+    display: none;
   }
 
   .lodging-label {
@@ -1934,6 +1945,10 @@ body.is-loading {
   }
 
   .groups-title {
+    text-align: center;
+  }
+
+  .groups-title .line {
     text-align: center;
   }
 

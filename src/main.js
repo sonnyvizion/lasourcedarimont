@@ -1368,6 +1368,27 @@ if (!prefersReducedMotion) {
     };
 
     revealTexts.forEach((el) => {
+      if (
+        el.classList.contains("groups-title") ||
+        el.classList.contains("groupes-title")
+      ) {
+        gsap.fromTo(
+          el,
+          { y: 28, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 1.1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: el,
+              start: "top 80%"
+            }
+          }
+        );
+        return;
+      }
+
       if (isMobileViewport && el.classList.contains("intro-text")) {
         gsap.fromTo(
           el,
