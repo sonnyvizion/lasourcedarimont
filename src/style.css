@@ -478,3 +478,62 @@ small,
     display: block;
   }
 }
+
+/* ── Section rhythm ── */
+.section-sm {
+  padding: 60px 0;
+}
+
+.section-md {
+  padding: 80px 0;
+}
+
+.section-lg {
+  padding: 120px 0;
+}
+
+.section-intro {
+  padding: 72px 0 24px;
+}
+
+/* ── Section typography ── */
+.section-title {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: clamp(1.55rem, 2.35vw, 2.28rem);
+  line-height: 1;
+  text-wrap: balance;
+  max-width: 980px;
+  margin: 0 auto 18px;
+  color: var(--color-forest);
+}
+
+.section-title--left {
+  margin-left: 0;
+  margin-right: 0;
+  text-align: left;
+}
+
+.section-lead {
+  font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+  line-height: 1.4;
+  opacity: 0.82;
+  max-width: 720px;
+  margin: 0 auto 34px;
+  color: var(--color-forest);
+}
+
+.section-lead--left {
+  margin-left: 0;
+  margin-right: 0;
+  text-align: left;
+}
+
+.section-label {
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.section-label--left {
+  text-align: left;
+}

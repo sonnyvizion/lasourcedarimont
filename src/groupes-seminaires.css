@@ -120,8 +120,6 @@
 /* ─── HÉBERGEMENTS ───────────────────────────────────────────────────────────── */
 
 .groupes-hebergements {
-  padding: 60px 0;
-  margin-top: 50px;
 }
 
 .groupes-hebergements-inner {
@@ -231,7 +229,6 @@
 
 .groupes-salle {
   background: var(--color-forest);
-  padding: 100px 0;
 }
 
 .groupes-salle-inner {
@@ -316,8 +313,6 @@
 /* ─── COMBO (meilleur des deux mondes) ───────────────────────────────────────── */
 
 .groupes-combo {
-  padding: 50px 0;
-  margin-top: 50px !important;
 }
 
 .groupes-combo .label,
@@ -380,7 +375,6 @@
 
 .groupes-infra {
   background: #ede7d5;
-  padding: 100px 0;
 }
 
 .groupes-infra h2 {
@@ -433,7 +427,6 @@
 
 .groupes-ideal {
   background: var(--color-forest);
-  padding: 100px 0;
 }
 
 .groupes-ideal .label {
@@ -477,7 +470,6 @@
 /* ─── CTA FINAL ──────────────────────────────────────────────────────────────── */
 
 .groupes-cta-section {
-  padding: 120px 0 140px;
 }
 
 .groupes-cta-section h2 {
