@@ -950,6 +950,7 @@ body.is-loading {
   grid-template-columns: 1fr 1fr;
   gap: 16px;
   margin-top: 56px;
+  text-align: center;
 }
 
 .lodging-card {
@@ -1297,6 +1298,7 @@ body.is-loading {
     grid-template-columns: 1fr 1fr;
     gap: 5px;
     margin-top: 24px;
+    text-align: center;
   }
 
   .lodgings-duo > .lodging-card {
@@ -1340,7 +1342,7 @@ body.is-loading {
   }
 
   .feature-bridge {
-    margin: 8px auto 30px;
+    margin: 8px auto 60px;
     max-width: 84vw;
     text-align: center;
     font-size: 12px;
@@ -1916,12 +1918,13 @@ body.is-loading {
 @media (max-width: 900px) {
   .section-groups {
     padding-top: 40px;
+    min-height: 80vh;
   }
 
   .groups-inner {
     grid-template-columns: 1fr;
     gap: 22px;
-    padding-bottom: 60px;
+    padding-bottom: 100px;
     align-items: start;
   }
 
@@ -1944,8 +1947,13 @@ body.is-loading {
   .groups-visuals {
     grid-template-rows: none;
     grid-template-columns: 1fr;
-    height: 260px;
+    height: auto;
+    min-height: 45vh;
     order: 5;
+  }
+
+  .groups-img {
+    aspect-ratio: 4 / 3;
   }
 
   .groups-img--secondary {
@@ -1996,6 +2004,7 @@ body.is-loading {
   .groups-visuals {
     grid-template-columns: 1fr;
     height: auto;
+    min-height: 40vh;
   }
 
   .groups-img {
