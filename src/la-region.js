@@ -585,30 +585,7 @@ if (mapRoot && window.mapboxgl) {
       map.on("zoom", () => updateBadgeScale(map));
     });
 
-    if (window.innerWidth > 1024) {
-      const initialBearing = -15;
-      const initialPitch = 60;
 
-      map.on("mousemove", (e) => {
-        const { width, height } = map.getCanvas();
-        const x = (e.point.x / width - 0.5) * 2;
-        const y = (e.point.y / height - 0.5) * 2;
-        map.easeTo({
-          bearing: initialBearing + x * 8,
-          pitch: initialPitch + y * 6,
-          duration: 300,
-          easing: (t) => t
-        });
-      });
-
-      map.on("mouseleave", () => {
-        map.easeTo({
-          bearing: initialBearing,
-          pitch: initialPitch,
-          duration: 800
-        });
-      });
-    }
   }
 }
 }; // fin initMap
