@@ -619,6 +619,11 @@
     padding-bottom: 42px;
   }
 
+  .restauration-dejeuners,
+  .restauration-repas {
+    padding-top: 60px;
+  }
+
   .restauration-intro-illu {
     left: 6%;
     top: -24px;
