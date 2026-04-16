@@ -5,11 +5,13 @@ import "./nav-lang-globe.js";
 import { t } from "./static-translations.js";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Draggable } from "gsap/Draggable";
+import { InertiaPlugin } from "gsap/InertiaPlugin";
 import Lenis from "lenis";
 import { initBookingRequest } from "./booking-request.js";
 import { applyHeroMedia, applyPageSeo, fetchLocalizedCollection, fetchLocalizedSingleton, urlFor } from "./sanity.js";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, Draggable, InertiaPlugin);
 
 const yearEl = document.querySelector("[data-year]");
 if (yearEl) {
@@ -1476,7 +1478,7 @@ if (!prefersReducedMotion) {
     requestAnimationFrame(initRevealText);
   });
 
-  // Gallery slider: boucle infinie + flèches + drag (desktop) / touch (mobile)
+  // Gallery slider: boucle infinie + flèches + drag fluide (Draggable + Inertia)
   const gallerySlider = document.querySelector(".gallery-slider");
   const galleryTrack = document.querySelector(".gallery-track");
   const galleryPrev = document.querySelector(".gallery-prev");
@@ -1493,11 +1495,9 @@ if (!prefersReducedMotion) {
 
     gsap.set(galleryTrack, { x: 0 });
 
-    const getRawX = () => Number(gsap.getProperty(galleryTrack, "x")) || 0;
-
-    const normalize = () => {
+    const normalizeX = () => {
       const half = getHalfWidth();
-      const x = getRawX();
+      const x = Number(gsap.getProperty(galleryTrack, "x")) || 0;
       if (x <= -half) gsap.set(galleryTrack, { x: x + half });
       else if (x > 0) gsap.set(galleryTrack, { x: x - half });
     };
@@ -1505,7 +1505,7 @@ if (!prefersReducedMotion) {
     const slideBy = (direction) => {
       const step = gallerySlider.clientWidth * (isMobile ? 0.75 : 0.6);
       const half = getHalfWidth();
-      let currentX = getRawX();
+      let currentX = Number(gsap.getProperty(galleryTrack, "x")) || 0;
       let targetX = currentX - step * direction;
 
       if (targetX > 0) {
@@ -1518,118 +1518,42 @@ if (!prefersReducedMotion) {
         gsap.set(galleryTrack, { x: currentX });
       }
 
-      gsap.to(galleryTrack, { x: targetX, duration: 0.85, ease: "power2.out", onComplete: normalize });
+      gsap.to(galleryTrack, {
+        x: targetX,
+        duration: 0.85,
+        ease: "power2.out",
+        onComplete: normalizeX
+      });
     };
 
     if (galleryPrev) galleryPrev.addEventListener("click", () => slideBy(-1));
     if (galleryNext) galleryNext.addEventListener("click", () => slideBy(1));
 
-    // --- Momentum drag (mobile + desktop) ---
-    let isDragging = false;
-    let didDrag = false;
-    let startX = 0;
-    let startTrackX = 0;
-    let lastX = 0;
-    let lastTime = 0;
-
-    const applyMomentum = () => {
-      const now = performance.now();
-      const dt = now - lastTime;
-      const dx = getRawX() - lastX;
-      const velocity = dt > 0 ? (dx / dt) * 1000 : 0; // px/s
-
-      if (Math.abs(velocity) > 60) {
-        const projected = getRawX() + velocity * 0.35;
-        const half = getHalfWidth();
-        let targetX = projected;
-
-        const maxLeap = gallerySlider.clientWidth * 0.9;
-        if (targetX > getRawX() + maxLeap) targetX = getRawX() + maxLeap;
-        if (targetX < getRawX() - maxLeap) targetX = getRawX() - maxLeap;
-
-        if (targetX > 0) {
-          gsap.set(galleryTrack, { x: getRawX() - half });
-          targetX -= half;
-        } else if (targetX <= -half) {
-          gsap.set(galleryTrack, { x: getRawX() + half });
-          targetX += half;
-        }
-
-        gsap.to(galleryTrack, {
-          x: targetX,
-          duration: 1.1,
-          ease: "expo.out",
-          onComplete: normalize
-        });
-      } else {
-        normalize();
-      }
-    };
-
-    const stopDragging = () => {
-      if (!isDragging) return;
-      isDragging = false;
-      gallerySlider.classList.remove("is-dragging");
-      applyMomentum();
-    };
-
-    const onMove = (pageX) => {
-      if (!isDragging) return;
-      const deltaX = pageX - startX;
-      if (Math.abs(deltaX) > 4) didDrag = true;
-      gsap.set(galleryTrack, { x: startTrackX + deltaX });
-      lastX = getRawX();
-      lastTime = performance.now();
-    };
-
-    if (isMobile) {
-      gallerySlider.addEventListener("touchstart", (event) => {
-        didDrag = false;
-        isDragging = true;
-        startX = event.touches[0].pageX;
-        startTrackX = getRawX();
-        lastX = startTrackX;
-        lastTime = performance.now();
-        gsap.killTweensOf(galleryTrack);
-      }, { passive: true });
-
-      gallerySlider.addEventListener("touchmove", (event) => {
-        onMove(event.touches[0].pageX);
-      }, { passive: true });
-
-      gallerySlider.addEventListener("touchend", stopDragging);
-    } else {
-      const desktopPointer = window.matchMedia("(hover: hover) and (pointer: fine)");
-      if (desktopPointer.matches) {
-        gallerySlider.classList.add("is-draggable");
-
-        gallerySlider.addEventListener("mousedown", (event) => {
-          didDrag = false;
-          if (event.button !== 0) return;
-          const target = event.target;
-          if (target instanceof Element && target.closest("a, button, input, textarea, select, label, [role='button']")) return;
-          isDragging = true;
-          startX = event.pageX;
-          startTrackX = getRawX();
-          lastX = startTrackX;
-          lastTime = performance.now();
-          gallerySlider.classList.add("is-dragging");
-          gsap.killTweensOf(galleryTrack);
-          event.preventDefault();
-        });
-
-        window.addEventListener("mousemove", (event) => {
-          onMove(event.pageX);
-        });
-
-        window.addEventListener("mouseup", stopDragging);
-        gallerySlider.addEventListener("click", (event) => {
-          if (!didDrag) return;
-          event.preventDefault();
-          event.stopPropagation();
-        }, true);
-      }
+    if (!isMobile) {
+      gallerySlider.classList.add("is-draggable");
     }
+
+    Draggable.create(galleryTrack, {
+      type: "x",
+      trigger: gallerySlider,
+      inertia: true,
+      edgeResistance: 0.55,
+      cursor: isMobile ? "auto" : "grab",
+      activeCursor: isMobile ? "auto" : "grabbing",
+      allowContextMenu: false,
+      allowNativeTouchScrolling: true,
+      zIndexBoost: false,
+      onDragStart: function () {
+        gsap.killTweensOf(galleryTrack);
+        if (!isMobile) gallerySlider.classList.add("is-dragging");
+      },
+      onDrag: normalizeX,
+      onThrowUpdate: normalizeX,
+      onDragEnd: function () {
+        if (!isMobile) gallerySlider.classList.remove("is-dragging");
+        normalizeX();
+      }
+    });
 
     requestAnimationFrame(() => ScrollTrigger.refresh());
   }

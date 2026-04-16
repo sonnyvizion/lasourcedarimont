@@ -1525,24 +1525,14 @@ body.is-loading {
   }
 
   .gallery-slider {
-    overflow-x: auto;
-    overflow-y: hidden;
-    scroll-snap-type: none;
-    -webkit-overflow-scrolling: touch;
+    overflow: hidden;
     touch-action: auto;
-    overscroll-behavior-x: contain;
   }
 
   .gallery-track {
     display: flex;
     width: auto;
-    scroll-snap-align: none;
     pointer-events: auto;
-  }
-
-  .gallery-slider {
-    overflow: hidden;
-    touch-action: pan-y;
   }
 
   .lodging-card-video {
