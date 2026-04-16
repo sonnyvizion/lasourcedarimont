@@ -120,7 +120,8 @@
 /* ─── HÉBERGEMENTS ───────────────────────────────────────────────────────────── */
 
 .groupes-hebergements {
-  padding: 100px 0;
+  padding: 60px 0;
+  margin-top: 50px;
 }
 
 .groupes-hebergements-inner {
@@ -144,6 +145,7 @@
   line-height: 1.75;
   opacity: 0.82;
   margin-bottom: 36px;
+  text-align: center;
 }
 
 .groupes-heberg-list {
@@ -283,10 +285,10 @@
 }
 
 .groupes-salle-highlight {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: 16px;
-  margin-top: 32px;
+  margin: 32px auto 0;
   padding: 18px 28px;
   border: 2px solid rgba(246, 241, 230, 0.25);
   border-radius: var(--radius-md);
@@ -512,7 +514,8 @@
   .groupes-stats-inner {
     flex-wrap: wrap;
     gap: 36px;
-    padding: 0 24px;
+    margin-left: 16px;
+    margin-right: 16px;
   }
 
   .groupes-stat {
@@ -521,6 +524,28 @@
 
   .groupes-stat-sep {
     display: none;
+  }
+
+  .groupes-salle {
+    margin: 0 16px;
+  }
+
+  .groupes-infra {
+    padding: 40px 0;
+  }
+
+  .groupes-combo {
+    padding: 50px 0;
+    margin-top: 40px;
+  }
+
+  .groupes-cta-section {
+    padding: 40px 0 140px;
+  }
+
+  .groupes-hebergements {
+    padding: 80px 0;
+    margin-top: 30px;
   }
 
   .groupes-hebergements-inner,
@@ -536,6 +561,9 @@
 
   .groupes-hebergements-text .label {
     text-align: center;
+    max-width: 70%;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .groupes-salle-content .label {
@@ -838,7 +866,7 @@
 }
 
 .groupes-hebergements-text .label {
-  text-align: left;
+  text-align: center;
 }
 
 .groupes-hebergements-text h2.reveal-text,
@@ -881,7 +909,7 @@
 
 .groupes-salle-content .label {
   color: rgba(42, 88, 67, 0.85);
-  text-align: left;
+  text-align: center;
 }
 
 .groupes-salle-content h2 {
@@ -890,6 +918,7 @@
 
 .groupes-salle-content p {
   color: var(--color-forest);
+  text-align: center;
 }
 
 .groupes-salle-content p strong {
@@ -974,7 +1003,10 @@
   }
 
   .groupes-hebergements-text .label {
-    text-align: left;
+    text-align: center;
+    max-width: 70%;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .groupes-hebergements-text h2.reveal-text,
