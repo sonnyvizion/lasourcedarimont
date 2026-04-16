@@ -173,6 +173,10 @@ p {
   .lodging-title {
     font-size: clamp(20px, 5.5vw, 30px) !important;
   }
+
+  .lodging-title {
+    font-size: clamp(15px, 4vw, 20px) !important;
+  }
 }
 
 small,

@@ -1326,7 +1326,7 @@ body.is-loading {
   }
 
   .lodging-title {
-    font-size: clamp(11px, 2.6vw, 14px);
+    font-size: clamp(10px, 2.2vw, 12px);
     text-align: center;
   }
 
@@ -1346,7 +1346,7 @@ body.is-loading {
   }
 
   .feature-bridge {
-    margin: 8px auto 60px;
+    margin: 20px auto 60px;
     max-width: 84vw;
     text-align: center;
     font-size: 12px;
