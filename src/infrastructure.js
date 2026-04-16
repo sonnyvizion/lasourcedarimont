@@ -5,6 +5,7 @@ import "./infrastructure.css";
 import "./nav-lang-globe.js";
 import { initBookingRequest } from "./booking-request.js";
 import { initSmoothScroll } from "./smooth-scroll.js";
+import { applyHeroMedia, applyPageSeo, fetchLocalizedCollection, fetchLocalizedSingleton, urlFor } from "./sanity.js";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -292,6 +293,19 @@ if (revealEls.length) {
   revealEls.forEach((el) => observer.observe(el));
 }
 
+function renderPortableText(blocks) {
+  if (!blocks || !Array.isArray(blocks)) return "";
+  return blocks.map((block) => {
+    if (block._type !== "block" || !block.children) return "";
+    return block.children.map((span) => {
+      let text = span.text || "";
+      if (span.marks?.includes("strong")) text = `<strong>${text}</strong>`;
+      if (span.marks?.includes("em")) text = `<span class="semi-italic">${text}</span>`;
+      return text;
+    }).join("");
+  }).join("<br />");
+}
+
 const infraSlides = [
   {
     title: "Espaces extérieurs et détente",
@@ -445,3 +459,63 @@ if (farmTrack && farmCaption) {
 
   updateFarm(0);
 }
+
+async function initSanityPageContent() {
+  try {
+    const page = await fetchLocalizedSingleton("infrastructurePage", {
+      projection: `heroMedia { mediaType, videoDesktop { asset->{ url } }, videoMobile { asset->{ url } }, fallbackDesktop, fallbackMobile, photoDesktop, photoMobile }`
+    });
+    if (!page) return;
+
+    applyPageSeo(page);
+
+    if (page.heroLabel) {
+      const el = document.querySelector(".hero-banner-label");
+      if (el) el.textContent = page.heroLabel;
+    }
+    if (page.heroLead) {
+      const el = document.querySelector(".hero-banner-lead");
+      if (el) el.innerHTML = renderPortableText(page.heroLead);
+    }
+    if (page.heroMedia) {
+      applyHeroMedia(
+        page.heroMedia,
+        {
+          videoDesktop: document.querySelector(".infrastructure-hero-video-desktop"),
+          videoMobile:  document.querySelector(".infrastructure-hero-video-mobile"),
+          imgDesktop:   document.querySelector(".infrastructure-hero-image img"),
+          imgMobile:    document.querySelector(".infrastructure-hero-image source"),
+        },
+        urlFor
+      );
+    }
+    if (page.highlightsLabel) {
+      const el = document.querySelector(".infrastructure-highlights .label");
+      if (el) el.textContent = page.highlightsLabel;
+    }
+    if (page.highlightsTitre) {
+      const el = document.querySelector(".infrastructure-title");
+      if (el) el.innerHTML = renderPortableText(page.highlightsTitre);
+    }
+    if (page.fermeLabel) {
+      const el = document.querySelector(".farm-section .label");
+      if (el) el.textContent = page.fermeLabel;
+    }
+    if (page.fermeTitre) {
+      const el = document.querySelector(".farm-title");
+      if (el) el.innerHTML = renderPortableText(page.fermeTitre);
+    }
+    if (page.fermeLead) {
+      const el = document.querySelector(".farm-lead");
+      if (el) el.innerHTML = renderPortableText(page.fermeLead);
+    }
+    if (page.fermeBody) {
+      const el = document.querySelector(".farm-body");
+      if (el) el.innerHTML = renderPortableText(page.fermeBody);
+    }
+  } catch (err) {
+    console.error("Erreur Sanity infrastructure page:", err);
+  }
+}
+
+initSanityPageContent();
