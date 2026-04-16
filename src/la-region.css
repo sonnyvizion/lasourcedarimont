@@ -487,6 +487,11 @@
   text-align: left;
   max-width: 48ch;
   font-size: 13px;
+}
+
+.feature-bridge.region-map-note {
+  text-align: left;
+}
   color: rgba(24, 53, 40, 0.78);
   line-height: 1.45;
 }

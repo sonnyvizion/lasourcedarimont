@@ -446,8 +446,12 @@
     gap: 22px;
   }
 
-  .farm-title {
-    text-align: left;
+  .farm-title,
+  .farm-title.reveal-text,
+  .farm-title.reveal-text.is-visible,
+  .farm-title .line,
+  .farm-title .line-inner {
+    text-align: left !important;
   }
 
   .farm-gallery {
