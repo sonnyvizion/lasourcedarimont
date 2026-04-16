@@ -394,6 +394,8 @@
   position: relative;
   z-index: 9;
   background: var(--color-beige);
+  padding-top: clamp(18px, 3.2vw, 46px);
+  padding-bottom: clamp(62px, 7vw, 110px);
 }
 
 .stays-notes .content-wrap {
@@ -485,8 +487,7 @@
   }
 
   .stays-section {
-    position: relative;
-    z-index: 8;
+    margin-top: 0px;
   }
 
   .stays-intro {
@@ -571,9 +572,8 @@
   }
 
   .stays-notes {
-    position: relative;
-    z-index: 9;
-    background: var(--color-beige);
+    padding-top: 16px;
+    padding-bottom: 44px;
   }
 
   .stays-notes .content-wrap {

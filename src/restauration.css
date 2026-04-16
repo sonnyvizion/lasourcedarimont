@@ -135,11 +135,14 @@
 
 .restauration-dejeuners,
 .restauration-repas {
+  padding-top: 80px;
+  padding-bottom: 60px;
 }
 
 /* ── Featured card (Le Complet) ──────────────────────────────────────────── */
 
 .restauration-dejeuners {
+  margin-top: 0;
 }
 
 .dejeuners-featured-wrap {
@@ -344,6 +347,7 @@
 /* ── Repas section ───────────────────────────────────────────────────────── */
 
 .restauration-repas {
+  margin-top: 0;
 }
 
 /* ── Bouton + sur les cards ──────────────────────────────────────────────── */
@@ -507,6 +511,7 @@
 
   .restauration-dejeuners,
   .restauration-repas {
+    padding-top: 60px;
   }
 
   .restauration-intro-illu {
