@@ -432,7 +432,7 @@ const ICONS = {
   nespresso:     { src: assetUrl("/img/NESPRESSO_ICON.png"),       alt: "Machine à espresso" },
   machineLaver:  { src: assetUrl("/img/MACHINE_A_LAVER_ICON.png"), alt: "Machine à laver" },
   laveVaisselle: { src: assetUrl("/img/LAVEVAISELLE_ICON.png"),    alt: "Lave-vaisselle" },
-  microOnde:     { src: assetUrl("/img/MICROONDE_ICON.png"),       alt: "Micro-ondes" },
+  microOnde:     { src: assetUrl("/img/MICROONDE_ICON.webp"),      alt: "Micro-ondes" },
   four:          { src: assetUrl("/img/FOUR_ICON.png"),            alt: "Four" },
 };
 
