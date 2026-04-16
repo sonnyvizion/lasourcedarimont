@@ -494,6 +494,7 @@
   text-align: left;
   max-width: 48ch;
   font-size: 13px;
+  grid-column: 1;
 }
 
 .feature-bridge.region-map-note {
@@ -674,6 +675,10 @@
 
   .region-map {
     order: 2;
+  }
+
+  .region-map-note {
+    order: 3;
   }
 
   .region-map-note,
