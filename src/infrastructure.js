@@ -460,11 +460,66 @@ if (farmTrack && farmCaption) {
   updateFarm(0);
 }
 
+function renderInfraSlides(slides) {
+  const infraTrack = document.querySelector("[data-infra-track]");
+  const infraDots  = document.querySelector("[data-infra-dots]");
+  const infraPrev  = document.querySelector("[data-infra-prev]");
+  const infraNext  = document.querySelector("[data-infra-next]");
+
+  if (!infraTrack || !infraDots) return;
+
+  infraTrack.innerHTML = slides.map((slide) => `
+    <article class="infra-slide">
+      <div class="infra-slide-card">
+        <figure class="infra-slide-media">
+          <img src="${slide.image ? urlFor(slide.image).width(900).url() : ""}" alt="${slide.imageAlt || ""}" loading="lazy" />
+        </figure>
+        <div class="infra-slide-copy">
+          <h3>${slide.title || ""}</h3>
+          <p>${slide.description || ""}</p>
+          ${slide.points?.length ? `<ul class="infra-slide-points">${slide.points.map((p) => `<li>${p}</li>`).join("")}</ul>` : ""}
+        </div>
+      </div>
+    </article>
+  `).join("");
+
+  infraDots.innerHTML = slides.map((_, idx) =>
+    `<button class="infra-dot${idx === 0 ? " is-active" : ""}" type="button" aria-label="Aller à la slide ${idx + 1}" data-infra-dot="${idx}"></button>`
+  ).join("");
+
+  const dotButtons = Array.from(document.querySelectorAll("[data-infra-dot]"));
+  let infraIndex = 0;
+
+  const updateInfra = (nextIndex) => {
+    infraIndex = ((nextIndex % slides.length) + slides.length) % slides.length;
+    infraTrack.style.transform = `translateX(-${infraIndex * 100}%)`;
+    dotButtons.forEach((dot, idx) => {
+      dot.classList.toggle("is-active", idx === infraIndex);
+      dot.setAttribute("aria-current", idx === infraIndex ? "true" : "false");
+    });
+  };
+
+  infraPrev?.addEventListener("click", () => updateInfra(infraIndex - 1));
+  infraNext?.addEventListener("click", () => updateInfra(infraIndex + 1));
+  dotButtons.forEach((dot) => {
+    dot.addEventListener("click", () => updateInfra(Number(dot.dataset.infraDot || "0")));
+  });
+
+  const infraCarousel = document.querySelector("[data-infra-carousel]");
+  infraCarousel?.addEventListener("keydown", (event) => {
+    if (event.key === "ArrowLeft") updateInfra(infraIndex - 1);
+    if (event.key === "ArrowRight") updateInfra(infraIndex + 1);
+  });
+}
+
 async function initSanityPageContent() {
   try {
-    const page = await fetchLocalizedSingleton("infrastructurePage", {
-      projection: `heroMedia { mediaType, videoDesktop { asset->{ url } }, videoMobile { asset->{ url } }, fallbackDesktop, fallbackMobile, photoDesktop, photoMobile }`
-    });
+    const [page, slides] = await Promise.all([
+      fetchLocalizedSingleton("infrastructurePage", {
+        projection: `heroMedia { mediaType, videoDesktop { asset->{ url } }, videoMobile { asset->{ url } }, fallbackDesktop, fallbackMobile, photoDesktop, photoMobile }`
+      }),
+      fetchLocalizedCollection("infraSlide", { orderBy: "order asc" }),
+    ]);
     if (!page) return;
 
     applyPageSeo(page);
@@ -513,6 +568,8 @@ async function initSanityPageContent() {
       const el = document.querySelector(".farm-body");
       if (el) el.innerHTML = renderPortableText(page.fermeBody);
     }
+
+    if (slides?.length) renderInfraSlides(slides);
   } catch (err) {
     console.error("Erreur Sanity infrastructure page:", err);
   }
