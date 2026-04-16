@@ -5,7 +5,7 @@ import "./nos-partenaires.css";
 import "./nav-lang-globe.js";
 import { initBookingRequest } from "./booking-request.js";
 import { initTestimonialsSlider } from "./testimonials.js";
-import { applyPageSeo, fetchLocalizedCollection, fetchPageConfig, urlFor } from "./sanity.js";
+import { applyPageSeo, fetchLocalizedCollection, fetchLocalizedSingleton, fetchPageConfig, urlFor } from "./sanity.js";
 import { t } from "./static-translations.js";
 import { initSmoothScroll } from "./smooth-scroll.js";
 
@@ -85,6 +85,21 @@ if (revealEls.length) {
   revealEls.forEach((el) => observer.observe(el));
 }
 
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function renderPortableText(blocks) {
+  if (!blocks || !Array.isArray(blocks)) return "";
+  return blocks.map((block) => {
+    if (block._type !== "block" || !block.children) return "";
+    return block.children.map((span) => {
+      let text = span.text || "";
+      if (span.marks?.includes("strong")) text = `<strong>${text}</strong>`;
+      if (span.marks?.includes("em")) text = `<span class="semi-italic">${text}</span>`;
+      return text;
+    }).join("");
+  }).join("<br />");
+}
+
 // ─── Sanity content ───────────────────────────────────────────────────────────
 
 const CATEGORIE_LABELS = {
@@ -133,11 +148,25 @@ async function initSanityContent() {
   if (grid) grid.innerHTML = "";
 
   try {
-    const [partenaires, pageConfig] = await Promise.all([
+    const [partenaires, pageConfig, partenairesPage] = await Promise.all([
       fetchLocalizedCollection("partenaire", { orderBy: "order asc" }),
       fetchPageConfig("nos-partenaires"),
+      fetchLocalizedSingleton("partenairesPage"),
     ]);
     applyPageSeo(pageConfig);
+
+    if (partenairesPage?.introLabel) {
+      const el = document.querySelector(".partners-intro .label");
+      if (el) el.textContent = partenairesPage.introLabel;
+    }
+    if (partenairesPage?.introTitre) {
+      const el = document.querySelector(".partners-title");
+      if (el) el.innerHTML = renderPortableText(partenairesPage.introTitre);
+    }
+    if (partenairesPage?.introLead) {
+      const el = document.querySelector(".partners-lead");
+      if (el) el.innerHTML = renderPortableText(partenairesPage.introLead);
+    }
 
     const featured = partenaires.find((p) => p.isFeatured);
     const others = partenaires.filter((p) => !p.isFeatured);
