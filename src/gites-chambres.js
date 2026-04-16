@@ -427,8 +427,13 @@ const ICONS = {
   tv:            { src: assetUrl("/img/TV_ICON.png"),      alt: "Télévision" },
   wc:            { src: assetUrl("/img/WC_ICON.png"),      alt: "WC" },
   douche:        { src: assetUrl("/img/DOUCHE_ICON.png"),  alt: "Douche" },
-  cuisine:       { src: assetUrl("/img/KITCHEN_ICON.png"), alt: "Cuisine équipée" },
-  cuisineCommune:{ src: assetUrl("/img/KITCHEN_ICON.png"), alt: "Cuisine commune" },
+  cuisine:       { src: assetUrl("/img/KITCHEN_ICON.png"),         alt: "Cuisine équipée" },
+  cuisineCommune:{ src: assetUrl("/img/KITCHEN_ICON.png"),         alt: "Cuisine commune" },
+  nespresso:     { src: assetUrl("/img/NESPRESSO_ICON.png"),       alt: "Machine à espresso" },
+  machineLaver:  { src: assetUrl("/img/MACHINE_A_LAVER_ICON.png"), alt: "Machine à laver" },
+  laveVaisselle: { src: assetUrl("/img/LAVEVAISELLE_ICON.png"),    alt: "Lave-vaisselle" },
+  microOnde:     { src: assetUrl("/img/MICROONDE_ICON.png"),       alt: "Micro-ondes" },
+  four:          { src: assetUrl("/img/FOUR_ICON.png"),            alt: "Four" },
 };
 
 const renderCapacite = (min, max) => {
