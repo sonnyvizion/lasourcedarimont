@@ -690,9 +690,7 @@
   text-align: center;
 }
 
-.groupes-title .semi-italic {
-  font-style: normal;
-}
+
 
 .groupes-page-main p {
   font-size: clamp(0.95rem, 1.2vw, 1.1rem);

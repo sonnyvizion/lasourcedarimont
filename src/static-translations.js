@@ -86,7 +86,7 @@ const STATIC_TRANSLATIONS = {
       scroll: "Scroll",
       groupsLabel: "Groupes & séminaires",
       groupsTitle:
-        "Un cadre d’exception <br />pour&nbsp;vos&nbsp;<span class=\"semi-italic\">événements</span>",
+        "Un cadre d’<span class=\"semi-italic\">exception</span> <br />pour&nbsp;vos&nbsp;<span class=\"semi-italic\">événements</span>",
       groupsLead:
         "Le Domaine de la Source d’Arimont accueille vos séminaires, retraites et événements privés. Avec une capacité de <strong>plus de 30 personnes</strong>, profitez d’un cadre naturel préservé, loin de l’agitation, pour des journées de travail ou de cohésion qui laissent une empreinte durable.",
       groupsPeople: "Personnes",
@@ -400,7 +400,7 @@ const STATIC_TRANSLATIONS = {
       scroll: "Scroll",
       groupsLabel: "Groups & seminars",
       groupsTitle:
-        "An exceptional setting <br class=\"br-desktop\" />for your <span class=\"semi-italic\">events</span>",
+        "An <span class=\"semi-italic\">exceptional</span> setting <br class=\"br-desktop\" />for your <span class=\"semi-italic\">events</span>",
       groupsLead:
         "Domaine de la Source d’Arimont welcomes your seminars, retreats and private events. With capacity for <strong>more than 30 guests</strong>, enjoy an unspoiled natural setting away from the noise for workdays and team moments that leave a lasting impression.",
       groupsPeople: "Guests",

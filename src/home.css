@@ -1823,9 +1823,7 @@ body.is-loading {
   text-align: left;
 }
 
-.groups-title .semi-italic {
-  font-style: normal;
-}
+
 
 .groups-lead {
   font-size: clamp(0.95rem, 1.2vw, 1.1rem);
