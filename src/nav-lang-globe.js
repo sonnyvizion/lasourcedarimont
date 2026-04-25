@@ -83,6 +83,11 @@ const shouldUseGreenGlobe = () => {
   if (isHomePage) {
     return headerEl.classList.contains("is-solid");
   }
+  // Pages avec bannière vidéo : globe blanc (gris) quand header transparent
+  const hasVideoBanner = !!document.querySelector(".page-hero-video, .hero-video, .banner-video");
+  if (hasVideoBanner) {
+    return headerEl.classList.contains("is-solid");
+  }
   return true;
 };
 
